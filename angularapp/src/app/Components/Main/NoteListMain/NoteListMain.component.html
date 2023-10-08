@@ -1,0 +1,20 @@
+<section class="filter-menu">
+    <div id="filter">
+        <img id="filter-icon" src="/assets/FilterIcon.png"/>
+        <span id="filter-by">Date modified</span>
+    </div>
+    <img id="filter-arrow" src="/assets/Arrow.png"/>
+</section>  
+<section class="notes">
+    <div id="notes-wrapper">
+        <NoteCard *ngFor="let note of notes" [noteName]="note.name" [noteDate]="note.modifyDate" [notePreview]="note.preview"/>
+    </div>
+    <button id="create-note" (click)="OnCreateNoteClick()">
+        <img src="/assets/CreateNoteIcon.png"/>
+    </button>
+</section>
+<section class="back-to-top">
+    <button id="back-to-top" (click)="OnBackToTopClick()">
+        <img src="/assets/BackToTopIcon.png"/>
+    </button>
+</section>

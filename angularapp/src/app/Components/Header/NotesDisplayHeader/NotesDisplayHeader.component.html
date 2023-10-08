@@ -1,0 +1,13 @@
+<section class="header-section" [ngStyle]="{'height': style}">
+  <div id="folder-name" [ngStyle]="{'opacity': folderNameOpacity}">{{folderName}}</div>
+    <div id="note-count" [ngStyle]="{'opacity': folderNameOpacity}">9 notes</div> 
+</section>  
+<section class="header-menu-section">
+    <div id="menu-wrapper">
+        <img id="menu-icon" src="/assets/MenuIcon.png" alt="Menu icon">
+        <span id="folder-name" [ngStyle]="{'opacity': folderNameSmallOpacity}">All notes</span>
+    </div>
+    <img id="add-pdf-icon" src="/assets/AddPDFIcon.png" alt="Add PDF icon"/>
+    <img id="search-icon" src="/assets/SearchIcon.png" alt="Search icon"/>
+    <img id="more-options-icon" src="/assets/MoreOptionsIcon.png" alt="More options icon"/>
+</section>

@@ -1,0 +1,7 @@
+div.note-page {
+    background-color: white;
+    height: max(70.52vh, 31.85rem);
+    width: 100vw;
+    border-bottom: 0.1rem solid rgb(223, 223, 223);
+    text-align: start;
+}

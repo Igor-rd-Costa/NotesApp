@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
+   version="1.1"
+   id="svg1"
+   inkscape:export-filename="MoreOptionsIcon.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="px"
+     showguides="true"
+     inkscape:export-bgcolor="#ffffff00">
+    <sodipodi:guide
+       position="0.34375,16"
+       orientation="0,-1"
+       id="guide7"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="15.998291,36.242641"
+       orientation="1,5.046015e-05"
+       id="guide10"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#000000"
+       d="m 30.903821,31.99473 c 0,-2.587615 0.01137,-2.599956 0.01137,-2.599956 v -0.02981"
+       id="path1" />
+    <path
+       id="path3"
+       d="M 19.690213,3.7344077 A 3.6902134,3.6902134 0 0 1 16,7.4246211 3.6902134,3.6902134 0 0 1 12.309787,3.7344077 3.6902134,3.6902134 0 0 1 16,0.04419422 3.6902134,3.6902134 0 0 1 19.690213,3.7344077 Z" />
+    <path
+       id="circle5"
+       d="M 19.690213,16.017626 A 3.6902134,3.6902134 0 0 1 16,19.707839 3.6902134,3.6902134 0 0 1 12.309787,16.017626 3.6902134,3.6902134 0 0 1 16,12.327412 a 3.6902134,3.6902134 0 0 1 3.690213,3.690214 z" />
+    <path
+       id="circle6"
+       d="M 19.690213,28.300844 A 3.6902134,3.6902134 0 0 1 16,31.991058 3.6902134,3.6902134 0 0 1 12.309787,28.300844 3.6902134,3.6902134 0 0 1 16,24.610631 a 3.6902134,3.6902134 0 0 1 3.690213,3.690213 z" />
+  </g>
+</svg>
