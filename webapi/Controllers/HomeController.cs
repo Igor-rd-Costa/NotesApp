@@ -10,8 +10,8 @@ namespace webapi.Controllers
     [Route("")]
     public class HomeController : ControllerBase
     {
-        private readonly DatabaseContext _dbContext;
-        public HomeController(DatabaseContext context) 
+        private readonly NotesContext _dbContext;
+        public HomeController(NotesContext context) 
         {
             _dbContext = context;
         }
@@ -28,10 +28,15 @@ namespace webapi.Controllers
                     ModifyDate = note.Modify_Date,
                     Preview = note.Content
                 }).ToList();
-                
                 return notes;
             }
             return new List<NotePreview>();
+        }
+
+        [HttpGet("/count")]
+        public int Count()
+        {
+            return _dbContext.notes.Count();
         }
     }
 }

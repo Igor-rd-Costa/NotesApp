@@ -3,8 +3,8 @@ import { NoteCard } from './NoteCard/NoteCard.component';
 import { SetScrollTop } from 'src/app/App.component';
 import { touchInfo } from '../../../Utils/GlobalEventHandlers';
 import { AppDisplayMode, DisplayModeService } from '../../../Services/DisplayModeService';
-import { HttpClient } from '@angular/common/http';
 import { NgFor } from '@angular/common';
+import { NotePreview, NotesService } from 'src/app/Services/NotesService';
 
 const Months : string[] = [ "Jan", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Aug", "Set", "Oct", "Nov", "Dec" ]
 
@@ -14,13 +14,6 @@ type Note = {
   creation_Date: string,
   modify_Date: string,
   content: string
-}
-
-interface NotePreview {
-  id: number,
-  name: string,
-  modifyDate: string,
-  preview: string
 }
 
 @Component({
@@ -35,18 +28,10 @@ export class NoteListMain {
   notes: Array<NotePreview> = new Array<NotePreview>;
   private count: number = 0;
   
-  constructor(http: HttpClient) {
-    http.get<Array<NotePreview>>('https://localhost:7216/').subscribe(result => {
-      for (let i = 0; i < result.length; i++) {
-        this.notes[i] = result[i];
-        let modifyDate: Date = new Date(result[i].modifyDate);
-        this.notes[i].modifyDate = this.GetNoteDate(modifyDate);
-      }
+  constructor(notesService : NotesService) {
+    notesService.GetNotePreviews().then(notePreviews => {
+      this.notes = notePreviews;
     })
-  }
-
-  GetNoteDate(date : Date): string {
-    return Months[date.getMonth()] + ' ' + (date.getDate()); 
   }
 
   OnBackToTopClick() {

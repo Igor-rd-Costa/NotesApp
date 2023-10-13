@@ -8,6 +8,7 @@ import { Header } from './Components/Header/Header.component';
 import { Main } from './Components/Main/Main.component';
 import { DisplayModeService } from './Services/DisplayModeService';
 import { HttpClientModule } from '@angular/common/http';
+import { NotesService } from './Services/NotesService';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
     Header,
     Main,
   ],
-  providers: [ DisplayModeService ],
+  providers: [ DisplayModeService, NotesService ],
   bootstrap: [App]
 })
 export class AppModule { 

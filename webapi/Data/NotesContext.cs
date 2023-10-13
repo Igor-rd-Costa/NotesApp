@@ -3,9 +3,9 @@ using webapi.Models;
 
 namespace webapi.Data
 {
-    public class DatabaseContext : DbContext
+    public class NotesContext : DbContext
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options) 
+        public NotesContext(DbContextOptions<NotesContext> options) 
             : base(options)
         {
             
