@@ -10,18 +10,18 @@ namespace webapi.Controllers
     [Route("")]
     public class HomeController : ControllerBase
     {
-        private readonly NotesContext _dbContext;
+        private readonly NotesContext m_NotesContext;
         public HomeController(NotesContext context) 
         {
-            _dbContext = context;
+            m_NotesContext = context;
         }
 
         [HttpGet]
         public List<NotePreview> Get()
         {
-            if (_dbContext.notes != null)
+            if (m_NotesContext.notes != null)
             {
-                var notes = _dbContext.notes.Select(note => new NotePreview
+                var notes = m_NotesContext.notes.Select(note => new NotePreview
                 {
                     Id = note.Id,
                     Name = note.Name,
@@ -36,7 +36,7 @@ namespace webapi.Controllers
         [HttpGet("/count")]
         public int Count()
         {
-            return _dbContext.notes.Count();
+            return m_NotesContext.notes.Count();
         }
     }
 }

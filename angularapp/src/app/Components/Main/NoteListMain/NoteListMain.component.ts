@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewChecked, AfterContentInit } from '@angular/core';
 import { NoteCard } from './NoteCard/NoteCard.component';
 import { SetScrollTop } from 'src/app/App.component';
 import { touchInfo } from '../../../Utils/GlobalEventHandlers';
@@ -6,14 +6,24 @@ import { AppDisplayMode, DisplayModeService } from '../../../Services/DisplayMod
 import { NgFor } from '@angular/common';
 import { NotePreview, NotesService } from 'src/app/Services/NotesService';
 
-const Months : string[] = [ "Jan", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Aug", "Set", "Oct", "Nov", "Dec" ]
-
-type Note = {
-  id: number,
-  name: string,
-  creation_Date: string,
-  modify_Date: string,
-  content: string
+function SetNoteWrapperSize() {
+  const NoteWrapper = document.getElementById("notes-wrapper");
+  const note = document.getElementById("note");
+  if (NoteWrapper != null && note != null) {
+    const windowWidth = window.innerWidth;
+    const noteWidth = parseFloat(getComputedStyle(note).width);
+    let gap = windowWidth * 0.05;
+    if (gap < 18) gap = 18;
+    if (gap > 32) gap = 32;
+    let size = 0;
+    size += noteWidth;
+    while(true) {
+      if ((size + (noteWidth + gap)) > windowWidth) 
+        break;
+      size += (noteWidth + gap);
+    }
+    NoteWrapper.style.width = size + "px";
+  }
 }
 
 @Component({
@@ -23,15 +33,18 @@ type Note = {
   styleUrls: ['./NoteListMain.component.css'],
   imports: [ NoteCard, NgFor ]
 })
-export class NoteListMain {
-
+export class NoteListMain implements AfterViewChecked {
   notes: Array<NotePreview> = new Array<NotePreview>;
-  private count: number = 0;
-  
+
   constructor(notesService : NotesService) {
+    window.addEventListener('resize', SetNoteWrapperSize);
     notesService.GetNotePreviews().then(notePreviews => {
       this.notes = notePreviews;
     })
+  }
+
+  ngAfterViewChecked(): void {
+    SetNoteWrapperSize();
   }
 
   OnBackToTopClick() {

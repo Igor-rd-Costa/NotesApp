@@ -1,5 +1,4 @@
-import { Component, effect, signal } from '@angular/core';
-import {  } from './Components/Header/Header.component';
+import { Component, effect } from '@angular/core';
 import { HandleTouchStart, HandleTouchMove, HandleTouchEnd, HandleWheel, touchInfo } from './Utils/GlobalEventHandlers'
 import { DisplayModeService, AppDisplayMode, HeaderDisplayMode } from './Services/DisplayModeService';
 import AnimateElement from './Utils/Animate';
