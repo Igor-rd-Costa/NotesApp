@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Main } from './Main.component';
+import { NoteDisplayHeader } from './NoteDisplayHeader.component';
 
-describe('Main', () => {
-  let component: Main;
-  let fixture: ComponentFixture<Main>;
+describe('NoteDisplayHeader', () => {
+  let component: NoteDisplayHeader;
+  let fixture: ComponentFixture<NoteDisplayHeader>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [Main]
+      imports: [NoteDisplayHeader]
     });
-    fixture = TestBed.createComponent(Main);
+    fixture = TestBed.createComponent(NoteDisplayHeader);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

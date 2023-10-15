@@ -1,3 +1,7 @@
+main {
+    background-color: transparent;
+}
+
 section.filter-menu {
     height: clamp(1.5rem, 6.5%, 2rem);
     width: 100%;

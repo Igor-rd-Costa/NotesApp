@@ -1,4 +1,0 @@
-<main id="notes-main" (scroll)="OnScroll($event)">
-    <NoteListMain *ngIf="DisplayModeService.GetAppDisplayMode() === AppDisplayMode.NOTE_LIST"></NoteListMain> 
-    <NoteDisplayMain *ngIf="DisplayModeService.GetAppDisplayMode() === AppDisplayMode.NOTE_DISPLAY" style="height: inherit; display: flex; flex-direction: column;"></NoteDisplayMain>
-</main>

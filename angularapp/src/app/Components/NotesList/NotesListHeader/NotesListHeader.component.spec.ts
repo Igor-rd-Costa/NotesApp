@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NotesEditHeader } from './NotesEditHeader.component';
+import { NotesListHeader } from './NotesListHeader.component';
 
-describe('NotesEditHeader', () => {
-  let component: NotesEditHeader;
-  let fixture: ComponentFixture<NotesEditHeader>;
+describe('NotesListHeader', () => {
+  let component: NotesListHeader;
+  let fixture: ComponentFixture<NotesListHeader>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [NotesEditHeader]
+      declarations: [NotesListHeader]
     });
-    fixture = TestBed.createComponent(NotesEditHeader);
+    fixture = TestBed.createComponent(NotesListHeader);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

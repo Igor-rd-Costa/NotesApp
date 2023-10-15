@@ -1,4 +1,4 @@
 <div id="notes-app" (touchstart)="appEvents.OnTouchStart($event)" (touchmove)="appEvents.OnTouchMove($event)" (touchend)="appEvents.OnTouchEnd()" (wheel)="appEvents.OnWheel($event)">
-    <Header></Header>
-    <Main></Main>
+    <NotesList *ngIf="DisplayModeService.GetAppDisplayMode() === AppDisplayMode.NOTE_LIST"></NotesList>
+    <NoteDisplay *ngIf="DisplayModeService.GetAppDisplayMode() === AppDisplayMode.NOTE_DISPLAY"></NoteDisplay>
 </div>

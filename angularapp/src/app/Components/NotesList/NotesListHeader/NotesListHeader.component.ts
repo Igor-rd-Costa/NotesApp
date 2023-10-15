@@ -3,17 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { AppDisplayMode, DisplayModeService, HeaderDisplayMode } from 'src/app/Services/DisplayModeService';
 import { NgStyle } from '@angular/common';
 import { NotesService } from 'src/app/Services/NotesService';
+import { ImgButton, ImgButtonProp } from '../../General/ImgButton/ImgButton.component';
 
 @Component({
   standalone: true,
-  selector: 'NotesDisplayHeader',
-  templateUrl: './NotesDisplayHeader.component.html',
+  selector: 'NotesListHeader',
   providers: [ HttpClient ],
-  imports: [ NgStyle ],
-  styleUrls: ['./NotesDisplayHeader.component.css']
+  imports: [ NgStyle, ImgButton ],
+  templateUrl: './NotesListHeader.component.html',
+  styleUrls: ['./NotesListHeader.component.css']
 })
 
-export class NotesDisplayHeader {
+export class NotesListHeader {
   folderName: string = "All Notes";
   noteCount : number = 0;
   style : string = "";
@@ -36,5 +37,20 @@ export class NotesDisplayHeader {
       }
     })
     notesService.GetNoteCount().then(result => { this.noteCount = result; });
+  }
+
+  menuButtonProps : ImgButtonProp = {
+    Button: {
+      OnClick: this.MenuButtonOnClick
+    },
+    Img: {
+      Src: '/assets/MenuIcon.png',
+      Alt: "Menu"
+    }
+  }
+
+  MenuButtonOnClick(event : MouseEvent) {
+      DisplayModeService.NotesListDisplayMode.ShowSideMenu();
+      
   }
 }

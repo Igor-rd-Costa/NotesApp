@@ -1,4 +1,4 @@
-div {
+div#notes-app {
     height: 100dvh;
     width: max(100vw, 300px);
     position: fixed;

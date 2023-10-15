@@ -36,6 +36,13 @@ export const touchInfo : TouchInfo = {
     }
 };
 
+export function ResetTouchInfoData(info : TouchInfo) {
+  info.touchStart= { X:-1, Y: -1 };
+  info.touchMove = { X:-1, Y: -1 };
+  info.touchDelta = { X:-1, Y:-1 };
+  info.wheelDelta = { X:-1, Y: -1 };
+}
+
 export function HandleTouchStart(event : TouchEvent) : void {
     if (touchInfo.touchStart.X === -1 && touchInfo.touchStart.Y === -1) {
       touchInfo.touchStart.X = event.touches[0].screenX;
@@ -49,16 +56,13 @@ export function HandleTouchMove(event : TouchEvent) {
 }
 
 export function HandleTouchEnd() {
-    if (touchInfo.touchMove.Y === -1) 
-        return;
-    
     if (touchInfo.touchMove.X === -1 && touchInfo.touchMove.Y === -1) {
         touchInfo.touchDelta.X = 0;
         touchInfo.touchDelta.Y = 0;
     }
     else {
-        touchInfo.touchDelta.X = touchInfo.touchMove.X - touchInfo.touchStart.X;
-        touchInfo.touchDelta.Y = touchInfo.touchMove.Y - touchInfo.touchStart.Y;
+      touchInfo.touchDelta.X = touchInfo.touchMove.X - touchInfo.touchStart.X;
+      touchInfo.touchDelta.Y = touchInfo.touchMove.Y - touchInfo.touchStart.Y;
     }
 
     touchInfo.touchStart.X = -1;

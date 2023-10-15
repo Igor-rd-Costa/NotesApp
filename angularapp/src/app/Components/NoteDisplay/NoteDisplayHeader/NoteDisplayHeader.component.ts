@@ -4,13 +4,13 @@ import { ImgButton, ImgButtonProp } from '../../General/ImgButton/ImgButton.comp
 import { AppDisplayMode, DisplayModeService } from '../../../Services/DisplayModeService';
 
 @Component({
-  selector: 'NotesEditHeader',
+  selector: 'NoteDisplayHeader',
   standalone: true,
   imports: [CommonModule, ImgButton ],
-  templateUrl: './NotesEditHeader.component.html',
-  styleUrls: ['./NotesEditHeader.component.css']
+  templateUrl: './NoteDisplayHeader.component.html',
+  styleUrls: ['./NoteDisplayHeader.component.css']
 })
-export class NotesEditHeader {
+export class NoteDisplayHeader {
   backButtonProps: ImgButtonProp = {
     Button: {
       OnClick: this.OnBackButtonClick

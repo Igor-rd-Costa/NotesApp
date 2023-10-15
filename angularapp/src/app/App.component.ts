@@ -1,5 +1,5 @@
 import { Component, effect } from '@angular/core';
-import { HandleTouchStart, HandleTouchMove, HandleTouchEnd, HandleWheel, touchInfo } from './Utils/GlobalEventHandlers'
+import { HandleTouchStart, HandleTouchMove, HandleTouchEnd, HandleWheel, touchInfo, ResetTouchInfoData } from './Utils/GlobalEventHandlers'
 import { DisplayModeService, AppDisplayMode, HeaderDisplayMode } from './Services/DisplayModeService';
 import AnimateElement from './Utils/Animate';
 
@@ -69,6 +69,8 @@ interface AppEvents {
 export class App {
   title = 'notes-app';
   private static scrollTargetId: string = "notes-app";
+  DisplayModeService = DisplayModeService;
+  AppDisplayMode = AppDisplayMode;
 
   public appEvents : AppEvents = {
     OnTouchStart: this.OnTouchStart,
@@ -89,18 +91,12 @@ export class App {
           if (headerDisplay === HeaderDisplayMode.HEADER_LARGE) {
             App.scrollTargetId = "notes-app";
             isHeaderVisible = true;
-            touchInfo.touchStart.X = -1;
-            touchInfo.touchStart.Y = -1;
-            touchInfo.touchMove.X = -1;
-            touchInfo.touchMove.Y = -1;
+            ResetTouchInfoData(touchInfo);
           }
           else {
             App.scrollTargetId = "notes-main";
             isHeaderVisible = false;
-            touchInfo.touchStart.X = -1;
-            touchInfo.touchStart.Y = -1;
-            touchInfo.touchMove.X = -1;
-            touchInfo.touchMove.Y = -1;
+            ResetTouchInfoData(touchInfo);
           }
         } break;
         case AppDisplayMode.NOTE_DISPLAY: {
@@ -126,9 +122,9 @@ export class App {
   OnTouchEnd() {
     HandleTouchEnd();
     if (scrollTopAtTouch < 20) {
-      if (touchInfo.touchDelta.Y < 0 && isHeaderVisible)
+      if (touchInfo.touchDelta.Y < -1 && isHeaderVisible && !DisplayModeService.IsSideMenuVisible())
         HideHeader();
-      else if (touchInfo.touchDelta.Y > 0 && !isHeaderVisible)
+      else if (touchInfo.touchDelta.Y > 0 && !isHeaderVisible && !DisplayModeService.IsSideMenuVisible())
         ShowHeader();
   }
     const AppElement = document.getElementById(App.scrollTargetId) as HTMLElement;
@@ -140,9 +136,9 @@ export class App {
     const AppElement = document.getElementById(App.scrollTargetId) as HTMLElement;
     scrollTopAtTouch = AppElement.scrollTop;
     if (scrollTopAtTouch < 20) {
-      if (touchInfo.wheelDelta.Y > 0 && isHeaderVisible)
+      if (touchInfo.wheelDelta.Y > 0 && isHeaderVisible && !DisplayModeService.IsSideMenuVisible())
         HideHeader();
-      else if (touchInfo.wheelDelta.Y < 0 && !isHeaderVisible)
+      else if (touchInfo.wheelDelta.Y < 0 && !isHeaderVisible && !DisplayModeService.IsSideMenuVisible())
         ShowHeader();
     }
   }

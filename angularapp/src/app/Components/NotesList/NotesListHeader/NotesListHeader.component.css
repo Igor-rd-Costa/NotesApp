@@ -1,3 +1,8 @@
+header {
+    width: 100%;
+    height: fit-content;
+}
+
 section.header-section {
     width: 100%;
     height: 30.8vh;
@@ -44,6 +49,13 @@ section.header-menu-section > div#menu-wrapper {
     display: flex;
     align-items: center;
     overflow: hidden;
+}
+
+section.header-menu-section > div#menu-wrapper > ImgButton#menu-icon {
+    width: 0.9rem;
+    height: 0.9rem;
+    margin-left: min(2rem, 9.3%);
+    margin-right: min(1rem, 6%);
 }
 
 section.header-menu-section > div#menu-wrapper > img#menu-icon {
