@@ -9,6 +9,8 @@ div#notes-list-wrapper {
         grid-row: 1 / 3; 
         align-self: end;
         height: 97.78%;
+        width: 0px;
+        overflow: hidden;
         z-index: 2;
     }
 

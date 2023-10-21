@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotesListHeader } from './NotesListHeader/NotesListHeader.component';
 import { NotesListMain } from './NotesListMain/NotesListMain.component';
 import { SideMenu } from './SideMenu/SideMenu.component';
-import { DisplayModeService } from 'src/app/Services/DisplayModeService';
+import { AppDisplayMode, DisplayModeService, SideMenuDisplayMode } from 'src/app/Services/DisplayModeService';
+import { NotesService } from 'src/app/Services/NotesService';
+import { AuthService } from 'src/app/Services/AuthService';
 
 @Component({
   selector: 'NotesList',
@@ -14,8 +16,24 @@ import { DisplayModeService } from 'src/app/Services/DisplayModeService';
 })
 export class NotesList {
 
-  OnClick(event : MouseEvent) { 
-    if (DisplayModeService.IsSideMenuVisible() && (event.target as HTMLElement).closest("sidemenu") === null)
+  private static noteCount = signal<number>(0);
+
+  constructor(private notesService : NotesService, private authService : AuthService) {
+    this.notesService.GetNoteCount().subscribe(count => NotesList.noteCount.set(count));
+  }
+
+  OnClick(event : MouseEvent) : void { 
+    if (DisplayModeService.GetSideMenuDisplayMode() === SideMenuDisplayMode.VISIBLE) {
+      if ((event.target as HTMLElement).closest("#profile-menu") === null && SideMenu.isProfileMenuVisible) {
+        SideMenu.HideProfileMenu();
+      }
+
+      if ((event.target as HTMLElement).closest("sidemenu") === null)
         DisplayModeService.NotesListDisplayMode.HideSideMenu();
+    }
+  }
+
+  public static GetNoteCount() : number {
+    return NotesList.noteCount();
   }
 }

@@ -1,7 +1,10 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { HandleTouchStart, HandleTouchMove, HandleTouchEnd, HandleWheel, touchInfo, ResetTouchInfoData } from './Utils/GlobalEventHandlers'
-import { DisplayModeService, AppDisplayMode, HeaderDisplayMode } from './Services/DisplayModeService';
+import { DisplayModeService, AppDisplayMode, HeaderDisplayMode, SideMenuDisplayMode } from './Services/DisplayModeService';
 import AnimateElement from './Utils/Animate';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AppRoutingModule } from './AppRouting.module';
+import { AuthService } from './Services/AuthService';
 
 let scrollTopAtTouch : number = 0;
 let folderDisplayLargeHeight : string = "";
@@ -73,13 +76,13 @@ export class App {
   AppDisplayMode = AppDisplayMode;
 
   public appEvents : AppEvents = {
-    OnTouchStart: this.OnTouchStart,
-    OnTouchMove: this.OnTouchMove,
-    OnTouchEnd: this.OnTouchEnd,
-    OnWheel: this.OnWheel
+    OnTouchStart: (event : TouchEvent) => {},
+    OnTouchMove: (event : TouchEvent) => {},
+    OnTouchEnd: () => {},
+    OnWheel: (event : WheelEvent) => {}
   }
   
-  constructor() {
+  constructor(private router : Router,) {
     effect(() => {
       switch (DisplayModeService.GetAppDisplayMode()) {
         case AppDisplayMode.NOTE_LIST: {
@@ -98,12 +101,14 @@ export class App {
             isHeaderVisible = false;
             ResetTouchInfoData(touchInfo);
           }
+          this.router.navigate(['']);
         } break;
         case AppDisplayMode.NOTE_DISPLAY: {
           this.appEvents.OnTouchStart = (event: TouchEvent) => { };
           this.appEvents.OnTouchMove = (event: TouchEvent) => { };
           this.appEvents.OnTouchEnd = () => { };
           this.appEvents.OnWheel = (event: WheelEvent) => { };
+          this.router.navigate(['/notes']);
         } break;
       }
     })
@@ -122,9 +127,9 @@ export class App {
   OnTouchEnd() {
     HandleTouchEnd();
     if (scrollTopAtTouch < 20) {
-      if (touchInfo.touchDelta.Y < -1 && isHeaderVisible && !DisplayModeService.IsSideMenuVisible())
+      if (touchInfo.touchDelta.Y < -1 && isHeaderVisible && DisplayModeService.GetSideMenuDisplayMode() != SideMenuDisplayMode.VISIBLE)
         HideHeader();
-      else if (touchInfo.touchDelta.Y > 0 && !isHeaderVisible && !DisplayModeService.IsSideMenuVisible())
+      else if (touchInfo.touchDelta.Y > 0 && !isHeaderVisible && DisplayModeService.GetSideMenuDisplayMode() != SideMenuDisplayMode.VISIBLE)
         ShowHeader();
   }
     const AppElement = document.getElementById(App.scrollTargetId) as HTMLElement;
@@ -136,9 +141,9 @@ export class App {
     const AppElement = document.getElementById(App.scrollTargetId) as HTMLElement;
     scrollTopAtTouch = AppElement.scrollTop;
     if (scrollTopAtTouch < 20) {
-      if (touchInfo.wheelDelta.Y > 0 && isHeaderVisible && !DisplayModeService.IsSideMenuVisible())
+      if (touchInfo.wheelDelta.Y > 0 && isHeaderVisible && DisplayModeService.GetSideMenuDisplayMode() != SideMenuDisplayMode.VISIBLE)
         HideHeader();
-      else if (touchInfo.wheelDelta.Y < 0 && !isHeaderVisible && !DisplayModeService.IsSideMenuVisible())
+      else if (touchInfo.wheelDelta.Y < 0 && !isHeaderVisible && DisplayModeService.GetSideMenuDisplayMode() != SideMenuDisplayMode.VISIBLE)
         ShowHeader();
     }
   }

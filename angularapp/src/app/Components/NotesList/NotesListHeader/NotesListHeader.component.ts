@@ -1,15 +1,16 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppDisplayMode, DisplayModeService, HeaderDisplayMode } from 'src/app/Services/DisplayModeService';
 import { NgStyle } from '@angular/common';
 import { NotesService } from 'src/app/Services/NotesService';
 import { ImgButton, ImgButtonProp } from '../../General/ImgButton/ImgButton.component';
+import { NotesList } from '../NotesList.component';
 
 @Component({
   standalone: true,
   selector: 'NotesListHeader',
   providers: [ HttpClient ],
-  imports: [ NgStyle, ImgButton ],
+  imports: [ NgStyle, ImgButton, NotesList ],
   templateUrl: './NotesListHeader.component.html',
   styleUrls: ['./NotesListHeader.component.css']
 })
@@ -20,23 +21,21 @@ export class NotesListHeader {
   style : string = "";
   folderNameOpacity : string = "";
   folderNameSmallOpacity : string = "";
-  constructor(notesService : NotesService) {
+  constructor() {
     effect(() => {
-      if (DisplayModeService.GetAppDisplayMode() === AppDisplayMode.NOTE_LIST) {
         let displayMode: HeaderDisplayMode = DisplayModeService.GetHeaderDisplayMode();
+        this.noteCount = NotesList.GetNoteCount();
         if (displayMode === HeaderDisplayMode.HEADER_LARGE) {
           this.style = '';
           this.folderNameOpacity = '';
           this.folderNameSmallOpacity = '';
         }
-        else if (displayMode === HeaderDisplayMode.HEADER_HIDDEN) {
+        else {
           this.style = '1vh';
           this.folderNameOpacity = '0';
           this.folderNameSmallOpacity = '1';
         }
-      }
-    })
-    notesService.GetNoteCount().then(result => { this.noteCount = result; });
+    });
   }
 
   menuButtonProps : ImgButtonProp = {
@@ -44,7 +43,7 @@ export class NotesListHeader {
       OnClick: this.MenuButtonOnClick
     },
     Img: {
-      Src: '/assets/MenuIcon.png',
+      Src: '/assets/MenuIcon.svg',
       Alt: "Menu"
     }
   }

@@ -1,0 +1,10 @@
+<ng-container *ngIf="DisplayModeService.GetAppDisplayMode() === AppDisplayMode.INDEX_DISPLAY; else NotesListView">
+    <main>
+        <h1>Notes App</h1>
+        <Login *ngIf="DisplayModeService.GetIndexDisplayMode() === IndexDisplayMode.LOGIN"></Login>
+        <Register *ngIf="DisplayModeService.GetIndexDisplayMode() === IndexDisplayMode.REGISTER"></Register>
+    </main>
+</ng-container>
+<ng-template #NotesListView>
+    <NotesList *ngIf="DisplayModeService.GetAppDisplayMode() === AppDisplayMode.NOTE_LIST"></NotesList>
+</ng-template>

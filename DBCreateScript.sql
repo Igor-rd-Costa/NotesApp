@@ -19,24 +19,21 @@ CREATE DATABASE "NotesAppDB"
 
 \connect NotesAppDB
 
-CREATE TABLE IF NOT EXISTS public.notes
+CREATE TABLE IF NOT EXISTS notes
 (
     "Id" serial,
-    "Name" character varying(100) COLLATE pg_catalog."default",
+    "Name" character varying(100),
     "Creation_Date" date,
     "Modify_Date" date,
-    "Content" text COLLATE pg_catalog."default",
-    CONSTRAINT notes_pkey PRIMARY KEY ("Id")
-)
+    "Content" text,
+    CONSTRAINT notes_Id_pkey PRIMARY KEY ("Id")
+);
 
-TABLESPACE pg_default;
+ALTER TABLE notes OWNER to "NotesAppUser";
 
-ALTER TABLE IF EXISTS public.notes
-    OWNER to "NotesAppUser";
+GRANT ALL ON TABLE notes TO "NotesAppUser";
 
-GRANT ALL ON TABLE public.notes TO "NotesAppUser";
-
-INSERT INTO public.notes ("Name", "Creation_Date", "Modify_Date", "Content") VALUES 
+INSERT INTO notes ("Name", "Creation_Date", "Modify_Date", "Content") VALUES 
 ('Note One',    '2023-01-01', '2023-01-01', 'Most of the buttons do no''t work for now'),
 ('Note Two',    '2023-02-02', '2023-02-02', 'Reminder to do something'),
 ('Note Three',  '2023-03-03', '2023-03-03', 'Buy carrots'),
@@ -49,5 +46,30 @@ INSERT INTO public.notes ("Name", "Creation_Date", "Modify_Date", "Content") VAL
 ('Note Ten',    '2023-10-10', '2023-10-10', ''),
 ('Note Eleven', '2023-11-11', '2023-11-11', ''),
 ('Note Twelve', '2023-12-12', '2023-12-12', '');
+
+CREATE TABLE if NOT EXISTS users
+(
+	"Id" serial not null,
+    "UserName" character varying(50) not null,
+    "NormalizedUserName" character varying(50) not null,
+    "Email" character varying(100) not null,
+    "NormalizedEmail" character varying(100) not null,
+    "EmailConfirmed" boolean,
+    "PasswordHash" character varying(84) not null,
+    "SecurityStamp" character varying(100),
+    "ConcurrencyStamp" character varying(100),
+    "PhoneNumber" character varying(50),
+    "PhoneNumberConfirmed" boolean,
+    "TwoFactorEnabled" boolean,
+    "LockoutEnd" timestamptz,
+    "LockoutEnabled" boolean,
+    "AccessFailedCount" integer,
+    CONSTRAINT users_id_pkey PRIMARY KEY ("Id"),
+    CONSTRAINT users_email_unq UNIQUE ("NormalizedEmail"),
+    CONSTRAINT users_username_unq UNIQUE ("NormalizedUserName")
+);
+
+alter table users owner to "NotesAppUser";
+GRANT ALL ON TABLE users TO "NotesAppUser";
 
 \q

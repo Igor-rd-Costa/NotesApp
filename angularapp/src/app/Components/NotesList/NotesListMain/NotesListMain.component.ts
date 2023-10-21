@@ -6,6 +6,7 @@ import { AppDisplayMode, DisplayModeService, HeaderDisplayMode } from '../../../
 import { NgFor } from '@angular/common';
 import { NotePreview, NotesService } from 'src/app/Services/NotesService';
 import AnimateElement from 'src/app/Utils/Animate';
+import { AuthService } from 'src/app/Services/AuthService';
 
 function SetNoteWrapperSize() {
   const NoteWrapper = document.getElementById("notes-wrapper");
@@ -38,11 +39,15 @@ export class NotesListMain implements AfterViewChecked {
   notes: Array<NotePreview> = new Array<NotePreview>;
   private isBackToTopButtonHidden : boolean = true;
 
-  constructor(notesService : NotesService) {
+  constructor(private notesService : NotesService, private authService : AuthService) {
     window.addEventListener('resize', SetNoteWrapperSize);
-    notesService.GetNotePreviews().then(notePreviews => {
-      this.notes = notePreviews;
-    });
+    this.notesService.GetNotePreviews().subscribe(result => {
+      result.forEach(note => { 
+        note.modifyDate = this.notesService.GetNotePreviewDateText(new Date(note.modifyDate)); 
+      });
+      this.notes = result;
+    })
+  
     effect(() => {
       switch (DisplayModeService.GetHeaderDisplayMode())
       {

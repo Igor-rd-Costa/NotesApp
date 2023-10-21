@@ -8,6 +8,7 @@ import { NotesService } from './Services/NotesService';
 import { NotesList } from './Components/NotesList/NotesList.component';
 import { NgIf } from '@angular/common';
 import { NoteDisplay } from './Components/NoteDisplay/NoteDisplay.component';
+import { AuthService } from './Services/AuthService';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,7 @@ import { NoteDisplay } from './Components/NoteDisplay/NoteDisplay.component';
     NoteDisplay,
     NgIf
   ],
-  providers: [ DisplayModeService, NotesService ],
+  providers: [ DisplayModeService, NotesService, AuthService ],
   bootstrap: [App]
 })
 export class AppModule { 

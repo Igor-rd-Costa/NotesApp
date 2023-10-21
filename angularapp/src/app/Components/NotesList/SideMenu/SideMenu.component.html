@@ -1,3 +1,28 @@
-<section>
-
+<section id="side-menu-section">
+    <div class="menu-header">
+        <div id="user-icon">
+            <img id="user-icon" src="/assets/UserIcon.svg" title="{{username}}" (click)="ProfileOnClick($event)"/>
+        </div>
+    </div>
+    <div class="menu-item selected">
+        <img src=""/>
+        <p class="label">All Notes</p>
+        <p class="count">{{noteCount}}</p>
+    </div>
+    <div class="menu-item">
+        <img src="" />
+        <p class="label">Trash</p>
+        <p class="count"></p>
+    </div>
+    <div id="separator">......................................................................................................</div>
+    <div class="menu-item">
+        <img src="" />
+        <p class="label">Folders</p>
+        <p class="count"></p>
+    </div>
+</section>
+<section id="profile-menu">
+    <ul>
+        <li (click)="Logout()">Logout</li>
+    </ul>
 </section>

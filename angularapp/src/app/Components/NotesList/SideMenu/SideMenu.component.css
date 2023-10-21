@@ -1,10 +1,106 @@
-section {
-    width: 100%;
+section#side-menu-section {
     background-color: white;
     border-top-right-radius: 1.2rem;
     border-bottom-right-radius: 1.2rem;
     height: 100%;
-    padding-left: 2.63%;
-    padding-right: 2.63%;
+    padding-left: 3.63%;
+    padding-right: 3.63%;
     padding-top: 1.65%;
+
+    div.menu-header {
+        width: 100%;
+        height: min(7.4%, 65px);
+        display: grid;
+        align-items: center;
+        grid-template-columns: 23% auto 9.96%;
+        div#user-icon {
+            justify-self: center;
+            height: 1.9rem;
+            width: 1.9rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            overflow: hidden;
+            img#user-icon {
+                height: 100%;
+                cursor: pointer;
+            }
+        }
+    }
+    div.selected {
+        background-color: rgb(239, 239, 239) !important;
+    }
+
+    div.menu-item:hover {
+        background-color: rgb(249, 249, 249);
+        cursor: pointer;
+    }
+
+    div.menu-item {
+        border-radius: 0.5rem;
+        width: 100%;
+        height: min(7%, 60px);
+        display: grid;
+        align-items: center;
+        grid-template-columns: 15.17% auto 9.96%;
+        margin-top: 0.1rem;
+        img {
+            justify-self: right;
+            width: 1.36rem;
+            height: 1.36rem;
+        }
+
+        P {
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        p.label {
+            font-size: larger;
+            margin: 0;
+            margin-left: 1rem;
+        }
+
+        p.count {
+            justify-self: left;
+            color: rgb(140, 140, 140);
+        }
+    }
+
+    div#separator {
+        color: gray;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 24px;
+        line-height: 23px;
+        width: 100%;
+    }
+}
+
+section#profile-menu {
+    position: absolute;
+    visibility: hidden;
+    top: 0;
+    width: 100px;
+    height: 35px;
+    background-color: white;
+    border-radius: 0.5rem;
+    border: 0.1rem solid black;
+
+    ul {
+        margin: 0rem;
+        overflow: hidden;
+        li {
+            height: 2rem;
+            margin: 0rem;
+            display: flex;
+            padding-left: 0.5rem;
+            align-items: center;
+            border-radius: 0.5rem;
+        }
+        li:hover {
+            cursor: pointer;
+            background-color: rgb(249, 249, 249);
+        }
+    }
 }

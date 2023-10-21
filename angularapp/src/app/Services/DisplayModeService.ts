@@ -3,7 +3,7 @@ import AnimateElement from "../Utils/Animate";
 import { ResetTouchInfoData, touchInfo } from "../Utils/GlobalEventHandlers";
 
 export enum AppDisplayMode {
-  NOTE_LIST, NOTE_DISPLAY
+  INDEX_DISPLAY, NOTE_LIST, NOTE_DISPLAY
 }
 
 export enum HeaderDisplayMode {
@@ -14,11 +14,22 @@ export enum NoteDisplayMode {
   DISPLAY, EDIT
 }
 
+
+export enum IndexDisplayMode {
+  LOGIN, REGISTER
+}
+
+export enum SideMenuDisplayMode {
+  HIDDEN, VISIBLE
+}
+
 export class DisplayModeService 
 {
   private static headerDisplayMode = signal<HeaderDisplayMode>(HeaderDisplayMode.HEADER_LARGE);
-  private static appDisplayMode = signal<AppDisplayMode>(AppDisplayMode.NOTE_LIST);
+  private static appDisplayMode = signal<AppDisplayMode>(AppDisplayMode.INDEX_DISPLAY);
   private static noteDisplayMode = signal<NoteDisplayMode>(NoteDisplayMode.DISPLAY);
+  private static indexDisplayMode = signal<IndexDisplayMode>(IndexDisplayMode.LOGIN);
+  private static sideMenuDisplayMode = signal<SideMenuDisplayMode>(SideMenuDisplayMode.HIDDEN);
 
   public static SetAppDisplayMode(mode: AppDisplayMode) : void {
     DisplayModeService.appDisplayMode.set(mode);
@@ -44,11 +55,22 @@ export class DisplayModeService
     return DisplayModeService.headerDisplayMode();
   }
 
-  public static IsSideMenuVisible() : boolean {
-    return DisplayModeService.isSideMenuVisible;
+  public static SetIndexDisplayMode(mode : IndexDisplayMode) : void {
+    DisplayModeService.indexDisplayMode.set(mode);
   }
 
-  private static isSideMenuVisible : boolean = false; 
+  public static GetIndexDisplayMode() : IndexDisplayMode {
+    return DisplayModeService.indexDisplayMode();
+  }
+
+  public static GetSideMenuDisplayMode() : SideMenuDisplayMode {
+    return DisplayModeService.sideMenuDisplayMode();
+  }
+
+  public static SetSideMenuDisplayMode(mode : SideMenuDisplayMode) : void {
+    DisplayModeService.sideMenuDisplayMode.set(mode);
+  }
+
   public static NotesListDisplayMode = {
     ShowSideMenu: () => {
       if (DisplayModeService.GetAppDisplayMode() != AppDisplayMode.NOTE_LIST)
@@ -70,19 +92,19 @@ export class DisplayModeService
       AnimateElement(createNoteButton, { right: rightValue + 'px' }, { right: rightValue - (windowWidth * 0.8435) + 'px' }, 175);
       AnimateElement(wrapper, { backgroundColor: "white" }, { backgroundColor: "rgb(207, 207, 207)" }, 175);
       AnimateElement(sideMenu, { width: "0px" }, { width: (windowWidth * 0.8435) + 'px' }, 175).addEventListener('finish', () => {
-        this.isSideMenuVisible = true;
+        DisplayModeService.SetSideMenuDisplayMode(SideMenuDisplayMode.VISIBLE);
       });
     },
     HideSideMenu: () => {
       if (DisplayModeService.GetAppDisplayMode() != AppDisplayMode.NOTE_LIST)
-      return;
+        return;
     
       const sideMenu = document.getElementById("side-menu") as HTMLElement;
       const createNoteButton = document.getElementById("create-note") as HTMLElement;
       const main = document.getElementById("notes-main") as HTMLElement;
       const wrapper = document.getElementById("notes-list-wrapper") as HTMLElement;    
       if (sideMenu == null || createNoteButton == null || main == null || wrapper == null) 
-      return;
+        return;
   
       let windowWidth = window.innerWidth;
       if (windowWidth > 345)
@@ -95,7 +117,7 @@ export class DisplayModeService
       AnimateElement(createNoteButton, { right: rightValue + 'px' }, { right: rightValue + (windowWidth * 0.8435) + "px" }, 175);
       AnimateElement(wrapper, { backgroundColor: "rgb(207, 207, 207)" }, { backgroundColor: "white" }, 175);
       AnimateElement(sideMenu, { width: (windowWidth * 0.8435) + 'px' }, { width: "0px" }, 175).addEventListener('finish', () => {
-        this.isSideMenuVisible = false;
+        DisplayModeService.SetSideMenuDisplayMode(SideMenuDisplayMode.HIDDEN);
       });
       ResetTouchInfoData(touchInfo);
     }

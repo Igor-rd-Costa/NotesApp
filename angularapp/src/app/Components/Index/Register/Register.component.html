@@ -1,0 +1,8 @@
+<form [formGroup]="registerForm" (submit)="Register()">
+    <h2>Register</h2>
+    <input id="username" type="text" placeholder="Username" formControlName="Username"/>
+    <input id="email" type="email" placeholder="Email" formControlName="Email"/>
+    <input id="password" type="password" placeholder="Password" formControlName="Password"/>
+    <button id="register" type="submit">Register</button>
+    <button id="return" type="button" (click)="Return()">Return</button>
+</form>

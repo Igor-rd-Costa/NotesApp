@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
+using System.Security.Claims;
 using webapi.Data;
 using webapi.Models;
 
@@ -8,12 +12,18 @@ namespace webapi.Controllers
 {
     [ApiController]
     [Route("")]
+    [Authorize(AuthenticationSchemes = "Identity.Application")]
     public class HomeController : ControllerBase
     {
         private readonly NotesContext m_NotesContext;
-        public HomeController(NotesContext context) 
+        private readonly UserManager<IdentityUser<int>> m_UserManager;
+        private readonly SignInManager<IdentityUser<int>> m_SignInManager;
+
+        public HomeController(NotesContext context, UserManager<IdentityUser<int>> userManager, SignInManager<IdentityUser<int>> signInManager) 
         {
             m_NotesContext = context;
+            m_UserManager = userManager;
+            m_SignInManager = signInManager;
         }
 
         [HttpGet]
@@ -33,7 +43,7 @@ namespace webapi.Controllers
             return new List<NotePreview>();
         }
 
-        [HttpGet("/count")]
+        [HttpGet("count")]
         public int Count()
         {
             return m_NotesContext.notes.Count();

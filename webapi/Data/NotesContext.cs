@@ -7,9 +7,7 @@ namespace webapi.Data
     {
         public NotesContext(DbContextOptions<NotesContext> options) 
             : base(options)
-        {
-            
-        }
+        { }
 
         public DbSet<Note> notes { get; set; } = default!;
     }

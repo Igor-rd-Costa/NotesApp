@@ -1,3 +1,7 @@
+main {
+    background-color: transparent;
+}
+
 section.pages {
     flex: 1;
     padding-top: max(7.97vh, 3.62rem);

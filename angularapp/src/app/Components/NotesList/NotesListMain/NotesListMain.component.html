@@ -1,17 +1,17 @@
 <main id="notes-main" (scroll)="OnScroll($event)">
     <section class="filter-menu">
         <div id="filter">
-            <img id="filter-icon" src="/assets/FilterIcon.png"/>
+            <img id="filter-icon" src="/assets/FilterIcon.svg"/>
             <span id="filter-by">Date modified</span>
         </div>
-        <img id="filter-arrow" src="/assets/Arrow.png"/>
+        <img id="filter-arrow" src="/assets/DownArrowIcon.svg"/>
     </section>  
     <section class="notes">
         <div id="notes-wrapper">
             <NoteCard id="note" class="note" *ngFor="let note of notes" [noteName]="note.name" [noteDate]="note.modifyDate" [notePreview]="note.preview"/>
         </div>
         <button id="create-note" (click)="OnCreateNoteClick()">
-            <img src="/assets/CreateNoteIcon.png"/>
+            <img src="/assets/CreateNoteIcon.svg"/>
         </button>
     </section>
     <section class="back-to-top">

@@ -38,7 +38,7 @@ section.header-menu-section {
     width: 100%;
     display: grid;
     grid-template-rows: 100%;
-    grid-template-columns: 1fr min(2.9rem, 10.83%) min(3rem, 11.85%) min(2.5rem, 9.44%);
+    grid-template-columns: 1fr min(3rem, 11.20%) min(2.5rem, 10.09%) min(3rem, 11.2%);
     align-items: center;
 }
 
@@ -54,14 +54,7 @@ section.header-menu-section > div#menu-wrapper {
 section.header-menu-section > div#menu-wrapper > ImgButton#menu-icon {
     width: 0.9rem;
     height: 0.9rem;
-    margin-left: min(2rem, 9.3%);
-    margin-right: min(1rem, 6%);
-}
-
-section.header-menu-section > div#menu-wrapper > img#menu-icon {
-    width: 0.9rem;
-    height: 0.9rem;
-    margin-left: min(2rem, 9.3%);
+    margin-left: min(2rem, 9.87%);
     margin-right: min(1rem, 6%);
 }
 
@@ -81,7 +74,7 @@ section.header-menu-section > img#add-pdf-icon {
     grid-column: 2;
     justify-self: start;
     height: 1rem;
-    width: 0.85rem;
+    width: 1rem;
 }
 
 section.header-menu-section > img#search-icon {
@@ -94,6 +87,6 @@ section.header-menu-section > img#search-icon {
 section.header-menu-section > img#more-options-icon {
     grid-column: 4;
     height: 1rem;
-    width: 0.2rem;
+    width: 1rem;
     justify-self: start;
 }
