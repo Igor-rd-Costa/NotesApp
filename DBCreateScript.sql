@@ -19,33 +19,22 @@ CREATE DATABASE "NotesAppDB"
 
 \connect NotesAppDB
 
-CREATE TABLE IF NOT EXISTS notes
+CREATE TABLE if NOT EXISTS notes
 (
-    "Id" serial,
-    "Name" character varying(100),
-    "Creation_Date" date,
-    "Modify_Date" date,
-    "Content" text,
-    CONSTRAINT notes_Id_pkey PRIMARY KEY ("Id")
+	"Id" serial not null,
+	"UserId" integer not null,
+	"Guid" uuid not null,
+	"Name" varchar(100),
+	"CreationDate" date not null,
+	"ModifyDate" date not null,
+	"Content" text,
+	constraint notes_Id_pkey primary key ("Id"),
+	constraint notes_UserId_fkey foreign key ("UserId") references users("Id")
 );
 
 ALTER TABLE notes OWNER to "NotesAppUser";
 
 GRANT ALL ON TABLE notes TO "NotesAppUser";
-
-INSERT INTO notes ("Name", "Creation_Date", "Modify_Date", "Content") VALUES 
-('Note One',    '2023-01-01', '2023-01-01', 'Most of the buttons do no''t work for now'),
-('Note Two',    '2023-02-02', '2023-02-02', 'Reminder to do something'),
-('Note Three',  '2023-03-03', '2023-03-03', 'Buy carrots'),
-('Note Four',   '2023-04-04', '2023-04-04', 'aaaaaaaaaaaaaaaaaaa'),
-('Note Five',   '2023-05-05', '2023-05-05', 'this is a longer text that I am writting to test this but I have no idea what I am writting'),
-('Note Six',    '2023-06-06', '2023-06-06', ''),
-('Note Seven',  '2023-07-07', '2023-07-07', ''),
-('Note Eight',  '2023-08-08', '2023-08-08', ''),
-('Note Nine',   '2023-09-09', '2023-09-09', ''),
-('Note Ten',    '2023-10-10', '2023-10-10', ''),
-('Note Eleven', '2023-11-11', '2023-11-11', ''),
-('Note Twelve', '2023-12-12', '2023-12-12', '');
 
 CREATE TABLE if NOT EXISTS users
 (
@@ -69,7 +58,7 @@ CREATE TABLE if NOT EXISTS users
     CONSTRAINT users_username_unq UNIQUE ("NormalizedUserName")
 );
 
-alter table users owner to "NotesAppUser";
+ALTER TABLE users OWNER to "NotesAppUser";
 GRANT ALL ON TABLE users TO "NotesAppUser";
 
 \q
