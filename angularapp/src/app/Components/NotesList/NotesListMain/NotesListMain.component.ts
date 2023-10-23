@@ -7,6 +7,7 @@ import { NgFor } from '@angular/common';
 import { NotePreview, NotesService } from 'src/app/Services/NotesService';
 import AnimateElement from 'src/app/Utils/Animate';
 import { AuthService } from 'src/app/Services/AuthService';
+import { Router } from '@angular/router';
 
 function SetNoteWrapperSize() {
   const NoteWrapper = document.getElementById("notes-wrapper");
@@ -39,11 +40,16 @@ export class NotesListMain implements AfterViewChecked {
   notes: Array<NotePreview> = new Array<NotePreview>;
   private isBackToTopButtonHidden : boolean = true;
 
-  constructor(private notesService : NotesService, private authService : AuthService) {
+  constructor(private notesService : NotesService, private authService : AuthService, private router : Router) {
     window.addEventListener('resize', SetNoteWrapperSize);
     this.notesService.GetNotePreviews().subscribe(result => {
-      result.forEach(note => { 
-        note.modifyDate = this.notesService.GetNotePreviewDateText(new Date(note.modifyDate)); 
+      result.forEach(note => {
+        const date : Date = new Date(note.modifyDate); 
+        if (note.name === "") {
+          note.name = `Text note<br>${date.getMonth() + 1}/${date.getDate()}`;
+        }
+
+        note.modifyDate = this.notesService.GetNotePreviewDateText(date); 
       });
       this.notes = result;
     })
@@ -85,7 +91,10 @@ export class NotesListMain implements AfterViewChecked {
   }
 
   OnCreateNoteClick() {
-    DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_DISPLAY);
+    this.notesService.Create().subscribe(id => {
+      DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_DISPLAY);
+      this.router.navigate(["note", id]);
+    });
   }
 
   OnScroll(event : Event) {    

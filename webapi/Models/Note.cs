@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Npgsql.Internal.TypeHandlers;
+using System.ComponentModel.DataAnnotations;
 
 namespace webapi.Models
 {
@@ -6,13 +7,27 @@ namespace webapi.Models
     {
         public int Id { get; set; }
 
-        public string? Name { get; set; }
+        public int UserId { get; set; }
+
+        public Guid Guid {  get; set; }
+
+        public string Name { get; set; } = "";
 
         [DataType(DataType.Date)]
-        public DateTime Creation_Date { get; set; }
+        public DateTime CreationDate { get; set; }
         [DataType(DataType.Date)]
-        public DateTime Modify_Date { get; set; }
+        public DateTime ModifyDate { get; set; }
 
-        public string? Content { get; set; }
+        public string Content { get; set; } = "";
+    }
+
+    public class NoteUpdateInfo
+    {
+        public Guid Id { get; set; }
+        public string Content { get; set; } = "";
+    }
+    public class NoteDeleteInfo
+    {
+        public Guid Id { get; set; }
     }
 }

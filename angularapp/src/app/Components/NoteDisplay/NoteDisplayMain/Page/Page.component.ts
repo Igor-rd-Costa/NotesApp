@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,5 +9,10 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./Page.component.css']
 })
 export class Page {
+  @Output() FocusOut = new EventEmitter<void>(false);
+  @Input() content : string = "";
 
+  Blur() {
+   this.FocusOut.emit();
+  }
 }

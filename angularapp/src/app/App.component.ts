@@ -1,10 +1,8 @@
-import { Component, effect, OnInit } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { HandleTouchStart, HandleTouchMove, HandleTouchEnd, HandleWheel, touchInfo, ResetTouchInfoData } from './Utils/GlobalEventHandlers'
 import { DisplayModeService, AppDisplayMode, HeaderDisplayMode, SideMenuDisplayMode } from './Services/DisplayModeService';
 import AnimateElement from './Utils/Animate';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AppRoutingModule } from './AppRouting.module';
-import { AuthService } from './Services/AuthService';
+import { Router } from '@angular/router';
 
 let scrollTopAtTouch : number = 0;
 let folderDisplayLargeHeight : string = "";
@@ -108,7 +106,6 @@ export class App {
           this.appEvents.OnTouchMove = (event: TouchEvent) => { };
           this.appEvents.OnTouchEnd = () => { };
           this.appEvents.OnWheel = (event: WheelEvent) => { };
-          this.router.navigate(['/notes']);
         } break;
       }
     })

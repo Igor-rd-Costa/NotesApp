@@ -27,15 +27,19 @@ section.header-section {
       margin-right: min(1rem, 6%);
     }
 
-    span#folder-name {
+    input#note-name {
       font-weight: 500;
       font-size: 1.30rem;
       margin: 0px;
       padding: 0px;
       padding-bottom: 5px;
       margin-top: 7px;
+      margin-right: 0.8rem;
       overflow: hidden;
       text-overflow: ellipsis;
+      min-width: 5rem;
+      max-width: 85%;
+      min-height: 1.8rem;
     }
   }
 
@@ -58,5 +62,9 @@ section.header-section {
     height: 1rem;
     width: 1rem;
     justify-self: start;
+
+    button {
+      cursor: pointer;
+    }
   }
 }

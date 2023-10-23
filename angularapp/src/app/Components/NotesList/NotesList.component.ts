@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 import { NotesListHeader } from './NotesListHeader/NotesListHeader.component';
 import { NotesListMain } from './NotesListMain/NotesListMain.component';
 import { SideMenu } from './SideMenu/SideMenu.component';
-import { AppDisplayMode, DisplayModeService, SideMenuDisplayMode } from 'src/app/Services/DisplayModeService';
+import { DisplayModeService, SideMenuDisplayMode } from 'src/app/Services/DisplayModeService';
 import { NotesService } from 'src/app/Services/NotesService';
-import { AuthService } from 'src/app/Services/AuthService';
 
 @Component({
   selector: 'NotesList',
@@ -18,7 +17,7 @@ export class NotesList {
 
   private static noteCount = signal<number>(0);
 
-  constructor(private notesService : NotesService, private authService : AuthService) {
+  constructor(private notesService : NotesService) {
     this.notesService.GetNoteCount().subscribe(count => NotesList.noteCount.set(count));
   }
 

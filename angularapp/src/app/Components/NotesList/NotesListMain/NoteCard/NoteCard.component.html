@@ -1,9 +1,9 @@
 <div class="note">
-    <div id="note-preview">
+    <div id="note-preview" (click)="OnClick()">
       <p id="preview-text">{{notePreview}}</p>
     </div>
     <div id="note-info">
-        <div id="note-name">{{noteName}}</div>
+        <div id="note-name" [innerHTML]="noteName"></div>
         <div id="note-date">{{noteDate}}</div>
     </div>
 </div>

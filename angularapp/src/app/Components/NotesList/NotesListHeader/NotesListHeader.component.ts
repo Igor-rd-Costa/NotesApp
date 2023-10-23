@@ -1,16 +1,14 @@
-import { Component, effect, signal } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AppDisplayMode, DisplayModeService, HeaderDisplayMode } from 'src/app/Services/DisplayModeService';
+import { DisplayModeService, HeaderDisplayMode } from 'src/app/Services/DisplayModeService';
 import { NgStyle } from '@angular/common';
-import { NotesService } from 'src/app/Services/NotesService';
 import { ImgButton, ImgButtonProp } from '../../General/ImgButton/ImgButton.component';
 import { NotesList } from '../NotesList.component';
-
 @Component({
   standalone: true,
   selector: 'NotesListHeader',
   providers: [ HttpClient ],
-  imports: [ NgStyle, ImgButton, NotesList ],
+  imports: [ NgStyle, ImgButton ],
   templateUrl: './NotesListHeader.component.html',
   styleUrls: ['./NotesListHeader.component.css']
 })

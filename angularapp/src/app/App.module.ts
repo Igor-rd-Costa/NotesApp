@@ -3,12 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './AppRouting.module';
 import { App } from './App.component';
 import { DisplayModeService } from './Services/DisplayModeService';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NotesService } from './Services/NotesService';
 import { NotesList } from './Components/NotesList/NotesList.component';
 import { NgIf } from '@angular/common';
 import { NoteDisplay } from './Components/NoteDisplay/NoteDisplay.component';
 import { AuthService } from './Services/AuthService';
+import { NoAuthInterceptor } from './Components/General/NoAuthInterceptor';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,7 @@ import { AuthService } from './Services/AuthService';
     NoteDisplay,
     NgIf
   ],
-  providers: [ DisplayModeService, NotesService, AuthService ],
+  providers: [ DisplayModeService, NotesService, AuthService, {provide: HTTP_INTERCEPTORS, useClass: NoAuthInterceptor, multi: true } ],
   bootstrap: [App]
 })
 export class AppModule { 

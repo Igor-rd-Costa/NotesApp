@@ -1,15 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoteDisplay } from './NoteDisplay.component';
 
-describe('NoteDisplay', () => {
-  let component: NoteDisplay;
-  let fixture: ComponentFixture<NoteDisplay>;
+import { MoreOptionsMenu } from './MoreOptionsMenu.component';
+
+describe('MoreOptionsMenu', () => {
+  let component: MoreOptionsMenu;
+  let fixture: ComponentFixture<MoreOptionsMenu>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [NoteDisplay]
+      imports: [MoreOptionsMenu]
     });
-    fixture = TestBed.createComponent(NoteDisplay);
+    fixture = TestBed.createComponent(MoreOptionsMenu);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

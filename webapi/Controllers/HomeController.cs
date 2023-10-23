@@ -3,7 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.Internal.TypeHandlers;
+using Npgsql.PostgresTypes;
 using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Security.Claims;
 using webapi.Data;
 using webapi.Models;
@@ -26,27 +30,145 @@ namespace webapi.Controllers
             m_SignInManager = signInManager;
         }
 
-        [HttpGet]
-        public List<NotePreview> Get()
+        [HttpPost("note/create")]
+        public IActionResult Create()
         {
-            if (m_NotesContext.notes != null)
+            string temp = m_UserManager.GetUserId(User) ?? "";
+            if (temp == "")
+                return BadRequest();
+
+            int id = int.Parse(temp);
+            Guid noteGuid = Guid.NewGuid();
+            DateTime date = DateTime.UtcNow;
+            Note note = new Note()
             {
-                var notes = m_NotesContext.notes.Select(note => new NotePreview
-                {
-                    Id = note.Id,
-                    Name = note.Name,
-                    ModifyDate = note.Modify_Date,
-                    Preview = note.Content
-                }).ToList();
-                return notes;
+                UserId = id,
+                Guid = noteGuid,
+                CreationDate = date,
+                ModifyDate = date,
+            };
+            var result = m_NotesContext.Add(note);
+            if (result.State == EntityState.Added)
+            {
+                m_NotesContext.SaveChanges();
+                return Ok(noteGuid);
             }
-            return new List<NotePreview>();
+            return BadRequest();
         }
 
-        [HttpGet("count")]
-        public int Count()
+        [HttpGet("note/{guid:guid}")]
+        public NoteInfo? Note(Guid guid)
         {
-            return m_NotesContext.notes.Count();
+            string? userId = m_UserManager.GetUserId(User);
+            if (userId == null)
+                return null;
+
+            NoteInfo? note = m_NotesContext.notes.Where(note => note.UserId == int.Parse(userId) && note.Guid == guid).Select(note => new NoteInfo
+            {
+                Id = note.Guid,
+                Name = note.Name,
+                Content = note.Content,
+                Date = note.ModifyDate
+            }).FirstOrDefault();
+
+            return note;
+        }
+
+        [HttpPatch("note/rename")]
+        public IActionResult Rename([FromBody] RenameInfo renameInfo)
+        {
+            string? userId = m_UserManager.GetUserId(User);
+            if (userId == null)
+                return NotFound();
+
+            Note? note = m_NotesContext.notes.Where(note => note.UserId == int.Parse(userId) && note.Guid == renameInfo.Id).FirstOrDefault();
+            if (note == null)
+                return NotFound();
+
+            note.Name = renameInfo.NewName;
+            note.ModifyDate = DateTime.UtcNow;
+
+            m_NotesContext.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPatch("note/update")]
+        public IActionResult Update([FromBody] NoteUpdateInfo info)
+        {
+            string? userId = m_UserManager.GetUserId(User);
+            if (userId == null)
+                return NotFound();
+
+            Note? note = m_NotesContext.notes.Where(note => note.UserId == int.Parse(userId) && note.Guid == info.Id).FirstOrDefault();
+            if (note == null)
+                return NotFound();
+
+            note.Content = info.Content;
+            m_NotesContext.SaveChanges();
+            return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            string? userId = m_UserManager.GetUserId(User);
+            if (userId == null)
+                return NotFound();
+
+            var notes = m_NotesContext.notes.Where(note => note.UserId == int.Parse(userId)).Select(note => new NotePreview
+            {
+                Id = note.Guid,
+                Name = note.Name,
+                ModifyDate = note.ModifyDate,
+                Preview = note.Content
+            }).ToList();
+            return Ok(notes);
+        }
+
+        [HttpGet("note/count")]
+        public IActionResult Count()
+        {
+            string? userId = m_UserManager.GetUserId(User);
+            if (userId == null)
+                return NotFound();
+
+            return Ok(m_NotesContext.notes.Where(note => note.UserId == int.Parse(userId)).Count());
+        }
+
+        [HttpDelete("note/delete")]
+        public IActionResult Delete([FromBody] NoteDeleteInfo info)
+        {
+            string? userId = m_UserManager.GetUserId(User);
+            if (userId == null)
+                return NotFound();
+
+            Note? note = m_NotesContext.notes.Where(note => note.Guid == info.Id && note.UserId == int.Parse(userId)).FirstOrDefault();
+            if (note == null)
+                return NotFound();
+
+            m_NotesContext.notes.Remove(note);
+            m_NotesContext.SaveChanges();
+            return Ok();
+        }
+
+        [HttpDelete("note/checkdelete")]
+        public IActionResult CheckDelete([FromBody] CheckDeleteInfo info)
+        {
+            string? userId = m_UserManager.GetUserId(User);
+            if (userId == null)
+                return NotFound();
+
+            Note? note = m_NotesContext.notes.Where(note => note.Guid == info.Id && note.UserId == int.Parse(userId)).FirstOrDefault();
+            if (note == null)
+                return NotFound();
+
+            if (note.ModifyDate.Equals(note.CreationDate))
+            {
+                m_NotesContext.notes.Remove(note);
+                m_NotesContext.SaveChanges();
+            }
+
+            return Ok();
         }
     }
 }

@@ -8,7 +8,7 @@ path: '',
 component: Index
 },
 {
-path: 'notes',
+path: 'note/:guid',
 component: NoteDisplay
 }];
 

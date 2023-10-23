@@ -1,6 +1,6 @@
 <main>
     <section class="pages">
-        <Page></Page>
+        <Page [content]="noteContent" (FocusOut)="SaveContentChanges()"></Page>
     </section>
     <section class="edit-menu">
         <ImgButton id="draw-mode"></ImgButton>
