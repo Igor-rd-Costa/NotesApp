@@ -1,3 +1,2 @@
-<div class="note-page" (blur)="Blur()" contenteditable>
-{{content}}
+<div class="note-page" [innerHTML]="content" (blur)="Blur()" contenteditable>
 </div>

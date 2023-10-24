@@ -1,14 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.Internal.TypeHandlers;
-using Npgsql.PostgresTypes;
 using System.Collections.Immutable;
-using System.ComponentModel;
-using System.Security.Claims;
 using webapi.Data;
 using webapi.Models;
 
@@ -28,6 +22,51 @@ namespace webapi.Controllers
             m_NotesContext = context;
             m_UserManager = userManager;
             m_SignInManager = signInManager;
+        }
+
+        [HttpGet]
+        public IActionResult Previews()
+        {
+            string? userId = m_UserManager.GetUserId(User);
+            if (userId == null)
+                return NotFound();
+
+            var notes = m_NotesContext.notes.Where(note => note.UserId == int.Parse(userId)).Select(note => new NotePreview
+            {
+                Id = note.Guid,
+                Name = note.Name,
+                ModifyDate = note.ModifyDate,
+                Preview = note.Content
+            }).ToList();
+            return Ok(notes);
+        }
+
+        [HttpGet("note/{guid:guid}")]
+        public IActionResult Note(Guid guid)
+        {
+            string? userId = m_UserManager.GetUserId(User);
+            if (userId == null)
+                return NotFound();
+
+            NoteInfo? note = m_NotesContext.notes.Where(note => note.UserId == int.Parse(userId) && note.Guid == guid).Select(note => new NoteInfo
+            {
+                Id = note.Guid,
+                Name = note.Name,
+                Content = note.Content,
+                Date = note.ModifyDate
+            }).FirstOrDefault();
+
+            return Ok(note);
+        }
+
+        [HttpGet("note/count")]
+        public IActionResult Count()
+        {
+            string? userId = m_UserManager.GetUserId(User);
+            if (userId == null)
+                return NotFound();
+
+            return Ok(m_NotesContext.notes.Where(note => note.UserId == int.Parse(userId)).Count());
         }
 
         [HttpPost("note/create")]
@@ -56,26 +95,8 @@ namespace webapi.Controllers
             return BadRequest();
         }
 
-        [HttpGet("note/{guid:guid}")]
-        public NoteInfo? Note(Guid guid)
-        {
-            string? userId = m_UserManager.GetUserId(User);
-            if (userId == null)
-                return null;
-
-            NoteInfo? note = m_NotesContext.notes.Where(note => note.UserId == int.Parse(userId) && note.Guid == guid).Select(note => new NoteInfo
-            {
-                Id = note.Guid,
-                Name = note.Name,
-                Content = note.Content,
-                Date = note.ModifyDate
-            }).FirstOrDefault();
-
-            return note;
-        }
-
         [HttpPatch("note/rename")]
-        public IActionResult Rename([FromBody] RenameInfo renameInfo)
+        public IActionResult Rename([FromBody] NoteRenameInfo renameInfo)
         {
             string? userId = m_UserManager.GetUserId(User);
             if (userId == null)
@@ -108,33 +129,6 @@ namespace webapi.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        public IActionResult Get()
-        {
-            string? userId = m_UserManager.GetUserId(User);
-            if (userId == null)
-                return NotFound();
-
-            var notes = m_NotesContext.notes.Where(note => note.UserId == int.Parse(userId)).Select(note => new NotePreview
-            {
-                Id = note.Guid,
-                Name = note.Name,
-                ModifyDate = note.ModifyDate,
-                Preview = note.Content
-            }).ToList();
-            return Ok(notes);
-        }
-
-        [HttpGet("note/count")]
-        public IActionResult Count()
-        {
-            string? userId = m_UserManager.GetUserId(User);
-            if (userId == null)
-                return NotFound();
-
-            return Ok(m_NotesContext.notes.Where(note => note.UserId == int.Parse(userId)).Count());
-        }
-
         [HttpDelete("note/delete")]
         public IActionResult Delete([FromBody] NoteDeleteInfo info)
         {
@@ -152,7 +146,7 @@ namespace webapi.Controllers
         }
 
         [HttpDelete("note/checkdelete")]
-        public IActionResult CheckDelete([FromBody] CheckDeleteInfo info)
+        public IActionResult CheckDelete([FromBody] NoteDeleteInfo info)
         {
             string? userId = m_UserManager.GetUserId(User);
             if (userId == null)

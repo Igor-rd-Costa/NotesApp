@@ -56,6 +56,10 @@ section.header-menu-section > div#menu-wrapper > ImgButton#menu-icon {
     height: 0.9rem;
     margin-left: min(2rem, 9.87%);
     margin-right: min(1rem, 6%);
+    
+    button {
+        cursor: pointer;
+    }
 }
 
 section.header-menu-section > div#menu-wrapper > span#folder-name {

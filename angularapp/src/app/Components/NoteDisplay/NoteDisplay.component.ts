@@ -29,6 +29,20 @@ noteInfo : NoteInfo = {
         return;
       }
       this.notesService.GetNote(guid).subscribe((note) => {
+        let content : string = "";
+        let index : number = 0;
+        let start : number = 0;
+        while(true) {
+          index = note.content.indexOf('\n', index);
+          
+          if (index === -1)
+            break;
+        
+          content += `<span>${note.content.substring(start, index)}</span><br>`;
+          index++;
+          start = index;
+        }
+        note.content = content;
         this.noteInfo = note;
       });
     })

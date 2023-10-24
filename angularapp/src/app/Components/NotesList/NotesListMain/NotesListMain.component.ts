@@ -40,7 +40,7 @@ export class NotesListMain implements AfterViewChecked {
   notes: Array<NotePreview> = new Array<NotePreview>;
   private isBackToTopButtonHidden : boolean = true;
 
-  constructor(private notesService : NotesService, private authService : AuthService, private router : Router) {
+  constructor(private notesService : NotesService, private router : Router) {
     window.addEventListener('resize', SetNoteWrapperSize);
     this.notesService.GetNotePreviews().subscribe(result => {
       result.forEach(note => {
@@ -48,7 +48,7 @@ export class NotesListMain implements AfterViewChecked {
         if (note.name === "") {
           note.name = `Text note<br>${date.getMonth() + 1}/${date.getDate()}`;
         }
-
+        note.preview = note.preview.replaceAll('\n', "<br>");
         note.modifyDate = this.notesService.GetNotePreviewDateText(date); 
       });
       this.notes = result;

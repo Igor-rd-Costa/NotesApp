@@ -42,7 +42,6 @@ export class NoteDisplayMain {
         content += page.innerText;
       }
     }
-    console.log("Content: ", content);
     this.notesService.Update(this.noteId, content).subscribe();
   }
 }
