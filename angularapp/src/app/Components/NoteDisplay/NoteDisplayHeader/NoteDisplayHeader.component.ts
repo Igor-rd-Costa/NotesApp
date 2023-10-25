@@ -82,7 +82,8 @@ export class NoteDisplayHeader implements AfterViewInit {
   }
 
   OnMoreOptionsClick(event : MouseEvent, userData : any) {
-    userData.MoreOptionsMenu.ToggleVisibility();
+    MoreOptionsMenu.Toggle();
+    event.stopPropagation();
   }
 
   OnBlur() {

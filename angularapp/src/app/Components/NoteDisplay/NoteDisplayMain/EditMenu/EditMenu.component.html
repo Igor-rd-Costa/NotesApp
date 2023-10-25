@@ -1,0 +1,13 @@
+<section class="edit-menu">
+    <ImgButton id="draw-mode"></ImgButton>
+    <ImgButton id="checkbox"></ImgButton>
+    <ImgButton id="text-options"></ImgButton>
+    <ImgButton id="font-color"></ImgButton>
+    <ImgButton id="font-background"></ImgButton>
+    <button id="font-size" (click)="FontSizeButtonOnClick($event)">
+        <span>{{fontSize}}</span>
+        <img src="/assets/DownArrowSmallIcon.svg"/>
+    </button>
+    <ImgButton id="undo" [props]="undoButtonProps"></ImgButton>
+    <FontSizeMenu (SelectionChange)="UpdateFontSizeDisplay($event)"></FontSizeMenu>
+</section>

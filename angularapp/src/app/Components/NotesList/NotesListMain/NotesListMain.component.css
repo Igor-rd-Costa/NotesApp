@@ -34,7 +34,7 @@ section.filter-menu {
         width: 1rem;
         height: 1rem;
         grid-column: 2;
-        padding-right: 43%;
+        margin-right: 43%;
     }
 }
 

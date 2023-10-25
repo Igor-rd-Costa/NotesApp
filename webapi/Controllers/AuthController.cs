@@ -53,7 +53,7 @@ namespace webapi.Controllers
             {
                 return Ok();
             }
-            return BadRequest("Failed to SignIn after registration!");
+            return BadRequest("Failed to sign in after registration!");
         }
 
         [HttpGet("islogged")]

@@ -6,7 +6,6 @@ import { AppDisplayMode, DisplayModeService, HeaderDisplayMode } from '../../../
 import { NgFor } from '@angular/common';
 import { NotePreview, NotesService } from 'src/app/Services/NotesService';
 import AnimateElement from 'src/app/Utils/Animate';
-import { AuthService } from 'src/app/Services/AuthService';
 import { Router } from '@angular/router';
 
 function SetNoteWrapperSize() {

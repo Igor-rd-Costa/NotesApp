@@ -1,3 +1,3 @@
-<div id="notes-app" (touchstart)="appEvents.OnTouchStart($event)" (touchmove)="appEvents.OnTouchMove($event)" (touchend)="appEvents.OnTouchEnd()" (wheel)="appEvents.OnWheel($event)">
+<div id="notes-app" (touchstart)="appEvents.OnTouchStart($event)" (touchmove)="appEvents.OnTouchMove($event)" (touchend)="appEvents.OnTouchEnd()" (wheel)="appEvents.OnWheel($event)" (click)="AppClick($event)">
     <router-outlet></router-outlet>
 </div>

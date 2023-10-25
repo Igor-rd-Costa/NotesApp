@@ -2,13 +2,5 @@
     <section class="pages">
         <Page [content]="noteContent" (FocusOut)="SaveContentChanges()"></Page>
     </section>
-    <section class="edit-menu">
-        <ImgButton id="draw-mode"></ImgButton>
-        <ImgButton id="checkbox"></ImgButton>
-        <ImgButton id="text-options"></ImgButton>
-        <ImgButton id="font-color"></ImgButton>
-        <ImgButton id="font-background"></ImgButton>
-        <ImgButton id="font-size"></ImgButton>
-        <ImgButton id="undo" [props]="undoButtonProps"></ImgButton>
-    </section>
+    <EditMenu></EditMenu>
 </main>

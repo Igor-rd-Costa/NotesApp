@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Page } from './Page/Page.component';
 import { ImgButton, ImgButtonProp } from '../../General/ImgButton/ImgButton.component';
 import { NotesService } from 'src/app/Services/NotesService';
+import { EditMenu } from './EditMenu/EditMenu.component';
 
 @Component({
   selector: 'NoteDisplayMain',
   standalone: true,
-  imports: [CommonModule, Page, ImgButton ],
+  imports: [CommonModule, Page, ImgButton, EditMenu ],
   templateUrl: './NoteDisplayMain.component.html',
   styleUrls: ['./NoteDisplayMain.component.css']
 })
@@ -15,20 +16,6 @@ export class NoteDisplayMain {
   constructor(private notesService : NotesService) {}
   @Input() noteId : string = "";
   @Input() noteContent : string = "";
-
-  undoButtonProps : ImgButtonProp = {
-    Button: {
-      OnClick: this.UndoButtonOnClick
-    },
-    Img: {
-      Src: '/assets/UndoIcon.svg',
-      Alt: 'Undo icon'
-    }
-  }
-
-
-  UndoButtonOnClick(event : MouseEvent) {
-  }
 
   SaveContentChanges() {
     let pages = document.getElementsByClassName("note-page");

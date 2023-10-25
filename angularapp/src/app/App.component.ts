@@ -70,6 +70,7 @@ interface AppEvents {
 export class App {
   title = 'notes-app';
   private static scrollTargetId: string = "notes-app";
+  private static clickWatchers : ((event : Event) => void)[] = [];
   DisplayModeService = DisplayModeService;
   AppDisplayMode = AppDisplayMode;
 
@@ -111,6 +112,10 @@ export class App {
     })
   }
 
+  public static RegisterClickWatcher(watcher :(event : Event) => void) {
+    App.clickWatchers.push(watcher);
+  }
+
   OnTouchStart(event : TouchEvent) {
     HandleTouchStart(event);
     const AppElement = document.getElementById(App.scrollTargetId) as HTMLElement;
@@ -142,6 +147,12 @@ export class App {
         HideHeader();
       else if (touchInfo.wheelDelta.Y < 0 && !isHeaderVisible && DisplayModeService.GetSideMenuDisplayMode() != SideMenuDisplayMode.VISIBLE)
         ShowHeader();
+    }
+  }
+
+  AppClick(event : Event) {
+    for (let i = 0; i < App.clickWatchers.length; i++) {
+      App.clickWatchers[i](event);
     }
   }
 }
