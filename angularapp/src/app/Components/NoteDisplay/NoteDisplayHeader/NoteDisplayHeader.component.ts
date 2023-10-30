@@ -70,7 +70,7 @@ export class NoteDisplayHeader implements AfterViewInit {
     if (name == null || content == null)
       return;
 
-    if (name.value === "" && content.innerText === "") {
+    if (name.value === "" && (content.innerText === "" || content.innerText === '\n')) {
       userData.Header.notesService.CheckDelete(userData.Header.noteId).subscribe({
         next: () => { DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_LIST)},
         error: (error : any) => { console.log(error) }
@@ -81,7 +81,7 @@ export class NoteDisplayHeader implements AfterViewInit {
     }
   }
 
-  OnMoreOptionsClick(event : MouseEvent, userData : any) {
+  OnMoreOptionsClick(event : MouseEvent) {
     MoreOptionsMenu.Toggle();
     event.stopPropagation();
   }

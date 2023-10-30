@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NoteDisplayMain } from './NoteDisplayMain/NoteDisplayMain.component';
 import { NoteDisplayHeader } from './NoteDisplayHeader/NoteDisplayHeader.component';
 import { ActivatedRoute } from '@angular/router';
 import { AppDisplayMode, DisplayModeService } from 'src/app/Services/DisplayModeService';
-import { NoteInfo, NotesService } from 'src/app/Services/NotesService';
+import { NoteManager } from 'src/app/Services/NoteManager';
+import { NoteFormater } from 'src/app/Utils/NoteFormater';
 
 @Component({
   selector: 'NoteDisplay',
@@ -14,37 +15,25 @@ import { NoteInfo, NotesService } from 'src/app/Services/NotesService';
   styleUrls: ['./NoteDisplay.component.css']
 })
 export class NoteDisplay {
-noteInfo : NoteInfo = {
-  id: "",
-  name: "",
-  content: "",
-  date: ""
-};
+noteContent : string = "";
+noteId : string = "";
+noteName : string = "";
 
-  constructor(private route : ActivatedRoute, private notesService : NotesService) {
+  constructor(private route : ActivatedRoute, private noteManager : NoteManager) {
+    effect(() => {
+      this.noteId = this.noteManager.GetNoteId();
+      this.noteName = this.noteManager.GetNoteName();
+      const content = this.noteManager.GetNoteContent();
+      this.noteContent = NoteFormater.ToHTML(content);
+    })
+
     this.route.paramMap.subscribe(value => {
       const guid = value.get("guid");
       if (guid == null) {
         DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_LIST);
         return;
       }
-      this.notesService.GetNote(guid).subscribe((note) => {
-        let content : string = "";
-        let index : number = 0;
-        let start : number = 0;
-        while(true) {
-          index = note.content.indexOf('\n', index);
-          
-          if (index === -1)
-            break;
-        
-          content += `<span>${note.content.substring(start, index)}</span><br>`;
-          index++;
-          start = index;
-        }
-        note.content = content;
-        this.noteInfo = note;
-      });
+      this.noteManager.Load(guid);
     })
   }
 

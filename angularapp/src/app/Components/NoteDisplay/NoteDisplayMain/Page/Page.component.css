@@ -6,4 +6,9 @@ div.note-page {
     text-align: start;
     line-break: anywhere;
     overflow: scroll;
+    font-size: 16px;
+
+    p {
+        margin: 0px;
+    }
 }

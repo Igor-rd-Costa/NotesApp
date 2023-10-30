@@ -7,6 +7,7 @@ import { NgFor } from '@angular/common';
 import { NotePreview, NotesService } from 'src/app/Services/NotesService';
 import AnimateElement from 'src/app/Utils/Animate';
 import { Router } from '@angular/router';
+import { NoteFormater } from 'src/app/Utils/NoteFormater';
 
 function SetNoteWrapperSize() {
   const NoteWrapper = document.getElementById("notes-wrapper");
@@ -47,7 +48,7 @@ export class NotesListMain implements AfterViewChecked {
         if (note.name === "") {
           note.name = `Text note<br>${date.getMonth() + 1}/${date.getDate()}`;
         }
-        note.preview = note.preview.replaceAll('\n', "<br>");
+        note.preview = NoteFormater.ToHTML(note.preview);
         note.modifyDate = this.notesService.GetNotePreviewDateText(date); 
       });
       this.notes = result;

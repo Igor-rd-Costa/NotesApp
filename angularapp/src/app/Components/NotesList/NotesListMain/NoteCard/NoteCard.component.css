@@ -11,6 +11,7 @@ div.note {
         overflow: hidden;
         padding: 0.4rem;
         cursor: pointer;
+        line-break: anywhere;
 
         p#preview-text {
             margin: 0rem;

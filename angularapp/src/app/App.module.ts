@@ -10,6 +10,7 @@ import { NgIf } from '@angular/common';
 import { NoteDisplay } from './Components/NoteDisplay/NoteDisplay.component';
 import { AuthService } from './Services/AuthService';
 import { NoAuthInterceptor } from './Components/General/NoAuthInterceptor';
+import { NoteManager } from './Services/NoteManager';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { NoAuthInterceptor } from './Components/General/NoAuthInterceptor';
     NoteDisplay,
     NgIf
   ],
-  providers: [ DisplayModeService, NotesService, AuthService, {provide: HTTP_INTERCEPTORS, useClass: NoAuthInterceptor, multi: true } ],
+  providers: [ DisplayModeService, NotesService, AuthService, NoteManager, {provide: HTTP_INTERCEPTORS, useClass: NoAuthInterceptor, multi: true } ],
   bootstrap: [App]
 })
 export class AppModule { 

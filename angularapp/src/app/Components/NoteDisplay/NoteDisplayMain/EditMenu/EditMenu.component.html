@@ -1,5 +1,5 @@
 <section class="edit-menu">
-    <ImgButton id="draw-mode"></ImgButton>
+    <ImgButton id="draw-mode" (click)="OnClickTest()"></ImgButton>
     <ImgButton id="checkbox"></ImgButton>
     <ImgButton id="text-options"></ImgButton>
     <ImgButton id="font-color"></ImgButton>
@@ -9,5 +9,6 @@
         <img src="/assets/DownArrowSmallIcon.svg"/>
     </button>
     <ImgButton id="undo" [props]="undoButtonProps"></ImgButton>
+    
     <FontSizeMenu (SelectionChange)="UpdateFontSizeDisplay($event)"></FontSizeMenu>
 </section>
