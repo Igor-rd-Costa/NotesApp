@@ -1,6 +1,6 @@
 <main>
     <section class="pages">
-        <Page [content]="noteContent" (mousedown)="UpdateDisplay()" (keydown)="OnKeyDown($event)" (FocusOut)="SaveContentChanges()"></Page>
+        <Page (mousedown)="UpdateDisplay()" (keydown)="OnKeyDown($event)" (FocusOut)="SaveContentChanges()"></Page>
     </section>
     <EditMenu></EditMenu>
 </main>

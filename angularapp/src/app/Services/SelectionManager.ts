@@ -4,6 +4,7 @@ export interface NoteSelection {
     FocusNode : Node | null,
     AnchorOffset : number | null,
     FocusOffset : number | null
+    Nodes: Node[] | null
 }
 
 export class SelectionManager {
@@ -12,7 +13,8 @@ export class SelectionManager {
         AnchorNode: null,
         FocusNode : null,
         AnchorOffset: null,
-        FocusOffset: null
+        FocusOffset: null,
+        Nodes: null
     };
 
     public static GetSelection() : NoteSelection {
@@ -27,6 +29,7 @@ export class SelectionManager {
             this.currentSelection.FocusNode = null;
             this.currentSelection.AnchorOffset = null;
             this.currentSelection.FocusOffset = null;
+            this.currentSelection.Nodes = null;
             return;
         }
 

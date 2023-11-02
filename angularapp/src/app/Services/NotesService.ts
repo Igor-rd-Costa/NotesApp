@@ -7,7 +7,7 @@ export interface NotePreview {
     name: string,
     modifyDate: string,
     preview: string
-  }
+}
 
 export interface NoteInfo {
     id : string,
@@ -16,13 +16,12 @@ export interface NoteInfo {
     date : string
 }
 
-  
-  @Injectable()
-  export class NotesService {
-      constructor(private http : HttpClient) {}
-      
-    private Months : string[] = [ "Jan", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Aug", "Set", "Oct", "Nov", "Dec" ];
+@Injectable()
+export class NotesService {
+    constructor(private http : HttpClient) {}
     
+    private Months : string[] = [ "Jan", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Aug", "Set", "Oct", "Nov", "Dec" ];
+
     public Create() : Observable<string> {
         return this.http.post<string>("https://localhost:7216/note/create/", {}, { withCredentials: true, });
     }
@@ -42,7 +41,7 @@ export interface NoteInfo {
     public GetNotePreviews() : Observable<NotePreview[]> {
         return this.http.get<Array<NotePreview>>('https://localhost:7216/', {withCredentials: true});
     }
-    
+
     public GetNoteCount() : Observable<number> {
             return this.http.get<number>('https://localhost:7216/note/count/', {withCredentials: true});
     }

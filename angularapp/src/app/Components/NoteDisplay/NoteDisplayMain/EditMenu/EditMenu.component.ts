@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ImgButton, ImgButtonProp } from 'src/app/Components/General/ImgButton/ImgButton.component';
 import { FontSizeMenu } from './Menus/FontSizeMenu/FontSizeMenu.component';
 import { SelectionManager } from 'src/app/Services/SelectionManager';
-import { NoteFormater, SpanStyle } from 'src/app/Utils/NoteFormater';
+import { NoteNodeStyles } from 'src/app/Utils/NoteFormater';
 
 @Component({
   selector: 'EditMenu',
@@ -28,7 +28,7 @@ export class EditMenu {
     }
   }
 
-  UpdateDisplay(tagStyle : SpanStyle | null) {
+  UpdateDisplay(tagStyle : NoteNodeStyles | null) {
     if (tagStyle === null) {
       this.fontSizeMenu.SetSelected(16);
       this.UpdateFontSizeDisplay(16);
@@ -59,10 +59,4 @@ export class EditMenu {
   UndoButtonOnClick() {
 
   }
-
-  OnClickTest() {
-    NoteFormater.Test();
-
-  }
-
 }

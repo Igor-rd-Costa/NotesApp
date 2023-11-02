@@ -18,7 +18,6 @@ export class NoteDisplayMain {
     
   }
   @Input() noteId : string = "";
-  @Input() noteContent : string = "";
   @ViewChild(EditMenu) editMenu! : EditMenu;
 
   SaveContentChanges() {

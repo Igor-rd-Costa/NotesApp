@@ -4,7 +4,7 @@ import { SetScrollTop } from 'src/app/App.component';
 import { touchInfo } from '../../../Utils/GlobalEventHandlers';
 import { AppDisplayMode, DisplayModeService, HeaderDisplayMode } from '../../../Services/DisplayModeService';
 import { NgFor } from '@angular/common';
-import { NotePreview, NotesService } from 'src/app/Services/NotesService';
+import { NotesService } from 'src/app/Services/NotesService';
 import AnimateElement from 'src/app/Utils/Animate';
 import { Router } from '@angular/router';
 import { NoteFormater } from 'src/app/Utils/NoteFormater';
@@ -29,6 +29,13 @@ function SetNoteWrapperSize() {
   }
 }
 
+interface NoteCardInfo {
+  id: string,
+  name : string,
+  modifyDate : string,
+  preview : HTMLParagraphElement[]
+}
+
 @Component({
   standalone: true,
   selector: 'NotesListMain',
@@ -37,7 +44,7 @@ function SetNoteWrapperSize() {
   imports: [ NoteCard, NgFor ]
 })
 export class NotesListMain implements AfterViewChecked {
-  notes: Array<NotePreview> = new Array<NotePreview>;
+  notes : NoteCardInfo[] = [];
   private isBackToTopButtonHidden : boolean = true;
 
   constructor(private notesService : NotesService, private router : Router) {
@@ -45,13 +52,17 @@ export class NotesListMain implements AfterViewChecked {
     this.notesService.GetNotePreviews().subscribe(result => {
       result.forEach(note => {
         const date : Date = new Date(note.modifyDate); 
-        if (note.name === "") {
-          note.name = `Text note<br>${date.getMonth() + 1}/${date.getDate()}`;
+        let noteCard : NoteCardInfo = {
+          id: note.id,
+          name: note.name,
+          modifyDate: this.notesService.GetNotePreviewDateText(date),
+          preview: NoteFormater.NoteToHMTLNew(note.preview)
+        };
+        if (noteCard.name === "") {
+          noteCard.name = `Text note<br>${date.getMonth() + 1}/${date.getDate()}`;
         }
-        note.preview = NoteFormater.ToHTML(note.preview);
-        note.modifyDate = this.notesService.GetNotePreviewDateText(date); 
+        this.notes.push(noteCard);  
       });
-      this.notes = result;
     })
   
     effect(() => {

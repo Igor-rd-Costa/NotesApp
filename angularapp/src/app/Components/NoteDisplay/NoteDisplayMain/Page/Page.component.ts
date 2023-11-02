@@ -1,5 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NoteManager } from 'src/app/Services/NoteManager';
+import { NoteFormater } from 'src/app/Utils/NoteFormater';
 
 @Component({
   selector: 'Page',
@@ -10,7 +12,20 @@ import { CommonModule } from '@angular/common';
 })
 export class Page {
   @Output() FocusOut = new EventEmitter<void>(false);
-  @Input() content : string = "";
+
+  constructor(private noteManager : NoteManager) {
+    effect(() => {
+      const content = this.noteManager.GetNoteContent();
+      const page = document.getElementsByClassName("note-page")[0] as HTMLElement;
+      const html = NoteFormater.NoteToHMTLNew(content);
+      while (page.childNodes.length > 0) {
+        page.removeChild(page.childNodes[0]);
+      }
+      html.forEach(element => {
+        page.appendChild(element);
+      })
+    })
+  }
 
   Blur() {
    this.FocusOut.emit();

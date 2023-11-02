@@ -51,7 +51,7 @@ export class NoteManager {
         const page = document.getElementsByClassName("note-page")[0];
         if (page === null)
             return;
-        
+
         const content = NoteFormater.ParseNode(page).trimEnd();
         if (this.note.content() !== content) {
             this.notesService.Update(this.note.id(), content).subscribe(() => {
