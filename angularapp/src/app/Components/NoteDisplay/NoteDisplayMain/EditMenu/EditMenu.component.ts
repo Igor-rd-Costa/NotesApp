@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ImgButton, ImgButtonProp } from 'src/app/Components/General/ImgButton/ImgButton.component';
 import { FontSizeMenu } from './Menus/FontSizeMenu/FontSizeMenu.component';
 import { SelectionManager } from 'src/app/Services/SelectionManager';
-import { NoteNodeStyles } from 'src/app/Utils/NoteFormater';
+import { NoteFormater, NoteNodeStyles } from 'src/app/Utils/NoteFormater';
 
 @Component({
   selector: 'EditMenu',
@@ -29,16 +29,13 @@ export class EditMenu {
   }
 
   UpdateDisplay(tagStyle : NoteNodeStyles | null) {
-    if (tagStyle === null) {
-      this.fontSizeMenu.SetSelected(16);
-      this.UpdateFontSizeDisplay(16);
-    } else {
-      if (tagStyle.fontSize !== undefined) {
-        const value = parseInt(tagStyle.fontSize);
-        this.fontSizeMenu.SetSelected(value);
-        this.UpdateFontSizeDisplay(value);
-      }
+    if (tagStyle && tagStyle.fontSize !== undefined) {
+      this.fontSizeMenu.SetSelected(tagStyle.fontSize);
+      this.UpdateFontSizeDisplay(tagStyle.fontSize);
+      return;
     }
+    this.fontSizeMenu.SetSelected(16);
+    this.UpdateFontSizeDisplay(16);
   }
 
   UpdateFontSizeDisplay(value : number) {

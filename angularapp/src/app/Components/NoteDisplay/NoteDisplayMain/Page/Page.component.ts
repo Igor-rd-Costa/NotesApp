@@ -17,7 +17,7 @@ export class Page {
     effect(() => {
       const content = this.noteManager.GetNoteContent();
       const page = document.getElementsByClassName("note-page")[0] as HTMLElement;
-      const html = NoteFormater.NoteToHMTLNew(content);
+      const html = NoteFormater.NoteToHMTL(content);
       while (page.childNodes.length > 0) {
         page.removeChild(page.childNodes[0]);
       }

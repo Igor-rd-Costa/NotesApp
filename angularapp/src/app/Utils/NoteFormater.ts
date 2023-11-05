@@ -18,7 +18,7 @@ interface NoteNode {
 //--------------------------------------------------//
 
 export interface NoteNodeStyles {
-    fontSize?: string,
+    fontSize?: number,
 }
 
 interface NoteStyleInfo {
@@ -35,11 +35,13 @@ interface TagInfo {
 interface AnchorInfo {
     node : Node,
     offset : number,
+    t?: number
 }
 
 interface FocusInfo {
     node : Node,
     offset : number,
+    j?: number
 }
 
 enum ParseMode {
@@ -58,9 +60,28 @@ export class NoteFormater {
             || selection.AnchorOffset == null || selection.FocusOffset == null) {
             return;
         }
-        if (selection.AnchorNode.textContent != null && selection.FocusNode.textContent != null) {
+        const anchor = selection.AnchorNode;
+        const focus = selection.FocusNode;
+        if (anchor.textContent != null && focus.textContent != null) {
             let start = selection.AnchorOffset;
             let end = selection.FocusOffset;
+            const startString = anchor.textContent.substring(0, start);
+            const endString = focus.textContent.substring(0, end);
+            let percentCount = 0;
+            let index = startString.indexOf('%');
+            while (index !== -1) {
+                percentCount++;
+                index = startString.indexOf('%', index + 1);
+            }
+            start += percentCount;
+            percentCount = 0;
+            index = endString.indexOf('%');
+            while(index !== -1) {
+                percentCount++;
+                index = endString.indexOf('%', index + 1);
+            }
+            end += percentCount;
+
 
             if (selection.AnchorNode === selection.FocusNode && start > end) {
                 let temp = end;
@@ -69,21 +90,33 @@ export class NoteFormater {
             }
 
             let style : NoteNodeStyles = {
-                fontSize: fontSize.toString()
+                fontSize: fontSize
             };
             let container = selection.Range.commonAncestorContainer as HTMLElement;
             if (container.nodeName === "#text" && container.parentElement) {
                 container = container.parentElement;
             }
             const html = this.StyleSelection(container, 
-                style, { node: selection.AnchorNode, offset: start }, 
-                {node: selection.FocusNode, offset: end });
-            while (container.childNodes.length > 0) {
-                container.removeChild(container.childNodes[0]);
+                style, 
+                { node: selection.AnchorNode, offset: start, t: 5 }, 
+                { node: selection.FocusNode, offset: end, j: 4 }
+            );
+            if (container.nodeName === "SPAN") {
+                let parent = container.parentElement;
+                if (parent) {
+                    let firstChild = html[0].firstChild;
+                    if (firstChild)
+                        parent.replaceChild(firstChild, container);
+                }
             }
-            html.forEach(child => {
-                container.appendChild(child);
-            })
+            else {
+                while (container.childNodes.length > 0) {
+                    container.removeChild(container.childNodes[0]);
+                }
+                html.forEach(child => {
+                    container.appendChild(child);
+                })
+            }
         }
     }
 
@@ -96,11 +129,11 @@ export class NoteFormater {
         original.substring(anchorInfo.offset, focusInfo.offset) + "%e%" + 
         original.substring(focusInfo.offset);
         parsed = this.AddStyle(parsed, style);
-        const html = this.NoteToHMTLNew(parsed);
+        const html = this.NoteToHMTL(parsed);
         return html;
     }
 
-    private static AddStyle(noteContent : string, style : NoteNodeStyles) : string {
+    public static AddStyle(noteContent : string, style : NoteNodeStyles) : string {
         let start = 0;
         let end = 0;
         let openPosition = noteContent.indexOf("%s%");
@@ -118,6 +151,11 @@ export class NoteFormater {
         while (end !== -1) {
             start = noteContent.indexOf('%', end);
             end = noteContent.indexOf('%', start + 1);
+            if (noteContent[start + 1] === '%') {
+                start = start + 2;
+                end = noteContent.indexOf('%', start);
+                continue;
+            }
             openPosition = noteContent.indexOf("%s%");
             closePosition = noteContent.indexOf("%e%");
             let tag = noteContent.substring(start, end + 1);
@@ -240,6 +278,7 @@ export class NoteFormater {
     private static FindOffset(ancestor : Node, info : AnchorInfo | FocusInfo) {
         let offset = info.offset;
         this.found = false;
+
         offset = this.GetOffsets(ancestor, info, offset);
         return offset;
     }
@@ -252,8 +291,15 @@ export class NoteFormater {
                     let tag = this.SpanToTag(ancestor as HTMLSpanElement);
                     addOffset = tag.length;
                 } else if (ancestor.nodeName === "#text") {
-                    if (ancestor.textContent)
-                        addOffset = ancestor.textContent.length; 
+                    if (ancestor.textContent) {
+                        let percentCount = 0;
+                        let index = ancestor.textContent.indexOf('%');
+                        while (index !== -1) {
+                            percentCount++;
+                            index = ancestor.textContent.indexOf('%', index + 1);
+                        }
+                        addOffset = ancestor.textContent.length + percentCount; 
+                    }
                 }
                 if (ancestor.childNodes.length > 0) {
                     ancestor.childNodes.forEach(child => {
@@ -291,11 +337,12 @@ export class NoteFormater {
         return tag;
     }
 
+    // DONE
     public static ParseNode(node : Node) : string {
         let content = "";
         switch(node.nodeName) {
             case "#text": {
-                content += node.nodeValue;
+                content += node.textContent?.replaceAll('%', "%%");
             } break;
             case "SPAN": {
                 const element = node as HTMLSpanElement;
@@ -326,7 +373,7 @@ export class NoteFormater {
         return content;
     }
 
-    public static NoteToHMTLNew(noteContent : string) {
+    public static NoteToHMTL(noteContent : string) {
         const paragraphs = noteContent.split('\n');
         let elements : HTMLParagraphElement[] = [];
         let openTags : {tag: string, start: number}[] = [];
@@ -344,13 +391,24 @@ export class NoteFormater {
                 })
             }
             if (start !== -1) {
-                if (start !== 0) {
-                    let text = document.createTextNode(paragraph.substring(0, start));
-                    currentElement.appendChild(text);
+                while (paragraph[start + 1] === '%') {
+                    start = paragraph.indexOf('%', start + 2);
                 }
-                while (end !== -1) {
+            }
+            if (start !== -1) {
+                if (start !== 0) {
+                    let text = paragraph.substring(0, start).replaceAll("%%", '%');
+                    currentElement.appendChild(document.createTextNode(text));
+                }
+                while (end !== -1 && start !== -1) {
                     start = paragraph.indexOf('%', end);
+                    while (start !== -1 && paragraph[start + 1] === '%') {
+                        start = paragraph.indexOf('%', start + 2);
+                    }
                     end = paragraph.indexOf('%', start + 1);
+                    if (start === -1) {
+                        break;
+                    }
                     let tag = paragraph.substring(start, end + 1);
                     if (tag !== "%/%") {
                         openTags.push({tag: tag, start: end+1});
@@ -358,32 +416,33 @@ export class NoteFormater {
                         this.SetSpanStyles(span, this.TagToStyle(tag));
                         currentElement.appendChild(span);
                         currentElement = span;
-                        let nextTag = end + 1;
-                        while (true) {
-                            nextTag = paragraph.indexOf('%', nextTag);
-                            if (nextTag === -1 || paragraph[nextTag + 1] !== '%')
-                                break;
+                        let nextTag = paragraph.indexOf('%', end + 1);
+                        while (nextTag !== -1 && paragraph[nextTag + 1] === '%') {
+                            nextTag = paragraph.indexOf('%', nextTag + 2);
                         }
                         if (nextTag !== end + 1) {
                             if (nextTag === -1)
                                 nextTag = paragraph.length;
-                            let text = document.createTextNode(paragraph.substring(end + 1, nextTag));
-                            span.appendChild(text);
+                            let text = paragraph.substring(end + 1, nextTag).replaceAll("%%", '%');
+                            span.appendChild(document.createTextNode(text));
                         }
-                    } else {
+                    } else { // Tag === "%/%"
                         openTags.pop();
                         if (currentElement.parentElement) {
                             currentElement = currentElement.parentElement;
                             let nextTag = paragraph.indexOf('%', end + 1);
+                            while (nextTag !== -1 && paragraph[nextTag + 1] === '%') {
+                                nextTag = paragraph.indexOf('%', nextTag + 2);
+                            }
                             if (nextTag !== -1 && nextTag !== end + 1) {
-                                let text = document.createTextNode(paragraph.substring(end + 1, nextTag));
-                                currentElement.appendChild(text);
+                                let text = paragraph.substring(end + 1, nextTag).replaceAll("%%", '%');
+                                currentElement.appendChild(document.createTextNode(text));
                                 
                             } else if (nextTag === -1) {
                                 nextTag = paragraph.length;
                                 if (nextTag !== end + 1) {
-                                    let text = document.createTextNode(paragraph.substring(end + 1, nextTag));
-                                    currentElement.appendChild(text);
+                                    let text = paragraph.substring(end + 1, nextTag).replaceAll("%%", '%'); 
+                                    currentElement.appendChild(document.createTextNode(text));
                                 }
                             }
                         }
@@ -391,9 +450,8 @@ export class NoteFormater {
                     start = end + 1;
                     end = paragraph.indexOf('%', start);
                 }
-                
-            } else {
-                pElement.appendChild(document.createTextNode(paragraph));
+            } else { // tag === -1
+                pElement.appendChild(document.createTextNode(paragraph.replaceAll("%%", '%')));
             }
             pElement.appendChild(document.createElement("BR"));
             elements.push(pElement as HTMLParagraphElement);
@@ -412,7 +470,7 @@ export class NoteFormater {
                 if (className.startsWith(styleName.className)) {
                     switch(styleName.code) {
                         case 'f': {
-                            spanStyle.fontSize = className.replace(styleName.className, '');
+                            spanStyle.fontSize = parseInt(className.replace(styleName.className, ''));
                         } break;
                     }
                 }
@@ -432,11 +490,12 @@ export class NoteFormater {
             switch(tag[startIndex]) {
                 case 'f': {
                     startIndex++;
-                    style.fontSize = "";
+                    let fontSize = "";
                     while (tag[startIndex].charCodeAt(0) >= 48 && tag[startIndex].charCodeAt(0) <= 57) {
-                        style.fontSize += tag[startIndex];
+                        fontSize += tag[startIndex];
                         startIndex++;
                     }
+                    style.fontSize = parseInt(fontSize);
                 } break;
                 default: {
                     console.error("Tag %s contains invalid characters.", tag);

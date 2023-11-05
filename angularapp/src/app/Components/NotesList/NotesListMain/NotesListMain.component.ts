@@ -56,7 +56,7 @@ export class NotesListMain implements AfterViewChecked {
           id: note.id,
           name: note.name,
           modifyDate: this.notesService.GetNotePreviewDateText(date),
-          preview: NoteFormater.NoteToHMTLNew(note.preview)
+          preview: NoteFormater.NoteToHMTL(note.preview)
         };
         if (noteCard.name === "") {
           noteCard.name = `Text note<br>${date.getMonth() + 1}/${date.getDate()}`;
