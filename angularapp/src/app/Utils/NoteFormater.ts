@@ -35,13 +35,11 @@ interface TagInfo {
 interface AnchorInfo {
     node : Node,
     offset : number,
-    t?: number
 }
 
 interface FocusInfo {
     node : Node,
     offset : number,
-    j?: number
 }
 
 enum ParseMode {
@@ -60,6 +58,7 @@ export class NoteFormater {
             || selection.AnchorOffset == null || selection.FocusOffset == null) {
             return;
         }
+
         const anchor = selection.AnchorNode;
         const focus = selection.FocusNode;
         if (anchor.textContent != null && focus.textContent != null) {
@@ -83,7 +82,7 @@ export class NoteFormater {
             end += percentCount;
 
 
-            if (selection.AnchorNode === selection.FocusNode && start > end) {
+            if (anchor === focus && start > end) {
                 let temp = end;
                 end = start;
                 start = temp;
@@ -92,30 +91,45 @@ export class NoteFormater {
             let style : NoteNodeStyles = {
                 fontSize: fontSize
             };
-            let container = selection.Range.commonAncestorContainer as HTMLElement;
-            if (container.nodeName === "#text" && container.parentElement) {
-                container = container.parentElement;
+            let commonAncestor = selection.Range.commonAncestorContainer as HTMLElement;
+            if (commonAncestor.nodeName === "#text" && commonAncestor.parentElement) {
+                commonAncestor = commonAncestor.parentElement;
             }
-            const html = this.StyleSelection(container, 
+            const html = this.StyleSelection(commonAncestor, 
                 style, 
-                { node: selection.AnchorNode, offset: start, t: 5 }, 
-                { node: selection.FocusNode, offset: end, j: 4 }
+                { node: anchor, offset: start }, 
+                { node: focus, offset: end }
             );
-            if (container.nodeName === "SPAN") {
-                let parent = container.parentElement;
+
+
+
+
+            if (commonAncestor.nodeName === "SPAN") {
+                const parent = commonAncestor.parentElement;
                 if (parent) {
-                    let firstChild = html[0].firstChild;
+                    const firstChild = html[0].firstChild;
                     if (firstChild)
-                        parent.replaceChild(firstChild, container);
+                        parent.replaceChild(firstChild, commonAncestor);
                 }
+                return;
             }
-            else {
-                while (container.childNodes.length > 0) {
-                    container.removeChild(container.childNodes[0]);
+            else if (commonAncestor.nodeName === "P") {
+                const parent = commonAncestor.parentElement;
+                if (parent) {
+                    const paragrath = html[0];
+                    parent.replaceChild(paragrath, commonAncestor);
+                }
+                return;
+            }
+            else if (commonAncestor.nodeName === "DIV") {
+                while (commonAncestor.childNodes.length > 0) {
+                    commonAncestor.removeChild(commonAncestor.childNodes[0]);
                 }
                 html.forEach(child => {
-                    container.appendChild(child);
+                    commonAncestor.appendChild(child);
                 })
+            } else {
+                console.error("Unexpected common ancestor ", commonAncestor);
             }
         }
     }
@@ -368,13 +382,13 @@ export class NoteFormater {
             content += "%/%";
         }
         else if (node.nodeName === "P") {
-            content += '\n';
+            content += '\r\n';
         }
         return content;
     }
 
     public static NoteToHMTL(noteContent : string) {
-        const paragraphs = noteContent.split('\n');
+        const paragraphs = noteContent.split('\r\n');
         let elements : HTMLParagraphElement[] = [];
         let openTags : {tag: string, start: number}[] = [];
         paragraphs.forEach(paragraph => {

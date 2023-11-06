@@ -118,13 +118,14 @@ namespace webapi.Controllers
         {
             string? userId = m_UserManager.GetUserId(User);
             if (userId == null)
-                return NotFound();
+                return NotFound("User not found!");
 
             Note? note = m_NotesContext.notes.Where(note => note.UserId == int.Parse(userId) && note.Guid == info.Id).FirstOrDefault();
             if (note == null)
-                return NotFound();
+                return NotFound("Note not found!");
 
             note.Content = info.Content;
+            note.ModifyDate = DateTime.UtcNow;
             m_NotesContext.SaveChanges();
             return Ok();
         }
@@ -148,6 +149,7 @@ namespace webapi.Controllers
         [HttpDelete("note/checkdelete")]
         public IActionResult CheckDelete([FromBody] NoteDeleteInfo info)
         {
+            Console.WriteLine("Check Delete request!");
             string? userId = m_UserManager.GetUserId(User);
             if (userId == null)
                 return NotFound();
@@ -156,6 +158,7 @@ namespace webapi.Controllers
             if (note == null)
                 return NotFound();
 
+            Console.WriteLine("Create: " + note.CreationDate + "\nModify: " + note.ModifyDate);
             if (note.ModifyDate.Equals(note.CreationDate))
             {
                 m_NotesContext.notes.Remove(note);
