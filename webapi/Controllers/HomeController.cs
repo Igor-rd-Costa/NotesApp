@@ -149,7 +149,6 @@ namespace webapi.Controllers
         [HttpDelete("note/checkdelete")]
         public IActionResult CheckDelete([FromBody] NoteDeleteInfo info)
         {
-            Console.WriteLine("Check Delete request!");
             string? userId = m_UserManager.GetUserId(User);
             if (userId == null)
                 return NotFound();
@@ -158,7 +157,6 @@ namespace webapi.Controllers
             if (note == null)
                 return NotFound();
 
-            Console.WriteLine("Create: " + note.CreationDate + "\nModify: " + note.ModifyDate);
             if (note.ModifyDate.Equals(note.CreationDate))
             {
                 m_NotesContext.notes.Remove(note);

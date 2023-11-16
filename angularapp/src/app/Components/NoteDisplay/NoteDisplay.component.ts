@@ -4,7 +4,7 @@ import { NoteDisplayMain } from './NoteDisplayMain/NoteDisplayMain.component';
 import { NoteDisplayHeader } from './NoteDisplayHeader/NoteDisplayHeader.component';
 import { ActivatedRoute } from '@angular/router';
 import { AppDisplayMode, DisplayModeService } from 'src/app/Services/DisplayModeService';
-import { NoteManager } from 'src/app/Services/NoteManager';
+import { NoteManager } from 'src/app/Services/NoteManager'; 
 
 @Component({
   selector: 'NoteDisplay',

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ImgButton, ImgButtonProp } from 'src/app/Components/General/ImgButton/ImgButton.component';
 import { FontSizeMenu } from './Menus/FontSizeMenu/FontSizeMenu.component';
 import { SelectionManager } from 'src/app/Services/SelectionManager';
-import { NoteFormater, NoteNodeStyles } from 'src/app/Utils/NoteFormater';
+import { NoteNodeStyles } from 'src/app/Utils/NoteFormater';
 
 @Component({
   selector: 'EditMenu',

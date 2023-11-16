@@ -139,46 +139,40 @@ export class NoteFormater {
         anchorInfo.offset = this.FindOffset(commonAncestor, anchorInfo);
         focusInfo.offset = this.FindOffset(commonAncestor, focusInfo);
 
-        let parsed = original.substring(0, anchorInfo.offset) + '%s%' + 
-        original.substring(anchorInfo.offset, focusInfo.offset) + "%e%" + 
-        original.substring(focusInfo.offset);
+        const startString = original.substring(0, anchorInfo.offset);
+        const middleString = original.substring(anchorInfo.offset, focusInfo.offset);
+        const endString = original.substring(focusInfo.offset);
+        let parsed = startString + '%s%' + middleString + "%e%" + endString;
         parsed = this.AddStyle(parsed, style);
         const html = this.NoteToHMTL(parsed);
         return html;
     }
 
-    public static AddStyle(noteContent : string, style : NoteNodeStyles) : string {
+    private static AddStyle(noteContent : string, style : NoteNodeStyles) : string {
         let start = 0;
         let end = 0;
         let openPosition = noteContent.indexOf("%s%");
-        let closePosition = noteContent.indexOf("%e%");
+        let closePosition = noteContent.indexOf("%e%", openPosition);
         if (openPosition === -1 || closePosition === -1) {
-            console.warn("Could not find edit tags in note.");
+            console.error("Could not find edit tags in note.");
             return noteContent;
         } 
         let parseMode : ParseMode = ParseMode.BEFORE_EDIT_START;
         let openBeforeTags : TagInfo[] = [];
         let openMiddleTags : TagInfo[] = [];
         let openAfterTags : TagInfo[] = [];
-        let newContent = noteContent;
         let removedTag : TagInfo | undefined = undefined;
+        let tempContent = noteContent;
         while (end !== -1) {
             start = noteContent.indexOf('%', end);
             end = noteContent.indexOf('%', start + 1);
-            if (noteContent[start + 1] === '%') {
+            if (noteContent[start + 1] === '%') {   
                 start = start + 2;
                 end = noteContent.indexOf('%', start);
                 continue;
             }
-            openPosition = noteContent.indexOf("%s%");
-            closePosition = noteContent.indexOf("%e%");
             let tag = noteContent.substring(start, end + 1);
             removedTag = undefined;
-            if (end > openPosition && end < closePosition) {
-                parseMode = ParseMode.MIDDLE_OF_EDIT;
-            } else if (end > closePosition) {
-                parseMode = ParseMode.AFTER_EDIT_END;
-            }
             if (tag !== "%/%") {
                 if (tag !== "%s%" && tag !== "%e%") {
                     switch(parseMode) {
@@ -192,18 +186,26 @@ export class NoteFormater {
                             openAfterTags.push({tag, start, end});
                         }
                     }
+                } else {
+                    if (tag === "%s%") {
+                        parseMode = ParseMode.MIDDLE_OF_EDIT;
+                        openPosition = start;
+                    } else {
+                        parseMode = ParseMode.AFTER_EDIT_END;
+                        closePosition = start;
+                    }
                 }
             } else {
                 switch(parseMode) {
                     case ParseMode.BEFORE_EDIT_START: {
-                        openBeforeTags.pop();
+                        removedTag = openBeforeTags.pop();
                     } break;
                     case ParseMode.MIDDLE_OF_EDIT: {
                         if (openMiddleTags.length > 0) {
                             let tagInfo = openMiddleTags[openMiddleTags.length -1];
                             let tag = this.ParseTag(tagInfo.tag, style);
                             if (tag === "%%") {
-                                newContent = noteContent.substring(0, tagInfo.start) + noteContent.substring(tagInfo.end + 1, start) + noteContent.substring(end + 1);
+                                tempContent = noteContent.substring(0, tagInfo.start) + noteContent.substring(tagInfo.end + 1, start) + noteContent.substring(end + 1);
                                 removedTag = openMiddleTags.pop();
                                 start -= tagInfo.tag.length;
                                 end = start;
@@ -215,7 +217,7 @@ export class NoteFormater {
                                 let tagInfo = openBeforeTags[openBeforeTags.length -1];
                                 let tag = this.ParseTag(tagInfo.tag, style);
                                 if (tag === "%%") {
-                                    newContent = noteContent.substring(0, openPosition) + "%/%" + 
+                                    tempContent = noteContent.substring(0, openPosition) + "%/%" + 
                                     noteContent.substring(openPosition, start) + noteContent.substring(end + 1);
                                     removedTag = openBeforeTags.pop();
                                     start -= 3;
@@ -233,12 +235,12 @@ export class NoteFormater {
                             let tagInfo = openMiddleTags[openMiddleTags.length -1];
                             let tag = this.ParseTag(tagInfo.tag, style);
                             if (tag === "%%") {
-                                newContent = noteContent.substring(0, tagInfo.start) + 
-                                noteContent.substring(tagInfo.end + 1, closePosition + 3) + tagInfo.tag + noteContent.substring(closePosition + 3);
+                                tempContent = noteContent.substring(0, tagInfo.start) + noteContent.substring(tagInfo.end + 1, closePosition + 3) + tagInfo.tag + noteContent.substring(closePosition + 3);
+                                removedTag = openMiddleTags.pop();
                             } else {
                                 console.error("Need to implement this!");
                             }
-                        } 
+                        }
                         // Should not need to remove from openBeforeTags
                         // because we are already parsing the common ancestor
                         // for the nodes.
@@ -246,13 +248,36 @@ export class NoteFormater {
                 }
             }
             if (removedTag !== null) {
-                noteContent = newContent;
+                noteContent = tempContent;
             }
             start = end + 1;
             end = noteContent.indexOf('%', start);
         }
-        newContent = newContent.replace("%s%", this.BuildTag(style)).replace("%e%", "%/%");
-        return newContent.trimEnd();
+        //walks over the tags again to find the start and end tags for the edit
+        start = 0;
+        end = 0;    
+        while (end !== -1) {
+            start = noteContent.indexOf('%', end);
+            end = noteContent.indexOf('%', start + 1);
+            if (start === -1)
+                break;
+            if (noteContent[start + 1] === '%') {   
+                start = start + 2;
+                end = start;
+                continue;
+            }
+            let tag = noteContent.substring(start, end + 1);
+            if (tag === "%s%") {
+                openPosition = start;
+            } else if (tag === "%e%") {
+                closePosition = start;
+                break;
+            }
+            start = end + 1;
+            end = noteContent.indexOf('%', start);
+        }
+        noteContent = noteContent.substring(0, openPosition) + this.BuildTag(style) + noteContent.substring(openPosition + 3, closePosition) + "%/%" + noteContent.substring(closePosition + 3);
+        return noteContent.trimEnd();
     }
 
     private static ParseTag(tag : string, style : NoteNodeStyles) {
@@ -328,12 +353,12 @@ export class NoteFormater {
             if (ancestor.nodeName === "SPAN")
                 addOffset += 3;
             if (ancestor.nodeName === "P") {
-                addOffset += 1;
+                addOffset += 2;
             }
         }
         return offset + addOffset;
     }
-    
+
     private static SpanToTag(span : HTMLSpanElement) : string {
         let tag = "";
         const classes = span.classList;
@@ -351,7 +376,6 @@ export class NoteFormater {
         return tag;
     }
 
-    // DONE
     public static ParseNode(node : Node) : string {
         let content = "";
         switch(node.nodeName) {
@@ -387,6 +411,7 @@ export class NoteFormater {
         return content;
     }
 
+    static error = false;
     public static NoteToHMTL(noteContent : string) {
         const paragraphs = noteContent.split('\r\n');
         let elements : HTMLParagraphElement[] = [];
@@ -415,6 +440,9 @@ export class NoteFormater {
                     currentElement.appendChild(document.createTextNode(text));
                 }
                 while (end !== -1 && start !== -1) {
+                    if (this.error) {
+                        break; 
+                    }
                     start = paragraph.indexOf('%', end);
                     while (start !== -1 && paragraph[start + 1] === '%') {
                         start = paragraph.indexOf('%', start + 2);
@@ -513,6 +541,7 @@ export class NoteFormater {
                 } break;
                 default: {
                     console.error("Tag %s contains invalid characters.", tag);
+                    this.error = true;
                     return style;
                 }
             }
