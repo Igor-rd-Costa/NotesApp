@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace webapi.Data
 {
-    public class UserStore : IUserStore<IdentityUser<int>>, IUserPasswordStore<IdentityUser<int>>
+    public class UserStore : IUserStore<IdentityUser<int>>, IUserPasswordStore<IdentityUser<int>>, IUserEmailStore<IdentityUser<int>>
     {
         private readonly UsersContext m_UserContext;
 
@@ -39,6 +39,14 @@ namespace webapi.Data
 
         }
 
+        public Task<IdentityUser<int>?> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                return m_UserContext.users.Where(user => user.NormalizedEmail == normalizedEmail).FirstOrDefault();
+            });
+        }
+
         public Task<IdentityUser<int>?> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -56,6 +64,21 @@ namespace webapi.Data
                 }
                 return null;
             });
+        }
+
+        public Task<string?> GetEmailAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        {
+            return Task.Factory.StartNew(() => user.Email);
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string?> GetNormalizedEmailAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<string?> GetNormalizedUserNameAsync(IdentityUser<int> user, CancellationToken cancellationToken)
@@ -84,6 +107,24 @@ namespace webapi.Data
         public Task<bool> HasPasswordAsync(IdentityUser<int> user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
+        }
+
+        public Task SetEmailAsync(IdentityUser<int> user, string? email, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetEmailConfirmedAsync(IdentityUser<int> user, bool confirmed, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetNormalizedEmailAsync(IdentityUser<int> user, string? normalizedEmail, CancellationToken cancellationToken)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                user.NormalizedEmail = normalizedEmail;
+            });
         }
 
         public Task SetNormalizedUserNameAsync(IdentityUser<int> user, string? normalizedName, CancellationToken cancellationToken)

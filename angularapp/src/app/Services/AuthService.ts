@@ -20,12 +20,8 @@ export class AuthService {
         return this.http.post<boolean>("https://localhost:7216/auth/logout/", {}, {withCredentials: true});
     }
 
-    Register(username : string, email : string, password : string) : Promise<boolean> {
-        return new Promise<boolean>(resolve => {
-            this.http.post<boolean>("https://localhost:7216/auth/register/", {username, email, password}, { withCredentials: true}).subscribe(() => {
-                resolve(true);
-            }); 
-        });
+    Register(username : string, email : string, password : string) {
+            return this.http.post<boolean>("https://localhost:7216/auth/register/", {username, email, password}, { withCredentials: true});
     }
 
     IsLogged() : Observable<boolean> {

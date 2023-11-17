@@ -1,0 +1,19 @@
+section {
+    visibility: visible;
+    background-color: #FF00002F;
+    border-radius: 0.5rem;
+    border: 1px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FF0000FF;
+    width: 21rem;
+    max-height: 9rem;
+    min-height: 5rem;
+    height: fit-content;
+    overflow: scroll;   
+
+    ul {
+        margin: 0;
+    }
+}

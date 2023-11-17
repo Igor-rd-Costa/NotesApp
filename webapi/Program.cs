@@ -14,6 +14,12 @@ builder.Services.AddIdentityCore<IdentityUser<int>>()
     .AddUserStore<UserStore>()
     .AddSignInManager<SignInManager<IdentityUser<int>>>();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequiredLength = 8;
+});
+
 var auth = builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;

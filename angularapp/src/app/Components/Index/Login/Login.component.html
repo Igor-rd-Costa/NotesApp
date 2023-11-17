@@ -1,7 +1,7 @@
 <form [formGroup]="loginForm" (submit)="Login()">
     <h2>Login</h2>
-    <input id="username" type="text" placeholder="Username" formControlName="Username"/>
-    <input id="password" type="password" placeholder="Password" formControlName="Password"/>
+    <input id="username" type="text" placeholder="Username" formControlName="Username" required/>
+    <input id="password" type="password" placeholder="Password" formControlName="Password" required/>
     <button id="login" type="submit">Login</button>
     <button id="register" type="button" (click)="Register()">Register</button>
 </form>

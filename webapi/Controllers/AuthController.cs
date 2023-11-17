@@ -4,6 +4,20 @@ using webapi.Models;
 
 namespace webapi.Controllers
 {
+    enum RegisterErrorCodes
+    {
+        USERNAME_TAKEN =            0b000000001, 
+        EMAIL_TAKEN =               0b000000010, 
+        PASSWORD_SHORT =            0b000000100, 
+        PASSWORD_NO_ALPHANUMERIC =  0b000001000, 
+        PASSWORD_NO_DIGIT =         0b000010000, 
+        PASSWORD_NO_UPPER =         0b000100000,
+        PASSWORD_NO_LOWER =         0b001000000,
+        INVALID_USERNAME =          0b010000000,
+        INVALID_EMAIL =             0b100000000
+    }
+
+
     [ApiController]
     [Route("/auth")]
     public class AuthController : ControllerBase
@@ -46,7 +60,54 @@ namespace webapi.Controllers
             IdentityResult result = await m_UserManager.CreateAsync(user, info.Password);
             if (!result.Succeeded)
             {
-                return BadRequest(result.Errors);
+                int registerError = 0;
+                foreach (IdentityError error in result.Errors)
+                {
+                    switch(error.Code)
+                    {
+                        case "DuplicateUserName":
+                        {
+                            registerError |= (int)RegisterErrorCodes.USERNAME_TAKEN;
+                        } break;
+                        case "DuplicateEmail":
+                        {
+                            registerError |= (int)RegisterErrorCodes.EMAIL_TAKEN;
+                        } break;
+                        case "PasswordTooShort":
+                        {
+                            registerError |= (int)RegisterErrorCodes.PASSWORD_SHORT;
+                        } break;
+                        case "PasswordRequiresNonAlphanumeric":
+                        {
+                            registerError |= (int)RegisterErrorCodes.PASSWORD_NO_ALPHANUMERIC;
+                        } break;
+                        case "PasswordRequiresDigit":
+                        {
+                            registerError |= (int)RegisterErrorCodes.PASSWORD_NO_DIGIT;
+                        } break;
+                        case "PasswordRequiresUpper":
+                        {
+                            registerError |= (int)RegisterErrorCodes.PASSWORD_NO_UPPER;
+                        } break;
+                        case "PasswordRequiresLower":
+                        {
+                            registerError |= (int)RegisterErrorCodes.PASSWORD_NO_LOWER;
+                        } break;
+                        case "InvalidUserName":
+                        {
+                            registerError |= (int)RegisterErrorCodes.INVALID_USERNAME;
+                        } break;
+                        case "InvalidEmail":
+                        {
+                            registerError |= (int)RegisterErrorCodes.INVALID_EMAIL; 
+                        } break;
+                        default:
+                        {
+                            Console.WriteLine("Unhandled register error: " + error.Code);
+                        } break;
+                    }
+                }
+                return BadRequest(registerError);
             }
             Microsoft.AspNetCore.Identity.SignInResult signInResult = await m_SignInManager.PasswordSignInAsync(info.Username, info.Password, false, false);
             if (signInResult.Succeeded)
