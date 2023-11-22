@@ -90,7 +90,7 @@ export class DisplayModeService
       main.style.overflow = "hidden";
       const rightValue = parseFloat(getComputedStyle(createNoteButton).right);
       AnimateElement(createNoteButton, { right: rightValue + 'px' }, { right: rightValue - (windowWidth * 0.8435) + 'px' }, 175);
-      AnimateElement(wrapper, { backgroundColor: "white" }, { backgroundColor: "rgb(207, 207, 207)" }, 175);
+      AnimateElement(wrapper, { backgroundColor: "#333333" }, { backgroundColor: "#222222" }, 175);
       AnimateElement(sideMenu, { width: "0px" }, { width: (windowWidth * 0.8435) + 'px' }, 175).addEventListener('finish', () => {
         DisplayModeService.SetSideMenuDisplayMode(SideMenuDisplayMode.VISIBLE);
       });
@@ -115,7 +115,7 @@ export class DisplayModeService
 
       const rightValue = parseFloat(getComputedStyle(createNoteButton).right);
       AnimateElement(createNoteButton, { right: rightValue + 'px' }, { right: rightValue + (windowWidth * 0.8435) + "px" }, 175);
-      AnimateElement(wrapper, { backgroundColor: "rgb(207, 207, 207)" }, { backgroundColor: "white" }, 175);
+      AnimateElement(wrapper, { backgroundColor: "#222222" }, { backgroundColor: "#333333" }, 175);
       AnimateElement(sideMenu, { width: (windowWidth * 0.8435) + 'px' }, { width: "0px" }, 175).addEventListener('finish', () => {
         DisplayModeService.SetSideMenuDisplayMode(SideMenuDisplayMode.HIDDEN);
       });

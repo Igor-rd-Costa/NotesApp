@@ -1,0 +1,22 @@
+.inactive {
+    background-color: #222222FF !important;
+}
+  
+.active {
+    cursor: pointer;
+    color: white;
+}
+
+button {
+    background-color: var(--ButtonColor);
+    box-shadow: var(--WhiteShadow);
+    border-radius: 0.5rem;
+}
+
+.active:hover {
+    background-color: var(--ButtonHighlightColor);
+}
+
+.pressed {
+    box-shadow: 0.05rem 0.05rem 0.3rem #FFFFFF77;
+}

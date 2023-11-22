@@ -75,3 +75,42 @@ export function HandleWheel(event : WheelEvent) {
     touchInfo.wheelDelta.X = event.deltaX;
     touchInfo.wheelDelta.Y = event.deltaY;
 }
+
+export function UpdateDefaultButtonState() {
+  const buttonList = document.getElementsByTagName("BUTTON") as HTMLCollectionOf<HTMLButtonElement>;
+  if (buttonList.length === 0)
+    return;
+  const buttons : HTMLButtonElement[] = [];
+  for (let i = 0; i < buttonList.length; i++) {
+    if (buttonList[i].classList.contains("default-button")) {
+      if (buttonList[i].type === "submit") {
+        buttons.push(buttonList[i]);
+      } else {
+        buttonList[i].classList.add("active-button");
+      }
+    }
+  }
+  
+  buttons.forEach(button => {
+    const form = button.closest("FORM") as HTMLFormElement | null;
+    if (form !== null) {
+      const inputs = Array.from(form.getElementsByTagName("INPUT")) as HTMLInputElement[];
+      let buttonActive = true;
+      if (inputs.length === 0) {
+        buttonActive = false;
+      } else {
+        inputs.forEach(input => {
+          if (input.required && input.value.trim().length === 0) {
+            buttonActive = false;
+          }
+        })
+      }
+      if (buttonActive) {
+        button.classList.add("active-button");
+      } else {
+        button.classList.add("inactive-button");
+        button.disabled = true;
+      }
+    }
+  })
+}

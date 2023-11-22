@@ -1,21 +1,27 @@
-import { Component, effect } from '@angular/core';
+import { Component, ViewChild, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotesList } from '../NotesList.component';
 import { AuthService } from 'src/app/Services/AuthService';
 import { Router } from '@angular/router';
 import { AppDisplayMode, DisplayModeService, IndexDisplayMode, SideMenuDisplayMode } from 'src/app/Services/DisplayModeService';
+import { ListMenu, ListMenuItem } from '../../General/ListMenu/ListMenu.component';
 
 @Component({
   selector: 'SideMenu',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ListMenu ],
   templateUrl: './SideMenu.component.html',
   styleUrls: ['./SideMenu.component.css']
 })
 export class SideMenu {
+  @ViewChild(ListMenu) listMenu! : ListMenu;
   noteCount : number = 0;
   username : string = "";
   public static isProfileMenuVisible : boolean = false;
+
+  profileMenuItems : ListMenuItem[] = [
+    {content: "Logout", onClick: {func: this.Logout, src: this }}
+  ]
 
   constructor(private authService : AuthService, private router : Router) {
     effect(() => {
@@ -25,7 +31,8 @@ export class SideMenu {
   }
 
   ProfileOnClick(event : MouseEvent) {
-    SideMenu.ShowProfileMenu(event);
+    this.listMenu.ToggleVisibility();
+    event.stopPropagation();
   }
 
   public static ShowProfileMenu(event : MouseEvent) {

@@ -1,14 +1,14 @@
 <section class="edit-menu">
-    <ImgButton id="draw-mode"></ImgButton>
-    <ImgButton id="checkbox"></ImgButton>
-    <ImgButton id="text-options"></ImgButton>
-    <ImgButton id="font-color"></ImgButton>
-    <ImgButton id="font-background"></ImgButton>
+    <!-- <ImgButton id="draw-mode"></ImgButton> -->
+    <!-- <ImgButton id="checkbox"></ImgButton> -->
+    <!-- <ImgButton id="text-options"></ImgButton> -->
+    <!-- <ImgButton id="font-color"></ImgButton> -->
+    <!-- <ImgButton id="font-background"></ImgButton> -->
     <button id="font-size" (click)="FontSizeButtonOnClick($event)">
         <span>{{fontSize}}</span>
         <img src="/assets/DownArrowSmallIcon.svg"/>
     </button>
-    <ImgButton id="undo" [props]="undoButtonProps"></ImgButton>
-    
-    <FontSizeMenu (SelectionChange)="UpdateFontSizeDisplay($event)"></FontSizeMenu>
+    <!-- <ImgButton id="undo" [props]="undoButtonProps"></ImgButton> -->
+    <ListMenu id="font-size-menu" (select)="OnFontSizeSelect($event)" width="6rem" height="12rem" top="-12.2rem" right="22.56vw" itemHeight="2.7rem" 
+    [items]="fontSizeMenuItems" default="16"></ListMenu>
 </section>

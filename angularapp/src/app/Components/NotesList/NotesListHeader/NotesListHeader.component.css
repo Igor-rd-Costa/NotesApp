@@ -1,6 +1,7 @@
 header {
     width: 100%;
     height: fit-content;
+    color: white;
 }
 
 section.header-section {
@@ -29,8 +30,8 @@ section.header-section > div#folder-name {
     width: fit-content;
 }
 
-section.header-section > div#notes-count {
-    color: rgb(99, 99, 99);
+section.header-section > div#note-count {
+    color: #BBBBBB;
 }
 
 section.header-menu-section {

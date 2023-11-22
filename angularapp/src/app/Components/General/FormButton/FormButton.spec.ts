@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-    
-import { FontSizeMenu } from './FontSizeMenu.component';
 
-describe('FontSizeMenu', () => {
-  let component: FontSizeMenu;
-  let fixture: ComponentFixture<FontSizeMenu>;
+import { FormButton } from './FormButton';
+
+describe('FormButton', () => {
+  let component: FormButton;
+  let fixture: ComponentFixture<FormButton>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [FontSizeMenu]
+      imports: [FormButton]
     });
-    fixture = TestBed.createComponent(FontSizeMenu);
+    fixture = TestBed.createComponent(FormButton);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

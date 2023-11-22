@@ -39,6 +39,8 @@ section.header-section {
       padding-bottom: 5px;
       margin-top: 7px;
       margin-right: 0.8rem;
+      color: white;
+      background-color: transparent;
       overflow: hidden;
       text-overflow: ellipsis;
       min-width: 5rem;

@@ -1,29 +1,30 @@
 section.edit-menu {
     width: 100vw;
     height: max(5.81vh, 2.6rem);
-    background-color: white;
-    border-top: 0.1rem solid rgb(223, 223, 223);
+    border-top: 0.1rem solid #444444;
     position: relative;
     bottom: 0;
     display: grid;
     align-items: center;
     grid-template-rows: 100%;
-    grid-template-columns: 12.5% auto auto auto auto auto auto;
+    grid-template-columns: repeat(7, 1fr);
 
-    ImgButton#draw-mode > button {
+    /* ImgButton#draw-mode > button {
         margin-left: 15.55%;
-        background-color: white;
         width: 35px;
         height: 35px;
         border-radius: 50%;
+        background-color: white;
         border: 0.1rem solid rgb(191, 191, 191);
-    }
+    } */
 
     button#font-size {
+        grid-column: 6;
         display: flex;
         align-items: center;
         font-size: 18px;
-        color: #4c4c4c;
+        width: fit-content;
+        color: #FFFFFF;
         font-family: Arial;
         background-color: transparent;
         img {
@@ -33,7 +34,8 @@ section.edit-menu {
         }
     }
 
-    ImgButton#undo > button {
+    ImgButton#undo {
+        grid-column: 7;
         width: 0.9rem;
         height: 0.9rem;
         margin-right: 70.80%;

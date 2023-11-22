@@ -37,9 +37,7 @@ export class NotesListHeader {
   }
 
   menuButtonProps : ImgButtonProp = {
-    Button: {
-      OnClick: this.MenuButtonOnClick
-    },
+    Button: {},
     Img: {
       Src: '/assets/MenuIcon.svg',
       Alt: "Menu"
@@ -48,6 +46,5 @@ export class NotesListHeader {
 
   MenuButtonOnClick(event : MouseEvent) {
       DisplayModeService.NotesListDisplayMode.ShowSideMenu();
-      
   }
 }

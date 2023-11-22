@@ -1,59 +1,93 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImgButton, ImgButtonProp } from 'src/app/Components/General/ImgButton/ImgButton.component';
-import { FontSizeMenu } from './Menus/FontSizeMenu/FontSizeMenu.component';
 import { SelectionManager } from 'src/app/Services/SelectionManager';
-import { NoteNodeStyles } from 'src/app/Utils/NoteFormater';
+import { NoteFormater, NoteNodeStyles } from 'src/app/Utils/NoteFormater';
+import { ListMenu, ListMenuItem } from 'src/app/Components/General/ListMenu/ListMenu.component';
+import { NoteManager } from 'src/app/Services/NoteManager';
 
 @Component({
   selector: 'EditMenu',
   standalone: true,
-  imports: [CommonModule, ImgButton, FontSizeMenu],
+  imports: [CommonModule, ImgButton, ListMenu ],
   templateUrl: './EditMenu.component.html',
   styleUrls: ['./EditMenu.component.css']
 })
-export class EditMenu {
+export class EditMenu implements AfterViewInit {
   fontSize : number = 16;
-  @ViewChild(FontSizeMenu) fontSizeMenu! : FontSizeMenu;
+  @ViewChild(ListMenu) listMenu! : ListMenu;
+  constructor(private noteManager : NoteManager) {}
 
-  constructor() {}
+  ngAfterViewInit(): void {
+    this.listMenu.SetSelectedByContent("16", false);
+  }
 
   undoButtonProps : ImgButtonProp = {
-    Button: {
-      OnClick: this.UndoButtonOnClick
-    },
+    Button: {},
     Img: {
       Src: '/assets/UndoIcon.svg',
       Alt: 'Undo icon'
     }
   }
+  fontSizeMenuItems : ListMenuItem[] = [
+    {content: "6",  onClick: null},
+    {content: "7",  onClick: null},
+    {content: "8",  onClick: null},
+    {content: "9",  onClick: null},
+    {content: "10", onClick: null},
+    {content: "11", onClick: null},
+    {content: "12", onClick: null},
+    {content: "13", onClick: null},
+    {content: "14", onClick: null},
+    {content: "15", onClick: null},
+    {content: "16", onClick: null},
+    {content: "17", onClick: null},
+    {content: "18", onClick: null},
+    {content: "19", onClick: null},
+    {content: "20", onClick: null},
+    {content: "22", onClick: null},
+    {content: "24", onClick: null},
+    {content: "26", onClick: null},
+    {content: "28", onClick: null},
+    {content: "30", onClick: null},
+    {content: "32", onClick: null},
+    {content: "34", onClick: null},
+    {content: "36", onClick: null},
+    {content: "38", onClick: null},
+    {content: "40", onClick: null},
+    {content: "44", onClick: null},
+    {content: "48", onClick: null},
+    {content: "52", onClick: null},
+    {content: "56", onClick: null},
+    {content: "60", onClick: null},
+    {content: "64", onClick: null},
+  ]
 
   UpdateDisplay(tagStyle : NoteNodeStyles | null) {
     if (tagStyle && tagStyle.fontSize !== undefined) {
-      this.fontSizeMenu.SetSelected(tagStyle.fontSize);
       this.UpdateFontSizeDisplay(tagStyle.fontSize);
       return;
     }
-    this.fontSizeMenu.SetSelected(16);
     this.UpdateFontSizeDisplay(16);
   }
 
   UpdateFontSizeDisplay(value : number) {
     this.fontSize = value;
     SelectionManager.SetSelection();
+    this.listMenu.SetSelectedByContent(value.toString(), false);
   }
 
   FontSizeButtonOnClick(event : Event) {
-    let width = window.visualViewport?.width;
-    if (width == undefined)
-      return;
-    
+    this.listMenu.ToggleVisibility();
     SelectionManager.UpdateSelection();
-    FontSizeMenu.Toggle(parseFloat((width * 0.65).toFixed(2)), -192);
     event.stopPropagation();
   }
 
-  UndoButtonOnClick() {
-
+  OnFontSizeSelect(element : HTMLLIElement) {
+    const value : number = parseInt(element.innerText);
+    NoteFormater.SetFontSize(value);
+    this.UpdateFontSizeDisplay(value);
+    this.noteManager.SaveNote();
+    this.listMenu.ToggleVisibility();
   }
 }

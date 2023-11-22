@@ -20,9 +20,5 @@
         <p class="label">Folders</p>
         <p class="count"></p>
     </div>
-</section>
-<section id="profile-menu">
-    <ul>
-        <li (click)="Logout()">Logout</li>
-    </ul>
+    <ListMenu top="3rem" left="4.2rem" [selectable]="false" [items]="profileMenuItems"></ListMenu>
 </section>

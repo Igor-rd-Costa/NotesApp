@@ -13,7 +13,7 @@ section.filter-menu {
     div#filter {
         width: 100%;
         grid-column: 1;
-        border-right: 0.1rem solid rgb(232, 232, 232);
+        border-right: 0.1rem solid #BBBBBB;
         display: flex;
         justify-content: flex-end;
         align-items: center;
@@ -26,7 +26,7 @@ section.filter-menu {
 
         span#filter-by {
             padding-right: min(2%, 1rem);
-            color: gray;     
+            color: #BBBBBB;     
         }
     }
 
@@ -58,18 +58,23 @@ section.notes {
         right:  min(6.66vw, 2rem);
         width:  clamp(2.81rem, 7.74vh, 3.25rem);
         height: clamp(2.81rem, 7.74vh, 3.25rem);
-        background-color: white;
-        border: 1px solid rgba(213, 213, 213, 0.1);
+        background-color: var(--ButtonColor);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 50%;
-        box-shadow: 0.1rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+        box-shadow: var(--WhiteShadow);
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
 
         img {
             width:  1rem;
             height: 1rem;
         }
+    }
+
+    button#create-note:hover {
+        background-color: var(--ButtonHighlightColor);
     }
 }
 
@@ -84,19 +89,24 @@ section.back-to-top {
         position: relative;
         width:  clamp(1.87rem, 4.8vh, 2.25rem);
         height: clamp(1.87rem, 4.8vh, 2.25rem);
-        background-color: white;
+        background-color: var(--ButtonColor);
         bottom: min(3vh, 1.7rem);
-        border: 1px solid rgba(213, 213, 213, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 50%;
-        box-shadow: 0.2rem 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
+        box-shadow: var(--WhiteShadow);
         display: flex;
         justify-content: center;
         align-items: center;
         opacity: 0;
+        cursor: pointer;
 
         img {
             width:  35%;
             height: 25%;
         }
+    }
+
+    button#back-to-top:hover {
+        background-color: var(--ButtonHighlightColor);
     }
 }

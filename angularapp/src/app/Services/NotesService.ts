@@ -49,7 +49,7 @@ export class NotesService {
     public Delete(id : string) {
         return this.http.delete('https://localhost:7216/note/delete/', { body: { Id: id }, withCredentials: true});
     }
-
+    
     public CheckDelete(id : string) {
         return this.http.delete('https://localhost:7216/note/checkdelete/', { body: { Id: id }, withCredentials: true});
     }

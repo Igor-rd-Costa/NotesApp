@@ -1,4 +1,4 @@
-import { NoteSelection } from "../Services/SelectionManager";
+import { NoteSelection, SelectionManager } from "../Services/SelectionManager";
 
 // Used to test if the note is being formated correctly
 const NoteNodeTypes = {
@@ -53,7 +53,8 @@ export class NoteFormater {
     
     private static focusedElement : HTMLElement | null = null;
     
-    public static SetFontSize(fontSize : number, selection : NoteSelection) {
+    public static SetFontSize(fontSize : number) {
+        const selection = SelectionManager.GetSelection();
         if (selection.Range == null || selection.AnchorNode == null || selection.FocusNode == null
             || selection.AnchorOffset == null || selection.FocusOffset == null) {
             return;

@@ -1,33 +1,36 @@
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImgButton, ImgButtonProp } from '../../General/ImgButton/ImgButton.component';
 import { AppDisplayMode, DisplayModeService } from '../../../Services/DisplayModeService';
 import { NotesService } from 'src/app/Services/NotesService';
-import { MoreOptionsMenu } from './MoreOptionsMenu/MoreOptionsMenu.component';
+import { ListMenu, ListMenuItem } from '../../General/ListMenu/ListMenu.component';
 
 @Component({
   selector: 'NoteDisplayHeader',
   standalone: true,
-  imports: [CommonModule, ImgButton, MoreOptionsMenu ],
+  imports: [CommonModule, ImgButton, ListMenu ],
   templateUrl: './NoteDisplayHeader.component.html',
   styleUrls: ['./NoteDisplayHeader.component.css']
 })
-export class NoteDisplayHeader implements AfterViewInit {
+export class NoteDisplayHeader {
   @Input() noteName : string = "";
   @Input() noteId : string = "";
-  @ViewChild(MoreOptionsMenu) moreOptionsMenu!: MoreOptionsMenu;
+
+  @ViewChild(ListMenu) listMenu! : ListMenu;
+  moreOptionsMenuItems : ListMenuItem[] = [
+    {content: "Delete", onClick: { func: this.Delete, src: this }}
+  ]
 
   constructor(private notesService : NotesService) {}
 
-  ngAfterViewInit(): void {
-      this.moreOptionsButtonProps.Button.UserData = { MoreOptionsMenu: this.moreOptionsMenu }
+  Delete() {
+    this.notesService.Delete(this.noteId).subscribe(() => {
+        DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_LIST);
+    })
   }
-
+  
   backButtonProps: ImgButtonProp = {
-    Button: {
-      OnClick: this.OnBackButtonClick,
-      UserData: { Header: this }
-    },
+    Button: {},
     Img: {
       Src: "/assets/BackArrow.png",
       Alt: "Back button"
@@ -35,9 +38,7 @@ export class NoteDisplayHeader implements AfterViewInit {
   }
 
   readModeButtonProps: ImgButtonProp = {
-    Button: {
-      OnClick: (event : MouseEvent) => {}
-    },
+    Button: {},
     Img: {
       Src: "/assets/BookIcon.png",
       Alt: "Read mode"
@@ -45,9 +46,7 @@ export class NoteDisplayHeader implements AfterViewInit {
   }
 
   appendButtonProps: ImgButtonProp = {
-    Button: {
-      OnClick: (event : MouseEvent) => {}
-    },
+    Button: {},
     Img: {
       Src: "/assets/ClipIcon.png",
       Alt: "Append"
@@ -55,23 +54,21 @@ export class NoteDisplayHeader implements AfterViewInit {
   }
 
   moreOptionsButtonProps : ImgButtonProp = {
-    Button: {
-      OnClick: this.OnMoreOptionsClick,
-    },
+    Button: {},
     Img: {
       Src: "/assets/MoreOptionsIcon.svg",
       Alt: "More options"
     }
   }
 
-  OnBackButtonClick(event: MouseEvent, userData : any | undefined) {
+  OnBackButtonClick(event: MouseEvent) {
     const name = document.getElementById("note-name") as HTMLInputElement;
     const content = document.getElementsByClassName("note-page")[0] as HTMLDivElement;
     if (name == null || content == null)
       return;
 
     if (name.value === "" && (content.innerText === "" || content.innerText === '\n')) {
-      userData.Header.notesService.CheckDelete(userData.Header.noteId).subscribe({
+      this.notesService.CheckDelete(this.noteId).subscribe({
         next: () => { DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_LIST)},
         error: (error : any) => { console.log(error) }
       })
@@ -82,7 +79,7 @@ export class NoteDisplayHeader implements AfterViewInit {
   }
 
   OnMoreOptionsClick(event : MouseEvent) {
-    MoreOptionsMenu.Toggle();
+    this.listMenu.ToggleVisibility();
     event.stopPropagation();
   }
 

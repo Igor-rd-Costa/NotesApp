@@ -61,6 +61,10 @@ interface AppEvents {
   OnWheel: (event : WheelEvent) => void
 }
 
+interface ClickWatcher {
+  watcher: (event : Event) => void,
+  src: object
+}
 
 @Component({
   selector: 'app-root',
@@ -70,7 +74,7 @@ interface AppEvents {
 export class App {
   title = 'notes-app';
   private static scrollTargetId: string = "notes-app";
-  private static clickWatchers : ((event : Event) => void)[] = [];
+  private static clickWatchers : ClickWatcher[] = [];
   DisplayModeService = DisplayModeService;
   AppDisplayMode = AppDisplayMode;
 
@@ -112,8 +116,8 @@ export class App {
     })
   }
 
-  public static RegisterClickWatcher(watcher :(event : Event) => void) {
-    App.clickWatchers.push(watcher);
+  public static RegisterClickWatcher(watcher :(event : Event) => void, src : object) {
+    App.clickWatchers.push({ watcher, src });
   }
 
   OnTouchStart(event : TouchEvent) {
@@ -152,7 +156,7 @@ export class App {
 
   AppClick(event : Event) {
     for (let i = 0; i < App.clickWatchers.length; i++) {
-      App.clickWatchers[i](event);
+      App.clickWatchers[i].watcher.call(App.clickWatchers[i].src, event); 
     }
   }
 }

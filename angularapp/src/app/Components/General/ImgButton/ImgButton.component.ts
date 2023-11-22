@@ -4,8 +4,6 @@ import { CommonModule } from '@angular/common';
 export interface ImgButtonProp {
   Button: {
     Id?: string,
-    OnClick: ((event: MouseEvent, userData : any | undefined) => void)
-    UserData? : any
   },
   Img: {
     Id?: string,
@@ -23,9 +21,7 @@ export interface ImgButtonProp {
 })
 export class ImgButton {
   @Input() props: ImgButtonProp = {
-    Button: {
-      OnClick: (event: MouseEvent, userData : any) => { },
-    },
+    Button: {},
     Img: {}
   }
 }

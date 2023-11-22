@@ -5,7 +5,7 @@
     </section>  
     <section class="header-menu-section">
         <div id="menu-wrapper">
-            <ImgButton id="menu-icon" [props]="menuButtonProps"></ImgButton>
+            <ImgButton (click)="MenuButtonOnClick($event)" id="menu-icon" [props]="menuButtonProps"></ImgButton>
             <span id="folder-name" [ngStyle]="{'opacity': folderNameSmallOpacity}">All notes</span>
         </div>
         <img id="add-pdf-icon" src="/assets/AddPDFIcon.svg" alt="Add PDF icon"/>

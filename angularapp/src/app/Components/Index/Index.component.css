@@ -10,20 +10,28 @@ main {
         grid-row: 1;
         grid-column: 1;
         align-self: end;
+        font-size: 3rem;
+        font-family: 'Caveat';
+        margin: 0;
+        color: white;
     }
 
     IndexErrorBox {
         grid-row: 2;
         grid-column: 1;
+        background-color: white;
+        border-radius: 0.5rem;
     }
 
     Login {
         grid-row: 1 / 4;
         grid-column: 1;
+        color: white;
     }
 
     Register {
         grid-row: 1 / 4;
         grid-column: 1;
+        color: white;
     }
 }

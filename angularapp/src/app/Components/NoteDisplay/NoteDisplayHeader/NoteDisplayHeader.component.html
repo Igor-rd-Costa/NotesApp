@@ -1,12 +1,12 @@
 <header>
   <section class="header-section">
     <div id="menu-wrapper">
-      <ImgButton class="back" [props]="backButtonProps"></ImgButton>
+      <ImgButton (click)="OnBackButtonClick($event)" class="back" [props]="backButtonProps"></ImgButton>
       <input [value]="noteName" placeholder="Title" id="note-name" (blur)="OnBlur()">
     </div>
-    <ImgButton class="read-mode" [props]="readModeButtonProps"></ImgButton>
-    <ImgButton class="append" [props]="appendButtonProps"></ImgButton>
-    <ImgButton class="more-options" [props]="moreOptionsButtonProps"></ImgButton>
+    <!-- <ImgButton class="read-mode" [props]="readModeButtonProps"></ImgButton>
+    <ImgButton class="append" [props]="appendButtonProps"></ImgButton> -->
+    <ImgButton (click)="OnMoreOptionsClick($event)" class="more-options" [props]="moreOptionsButtonProps"></ImgButton>
   </section>
-  <MoreOptionsMenu [noteId]="noteId"></MoreOptionsMenu>
+  <ListMenu id="more-options-menu" top="3.2rem" right="2rem" width="10rem" itemHeight="2.5rem" [selectable]="false" [items]="moreOptionsMenuItems"></ListMenu>
 </header>
