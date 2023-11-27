@@ -1,5 +1,5 @@
 section#side-menu-section {
-    background-color: #333333;
+    background-color: #292929FF;
     border-top-right-radius: 1.2rem;
     border-bottom-right-radius: 1.2rem;
     height: 100%;
@@ -30,11 +30,11 @@ section#side-menu-section {
         }
     }
     div.selected {
-        background-color: #444444 !important;
+        background-color: var(--ButtonHighlightColor) !important;
     }
 
     div.menu-item:hover {
-        background-color: #444444;
+        background-color: var(--ButtonHighlightColor);
         cursor: pointer;
     }
 
@@ -78,29 +78,3 @@ section#side-menu-section {
     }
 }
 
-section#profile-menu {
-    position: absolute;
-    visibility: hidden;
-    top: 0;
-    width: 100px;
-    background-color: #555555;
-    border-radius: 0.5rem;
-    border: 0.1rem solid #777777;
-
-    ul {
-        margin: 0rem;
-        overflow: hidden;
-        li {
-            height: 2rem;
-            margin: 0rem;
-            display: flex;
-            padding-left: 0.5rem;
-            align-items: center;
-            border-radius: 0.5rem;
-        }
-        li:hover {
-            cursor: pointer;
-            background-color: #666666;
-        }
-    }
-}

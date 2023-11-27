@@ -11,7 +11,6 @@ import { NoteFormater } from 'src/app/Utils/NoteFormater';
   styleUrls: ['./Page.component.css']
 })
 export class Page {
-  @Output() FocusOut = new EventEmitter<void>(false);
 
   constructor(private noteManager : NoteManager) {
     effect(() => {
@@ -27,7 +26,10 @@ export class Page {
     })
   }
 
-  Blur() {
-   this.FocusOut.emit();
+  Blur(event : FocusEvent) {
+    NoteFormater.SetFocusedElement(null);
+    if (event.relatedTarget === null || (event.relatedTarget as HTMLElement).closest(".edit-menu") === null) {
+      this.noteManager.SaveNote();
+    }
   }
 }

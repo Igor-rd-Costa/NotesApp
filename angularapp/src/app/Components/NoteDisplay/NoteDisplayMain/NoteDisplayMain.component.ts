@@ -5,6 +5,7 @@ import { ImgButton } from '../../General/ImgButton/ImgButton.component';
 import { EditMenu } from './EditMenu/EditMenu.component';
 import { NoteManager } from 'src/app/Services/NoteManager';
 import { NoteFormater } from 'src/app/Utils/NoteFormater';
+import { SelectionManager } from 'src/app/Services/SelectionManager';
 
 @Component({
   selector: 'NoteDisplayMain',
@@ -20,11 +21,6 @@ export class NoteDisplayMain {
   @Input() noteId : string = "";
   @ViewChild(EditMenu) editMenu! : EditMenu;
 
-  SaveContentChanges() {
-    this.noteManager.SaveNote();
-    NoteFormater.SetFocusedElement(null);
-  }
-
   OnKeyDown(event : KeyboardEvent) { 
     if (event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "ArrowLeft" || event.key === "ArrowRight") {
       this.UpdateDisplay();
@@ -36,7 +32,6 @@ export class NoteDisplayMain {
       const selection = window.getSelection();
       if (selection !== null) {
         const anchor : Node | null = selection.anchorNode;
-        let offset = selection.anchorOffset;
         if (anchor !== null) {
           let parent = anchor;
           while (parent.nodeName !== "P" && parent.nodeName !== "SPAN" && parent.parentElement !== null) {
@@ -54,7 +49,6 @@ export class NoteDisplayMain {
           } else {
             console.error("Font display update error: Unexpected anchor node", parent);
           }
-          selection.setPosition(anchor, offset);
         }
       }
     }, 10);

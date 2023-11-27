@@ -21,6 +21,7 @@ section.edit-menu {
     button#font-size {
         grid-column: 6;
         display: flex;
+        cursor: pointer;
         align-items: center;
         font-size: 18px;
         width: fit-content;
@@ -45,5 +46,10 @@ section.edit-menu {
             width: 100%;
             height: 100%;
         }
+    }
+
+    button#test {
+        width: 1.5rem;
+        height: 1.5rem;
     }
 }

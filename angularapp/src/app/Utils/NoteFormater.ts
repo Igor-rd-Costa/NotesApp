@@ -1,4 +1,4 @@
-import { NoteSelection, SelectionManager } from "../Services/SelectionManager";
+import { NoteSelection } from "../Services/SelectionManager";
 
 // Used to test if the note is being formated correctly
 const NoteNodeTypes = {
@@ -53,8 +53,7 @@ export class NoteFormater {
     
     private static focusedElement : HTMLElement | null = null;
     
-    public static SetFontSize(fontSize : number) {
-        const selection = SelectionManager.GetSelection();
+    public static SetFontSize(selection : NoteSelection, fontSize : number) {
         if (selection.Range == null || selection.AnchorNode == null || selection.FocusNode == null
             || selection.AnchorOffset == null || selection.FocusOffset == null) {
             return;
@@ -82,11 +81,28 @@ export class NoteFormater {
             }
             end += percentCount;
 
+            if (anchor === focus) {
+                
+            }
 
-            if (anchor === focus && start > end) {
-                let temp = end;
-                end = start;
-                start = temp;
+
+            if (anchor === focus) {
+                if (start > end) {
+                    let temp = end;
+                    end = start;
+                    start = temp;
+                }
+                if (anchor.parentElement && anchor.parentElement.nodeName === "SPAN" && selection.AnchorOffset === 0 
+                    && selection.FocusOffset === anchor.parentElement.innerText.length) {
+                    const classes = anchor.parentElement.classList;
+                    classes.forEach(className => {
+                        if (className.startsWith("font-")) {
+                            classes.remove(className);
+                        }
+                    })
+                    classes.add(`font-${fontSize}`);
+                    return;
+                }
             }
 
             let style : NoteNodeStyles = {
@@ -102,15 +118,13 @@ export class NoteFormater {
                 { node: focus, offset: end }
             );
 
-
-
-
             if (commonAncestor.nodeName === "SPAN") {
                 const parent = commonAncestor.parentElement;
                 if (parent) {
                     const firstChild = html[0].firstChild;
-                    if (firstChild)
+                    if (firstChild) {
                         parent.replaceChild(firstChild, commonAncestor);
+                    }
                 }
                 return;
             }
@@ -130,16 +144,18 @@ export class NoteFormater {
                     commonAncestor.appendChild(child);
                 })
             } else {
-                console.error("Unexpected common ancestor ", commonAncestor);
+                console.error("Unexpected common ancestor:", commonAncestor);
             }
         }
     }
 
     private static StyleSelection(commonAncestor : HTMLElement, style : NoteNodeStyles, anchorInfo : AnchorInfo, focusInfo : FocusInfo) {
         const original = NoteFormater.ParseNode(commonAncestor);
-        anchorInfo.offset = this.FindOffset(commonAncestor, anchorInfo);
-        focusInfo.offset = this.FindOffset(commonAncestor, focusInfo);
-
+        let anchorOffsets = this.FindOffset(commonAncestor, anchorInfo);
+        let focusOffsets = this.FindOffset(commonAncestor, focusInfo);
+        anchorInfo.offset = anchorOffsets.Offset; 
+        focusInfo.offset = focusOffsets.Offset;
+        
         const startString = original.substring(0, anchorInfo.offset);
         const middleString = original.substring(anchorInfo.offset, focusInfo.offset);
         const endString = original.substring(focusInfo.offset);
@@ -317,14 +333,16 @@ export class NoteFormater {
     private static found = false;
     private static FindOffset(ancestor : Node, info : AnchorInfo | FocusInfo) {
         let offset = info.offset;
+        let selectionOffset = info.offset;
         this.found = false;
 
-        offset = this.GetOffsets(ancestor, info, offset);
-        return offset;
+        let offsets = this.GetOffsets(ancestor, info, offset, selectionOffset);
+        return offsets;
     }
     
-    private static GetOffsets(ancestor : Node, info : AnchorInfo | FocusInfo, offset : number) : number {
+    private static GetOffsets(ancestor : Node, info : AnchorInfo | FocusInfo, offset : number, selectionOffset : number) {
         let addOffset = 0;
+        let selectionAddOffset = 0;
         if (ancestor !== info.node) {
             if (!this.found) {
                 if (ancestor.nodeName === "SPAN") {
@@ -339,11 +357,14 @@ export class NoteFormater {
                             index = ancestor.textContent.indexOf('%', index + 1);
                         }
                         addOffset = ancestor.textContent.length + percentCount; 
+                        selectionAddOffset = ancestor.textContent.length;
                     }
                 }
                 if (ancestor.childNodes.length > 0) {
                     ancestor.childNodes.forEach(child => {
-                        addOffset = this.GetOffsets(child, info, addOffset);
+                        let offsets = this.GetOffsets(child, info, addOffset, selectionAddOffset);
+                        addOffset = offsets.Offset;
+                        selectionAddOffset = offsets.SelectionOffset;
                     })
                 }
             }
@@ -357,7 +378,7 @@ export class NoteFormater {
                 addOffset += 2;
             }
         }
-        return offset + addOffset;
+        return { Offset: offset + addOffset, SelectionOffset: selectionOffset + selectionAddOffset};
     }
 
     private static SpanToTag(span : HTMLSpanElement) : string {

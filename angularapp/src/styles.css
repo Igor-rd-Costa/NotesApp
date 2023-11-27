@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
-  --ButtonColor: #333333FF;
-  --ButtonHighlightColor: #444444FF;
+  --ButtonColor: #222222FF;
+  --ButtonHighlightColor: #333333FF;
   --AppHighlightColor: #7700FFFF;
   --WhiteShadow: 0.1rem 0.2rem 0.3rem #FFFFFF77;
 }
@@ -10,7 +10,7 @@ body {
   margin: 0;
   width: 100dvw;
   height: 100dvh;
-  background-color: #222222;
+  background-color: #222222FF;
 }
 
 * {

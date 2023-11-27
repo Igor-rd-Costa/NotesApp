@@ -29,6 +29,7 @@ export class EditMenu implements AfterViewInit {
       Alt: 'Undo icon'
     }
   }
+
   fontSizeMenuItems : ListMenuItem[] = [
     {content: "6",  onClick: null},
     {content: "7",  onClick: null},
@@ -73,21 +74,24 @@ export class EditMenu implements AfterViewInit {
 
   UpdateFontSizeDisplay(value : number) {
     this.fontSize = value;
-    SelectionManager.SetSelection();
     this.listMenu.SetSelectedByContent(value.toString(), false);
   }
 
   FontSizeButtonOnClick(event : Event) {
+    event.stopPropagation();
     this.listMenu.ToggleVisibility();
     SelectionManager.UpdateSelection();
-    event.stopPropagation();
   }
 
   OnFontSizeSelect(element : HTMLLIElement) {
     const value : number = parseInt(element.innerText);
-    NoteFormater.SetFontSize(value);
+    const selection = SelectionManager.GetSelection();
+    SelectionManager.SaveSelection(selection);
+    
+    NoteFormater.SetFontSize(selection, value);
     this.UpdateFontSizeDisplay(value);
     this.noteManager.SaveNote();
+    SelectionManager.RestoreSelection();
     this.listMenu.ToggleVisibility();
   }
 }
