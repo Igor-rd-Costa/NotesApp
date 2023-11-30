@@ -85,7 +85,6 @@ namespace webapi.Controllers
                 Guid = noteGuid,
                 CreationDate = date,
                 ModifyDate = date,
-                Content = "aa%f32%aaabb%/%bbb\r\ncccccddddd"
             };
             var result = m_NotesContext.Add(note);
             if (result.State == EntityState.Added)
