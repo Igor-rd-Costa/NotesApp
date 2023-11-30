@@ -27,7 +27,8 @@ export interface ListMenuPosition {
 })
 export class ListMenu extends ClickHighlight {
   @Input() items : ListMenuItem[] = [];
-  @Input() id: string = "list-menu";
+  @Input() id: string = `list-menu`;
+  @Input() triggerId: string | null = null;
   @Input() top: string = "auto";
   @Input() left: string = "auto";
   @Input() bottom: string = "auto";
@@ -92,7 +93,7 @@ export class ListMenu extends ClickHighlight {
       return;
     
     const target = event.target as HTMLElement;
-    if (target.closest(`#${this.id}`) === null) {
+    if (target.closest(`#${this.id}`) === null && (this.triggerId === null || target.closest(`#${this.triggerId}`) === null)) {
       this.ToggleVisibility();
     }    
   }

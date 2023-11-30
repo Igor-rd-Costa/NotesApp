@@ -70,7 +70,7 @@ export class NoteDisplayHeader {
     if (name.value === "" && (content.innerText === "" || content.innerText === '\n')) {
       this.notesService.CheckDelete(this.noteId).subscribe({
         next: () => { DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_LIST)},
-        error: (error : any) => { console.log(error) }
+        error: (error : any) => { console.error(error) }
       })
     }
     else {
@@ -80,7 +80,7 @@ export class NoteDisplayHeader {
 
   OnMoreOptionsClick(event : MouseEvent) {
     this.listMenu.ToggleVisibility();
-    event.stopPropagation();
+    //event.stopPropagation();
   }
 
   OnBlur() {

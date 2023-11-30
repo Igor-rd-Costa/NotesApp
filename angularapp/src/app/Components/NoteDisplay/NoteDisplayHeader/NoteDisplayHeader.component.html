@@ -6,7 +6,7 @@
     </div>
     <!-- <ImgButton class="read-mode" [props]="readModeButtonProps"></ImgButton>
     <ImgButton class="append" [props]="appendButtonProps"></ImgButton> -->
-    <ImgButton (click)="OnMoreOptionsClick($event)" class="more-options" [props]="moreOptionsButtonProps"></ImgButton>
+    <ImgButton (click)="OnMoreOptionsClick($event)" id="more-options" class="more-options" [props]="moreOptionsButtonProps"></ImgButton>
   </section>
-  <ListMenu id="more-options-menu" top="3.2rem" right="2rem" width="10rem" itemHeight="2.5rem" [selectable]="false" [items]="moreOptionsMenuItems"></ListMenu>
+  <ListMenu id="more-options-menu" triggerId="more-options" top="3.2rem" right="2rem" width="10rem" itemHeight="2.5rem" [selectable]="false" [items]="moreOptionsMenuItems"></ListMenu>
 </header>

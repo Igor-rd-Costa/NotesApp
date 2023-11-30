@@ -7,7 +7,7 @@ import { NgFor } from '@angular/common';
 import { NotesService } from 'src/app/Services/NotesService';
 import AnimateElement from 'src/app/Utils/Animate';
 import { Router } from '@angular/router';
-import { NoteFormater } from 'src/app/Utils/NoteFormater';
+import { NoteFormater } from 'src/app/Services/NoteFormater';
 
 function SetNoteWrapperSize() {
   const NoteWrapper = document.getElementById("notes-wrapper");
@@ -47,7 +47,7 @@ export class NotesListMain implements AfterViewChecked {
   notes : NoteCardInfo[] = [];
   private isBackToTopButtonHidden : boolean = true;
 
-  constructor(private notesService : NotesService, private router : Router) {
+  constructor(private notesService : NotesService, private noteFormater : NoteFormater, private router : Router) {
     window.addEventListener('resize', SetNoteWrapperSize);
     this.notesService.GetNotePreviews().subscribe(result => {
       result.forEach(note => {
@@ -56,7 +56,7 @@ export class NotesListMain implements AfterViewChecked {
           id: note.id,
           name: note.name,
           modifyDate: this.notesService.GetNotePreviewDateText(date),
-          preview: NoteFormater.NoteToHMTL(note.preview)
+          preview: this.noteFormater.NoteToHMTL(note.preview)
         };
         if (noteCard.name === "") {
           noteCard.name = `Text note<br>${date.getMonth() + 1}/${date.getDate()}`;

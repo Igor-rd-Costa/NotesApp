@@ -47,9 +47,4 @@ section.edit-menu {
             height: 100%;
         }
     }
-
-    button#test {
-        width: 1.5rem;
-        height: 1.5rem;
-    }
 }

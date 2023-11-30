@@ -1,6 +1,5 @@
 import { Injectable, signal } from "@angular/core";
 import { NoteInfo, NotesService } from "./NotesService";
-import { NoteFormater } from "../Utils/NoteFormater";
 
 @Injectable()
 export class NoteManager {
@@ -47,15 +46,18 @@ export class NoteManager {
         return this.note.content();
     }
 
-    public SaveNote() {
+    public SetNoteContent(content : string) : void {
+        this.note.content.set(content);
+    }
+
+    public SaveNote(newContent : string) {
         const page = document.getElementsByClassName("note-page")[0];
         if (page === null)
             return;
 
-        const content = NoteFormater.ParseNode(page).trimEnd();
-        if (this.note.content() !== content) {
-            this.notesService.Update(this.note.id(), content).subscribe(() => {
-                this.note.content.set(content);
+        if (this.note.content() !== newContent) {
+            this.notesService.Update(this.note.id(), newContent).subscribe(() => {
+                this.note.content.set(newContent);
             });
         }
     }

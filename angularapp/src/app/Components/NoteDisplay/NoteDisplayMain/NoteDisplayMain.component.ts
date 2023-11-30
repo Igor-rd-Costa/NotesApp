@@ -4,7 +4,7 @@ import { Page } from './Page/Page.component';
 import { ImgButton } from '../../General/ImgButton/ImgButton.component';
 import { EditMenu } from './EditMenu/EditMenu.component';
 import { NoteManager } from 'src/app/Services/NoteManager';
-import { NoteFormater } from 'src/app/Utils/NoteFormater';
+import { NoteFormater } from 'src/app/Services/NoteFormater';
 import { SelectionManager } from 'src/app/Services/SelectionManager';
 
 @Component({
@@ -15,7 +15,7 @@ import { SelectionManager } from 'src/app/Services/SelectionManager';
   styleUrls: ['./NoteDisplayMain.component.css']
 })
 export class NoteDisplayMain {
-  constructor(private noteManager : NoteManager) {
+  constructor(private noteManager : NoteManager, private noteFormater : NoteFormater) {
     
   }
   @Input() noteId : string = "";
@@ -37,14 +37,14 @@ export class NoteDisplayMain {
           while (parent.nodeName !== "P" && parent.nodeName !== "SPAN" && parent.parentElement !== null) {
             parent = parent.parentElement;
           }
-          if (parent === NoteFormater.GetFocusedElement())
+          if (parent === this.noteFormater.GetFocusedElement())
             return;
 
-          NoteFormater.SetFocusedElement(parent as HTMLElement);
+          this.noteFormater.SetFocusedElement(parent as HTMLElement);
           if (parent.nodeName === "P") {
             this.editMenu.UpdateDisplay(null);
           } else if (parent.nodeName === "SPAN") {
-            let tagStyle = NoteFormater.GetSpanStyle(parent as HTMLSpanElement);
+            let tagStyle = this.noteFormater.GetSpanStyle(parent as HTMLSpanElement);
             this.editMenu.UpdateDisplay(tagStyle);
           } else {
             console.error("Font display update error: Unexpected anchor node", parent);

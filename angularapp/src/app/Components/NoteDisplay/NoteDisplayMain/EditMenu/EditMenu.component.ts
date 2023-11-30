@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImgButton, ImgButtonProp } from 'src/app/Components/General/ImgButton/ImgButton.component';
-import { SelectionManager } from 'src/app/Services/SelectionManager';
-import { NoteFormater, NoteNodeStyles } from 'src/app/Utils/NoteFormater';
+import { NoteSelection, SelectionManager } from 'src/app/Services/SelectionManager';
+import { NoteFormater, NoteNodeStyles } from 'src/app/Services/NoteFormater';
 import { ListMenu, ListMenuItem } from 'src/app/Components/General/ListMenu/ListMenu.component';
 import { NoteManager } from 'src/app/Services/NoteManager';
 
@@ -16,7 +16,7 @@ import { NoteManager } from 'src/app/Services/NoteManager';
 export class EditMenu implements AfterViewInit {
   fontSize : number = 16;
   @ViewChild(ListMenu) listMenu! : ListMenu;
-  constructor(private noteManager : NoteManager) {}
+  constructor(private noteManager : NoteManager, private noteFormater : NoteFormater) {}
 
   ngAfterViewInit(): void {
     this.listMenu.SetSelectedByContent("16", false);
@@ -78,19 +78,16 @@ export class EditMenu implements AfterViewInit {
   }
 
   FontSizeButtonOnClick(event : Event) {
-    event.stopPropagation();
+    //event.stopPropagation();
     this.listMenu.ToggleVisibility();
     SelectionManager.UpdateSelection();
   }
 
   OnFontSizeSelect(element : HTMLLIElement) {
     const value : number = parseInt(element.innerText);
-    const selection = SelectionManager.GetSelection();
-    SelectionManager.SaveSelection(selection);
-    
-    NoteFormater.SetFontSize(selection, value);
+    const newContent = this.noteFormater.SetFontSize(value);
     this.UpdateFontSizeDisplay(value);
-    this.noteManager.SaveNote();
+    this.noteManager.SaveNote(newContent);
     SelectionManager.RestoreSelection();
     this.listMenu.ToggleVisibility();
   }

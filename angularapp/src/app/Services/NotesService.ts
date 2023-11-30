@@ -19,7 +19,6 @@ export interface NoteInfo {
 @Injectable()
 export class NotesService {
     constructor(private http : HttpClient) {}
-    
     private Months : string[] = [ "Jan", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Aug", "Set", "Oct", "Nov", "Dec" ];
 
     public Create() : Observable<string> {

@@ -15,16 +15,8 @@ export class SelectionManager {
         FocusOffset: -1,
     };
 
-    private static selectionNode : Node | null | undefined = null;
-    private static selectionOffset : number = -1;
-
-    public static SaveSelection(selection : NoteSelection) {
-        const page = document.getElementsByClassName("note-page")[0] as HTMLElement;
-        if (page !== undefined) {
-            this.selectionOffset = 0;
-            SelectionManager.CalculateOffset(page, selection);
-        }
-    }
+    public static selectionAnchorOffset = -1;
+    public static selectionFocusOffset = -1;
 
     public static RestoreSelection() {
         setTimeout(() => {
@@ -33,68 +25,64 @@ export class SelectionManager {
             let range : Range = new Range;
             const page = document.getElementsByClassName("note-page")[0] as HTMLElement;
             if (page) {
-                SelectionManager.FindAnchor(page);
-                if (this.selectionNode) {
-                    range.setStart(this.selectionNode, 0)
-                    if (this.selectionNode.textContent)
-                        range.setEnd(this.selectionNode, this.selectionNode.textContent.length)
-                    else 
-                        range.setEnd(this.selectionNode, 0)
-            
-                    selection?.addRange(range);
+                const nodes = SelectionManager.FindAnchor(page);
+                if (nodes.anchor && nodes.focus && nodes.focus.textContent) {
+                   range.setStart(nodes.anchor, 0)
+                   range.setEnd(nodes.focus, nodes.focus.textContent.length)
+                   selection?.addRange(range);
                 }
-                this.selectionNode = null;
-                this.selectionOffset = -1;                
             }
+            SelectionManager.selectionAnchorOffset = -1;
+            SelectionManager.selectionFocusOffset = -1;
         }, 100);
     }
 
-    private static CalculateOffset(node : Node, selection : NoteSelection) {
-        if (this.selectionNode === undefined) {
-            return;
-        }
-        if (node.hasChildNodes()) {
-            node.childNodes.forEach(childNode => {
-                SelectionManager.CalculateOffset(childNode, selection);
-            })
-        }
-        if (this.selectionNode === null) {
-            if (node === selection.AnchorNode) {
-                this.selectionNode = undefined;
-                this.selectionOffset += selection.AnchorOffset;    
-            } else {
-                if (node.nodeName === "#text" && node.textContent) {
-                    this.selectionOffset += node.textContent.length;
-                }
-            }
-        }
-    }
-
     private static FindAnchor(node : Node) {
-        if (this.selectionNode !== undefined)
-            return;
-
-        if (this.selectionOffset <= 0) {
-            while (node.nodeName === "SPAN" && node.firstChild) {
-                node = node.firstChild;
+        let nodes : {anchor: Node | null, focus: Node | null} = {
+            anchor: null,
+            focus: null
+        };
+        (function ParseNode(node : Node) {
+            if (nodes.anchor && nodes.focus) {
+                return;
             }
-            this.selectionNode = node;
-            return;
-        }
-        else if (node.nodeName === "#text" && node.textContent) {
-            this.selectionOffset -= node.textContent.length;
-        }
-        if (node.hasChildNodes()) {
-            for (let i = 0; i < node.childNodes.length; i++) {
-                const childNode = node.childNodes[i];
-                SelectionManager.FindAnchor(childNode);
-                if (this.selectionNode !== undefined) {
-                    break;
+            if (node.nodeName === "#text" && node.textContent) {
+                if (nodes.anchor === null)
+                    SelectionManager.selectionAnchorOffset -= node.textContent.length;
+                if (nodes.focus === null) {
+                    SelectionManager.selectionFocusOffset -= node.textContent.length;
                 }
             }
-        }
+            if (SelectionManager.selectionAnchorOffset <= 0 && nodes.anchor === null) {
+                let tempNode = node;
+                if (node.nextSibling) {
+                    tempNode = node.nextSibling;
+                } else if (node.parentElement && node.parentElement.nextSibling) {
+                    tempNode = node.parentElement.nextSibling;
+                }
+                while (tempNode.nodeName === "SPAN" && tempNode.firstChild) {
+                    tempNode = tempNode.firstChild;
+                }
+                nodes.anchor = tempNode;
+            }
+            if (SelectionManager.selectionFocusOffset <= 0 && nodes.focus === null) {
+                let tempNode = node;
+                while (tempNode.nodeName === "SPAN" && tempNode.firstChild) {
+                    tempNode = tempNode.firstChild;
+                }
+                nodes.focus = tempNode;
+            }
 
-        
+
+            if (node.hasChildNodes()) {
+                for (let i = 0; i < node.childNodes.length; i++) {
+                    ParseNode(node.childNodes[i]);
+                    if (nodes.anchor && nodes.focus)
+                        return;
+                }
+            }
+        })(node);
+        return nodes;
     }
 
     public static GetSelection() : NoteSelection {
@@ -123,6 +111,6 @@ export class SelectionManager {
     }
 
     public static UpdateSelection() : void {
-        this.currentSelection = SelectionManager.ToNoteSelection(window.getSelection());
+        SelectionManager.currentSelection = SelectionManager.ToNoteSelection(window.getSelection());
     }
 }
