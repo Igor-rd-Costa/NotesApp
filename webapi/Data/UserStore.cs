@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace webapi.Data
@@ -31,7 +32,12 @@ namespace webapi.Data
 
         public Task<IdentityResult> DeleteAsync(IdentityUser<int> user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(() =>
+            {
+                m_UserContext.Database.ExecuteSqlInterpolated($"CALL delete_account({user.Id})");
+                m_UserContext.SaveChanges();
+                return IdentityResult.Success;
+            });
         }
 
         public void Dispose()
@@ -49,7 +55,10 @@ namespace webapi.Data
 
         public Task<IdentityUser<int>?> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(() =>
+            {
+                return m_UserContext.users.Where(user => user.Id == int.Parse(userId)).FirstOrDefault();
+            });
         }
 
         public Task<IdentityUser<int>?> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
@@ -111,12 +120,18 @@ namespace webapi.Data
 
         public Task SetEmailAsync(IdentityUser<int> user, string? email, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(() =>
+            {
+                user.Email = email;
+            });
         }
 
         public Task SetEmailConfirmedAsync(IdentityUser<int> user, bool confirmed, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(() =>
+            {
+                user.EmailConfirmed = true;
+            });
         }
 
         public Task SetNormalizedEmailAsync(IdentityUser<int> user, string? normalizedEmail, CancellationToken cancellationToken)
@@ -139,19 +154,32 @@ namespace webapi.Data
         {
             return Task.Factory.StartNew(() =>
             {
-                Console.WriteLine("Action!!");
                 user.PasswordHash = passwordHash;
             });
         }
 
         public Task SetUserNameAsync(IdentityUser<int> user, string? userName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(() =>
+            {
+                user.UserName = userName;
+            });
         }
 
         public Task<IdentityResult> UpdateAsync(IdentityUser<int> user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task<IdentityResult>.Factory.StartNew(() =>
+            {
+                var existingUser = m_UserContext.users.Where(dbUser => dbUser.Id == user.Id).FirstOrDefault();
+                if (existingUser == null)
+                {
+                    return IdentityResult.Failed();
+                }
+
+                existingUser = user;
+                m_UserContext.SaveChanges();
+                return IdentityResult.Success;
+            });
         }
     }
 }

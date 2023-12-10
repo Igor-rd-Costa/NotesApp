@@ -2,8 +2,7 @@ import { Component, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NoteDisplayMain } from './NoteDisplayMain/NoteDisplayMain.component';
 import { NoteDisplayHeader } from './NoteDisplayHeader/NoteDisplayHeader.component';
-import { ActivatedRoute } from '@angular/router';
-import { AppDisplayMode, DisplayModeService } from 'src/app/Services/DisplayModeService';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NoteManager } from 'src/app/Services/NoteManager'; 
 
 @Component({
@@ -17,7 +16,7 @@ export class NoteDisplay {
   noteId : string = "";
   noteName : string = "";
 
-  constructor(private route : ActivatedRoute, private noteManager : NoteManager) {
+  constructor(private router : Router, private route : ActivatedRoute, private noteManager : NoteManager) {
     effect(() => {
       this.noteId = this.noteManager.GetNoteId();
       this.noteName = this.noteManager.GetNoteName();
@@ -26,7 +25,7 @@ export class NoteDisplay {
     this.route.paramMap.subscribe(value => {
       const guid = value.get("guid");
       if (guid == null) {
-        DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_LIST);
+        this.router.navigate(['']);
         return;
       }
       this.noteManager.Load(guid);

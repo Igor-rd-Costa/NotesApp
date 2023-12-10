@@ -1,0 +1,17 @@
+<section *ngIf="isEditable() === false else editableField">
+    <p id="content">{{content}}</p>
+    <ImgButton [props]="editButtonProps" (click)="AllowEdit()"></ImgButton>
+    <p *ngIf="updated" id="update-success">{{fieldName}} updated successfully.</p>
+</section>
+
+<ng-template #editableField>
+    <section>
+        <form [formGroup]="editForm" (submit)="SaveChanges()" (keyup)="OnKeyUp($event)">
+            <input [value]="content" formControlName="Content" [type]="type" #inputField>
+            <img *ngIf="showError" src="/assets/RedCrossIcon.svg" [title]="currentMessage"/>
+            <img *ngIf="showSuccess" src="/assets/GreenCheckMarkIcon.svg" [title]="currentMessage"/>
+            <FormButton text="Save" type="submit" #saveFormButton></FormButton>
+            <FormButton text="Cancel" (click)="CancelEdit()" type="button" [isActive]="true"></FormButton>
+        </form>
+    </section>
+</ng-template>

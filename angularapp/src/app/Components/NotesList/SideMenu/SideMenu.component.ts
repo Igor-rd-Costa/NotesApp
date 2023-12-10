@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NotesList } from '../NotesList.component';
 import { AuthService } from 'src/app/Services/AuthService';
 import { Router } from '@angular/router';
-import { AppDisplayMode, DisplayModeService, IndexDisplayMode, SideMenuDisplayMode } from 'src/app/Services/DisplayModeService';
+import { DisplayModeService, IndexDisplayMode, SideMenuDisplayMode } from 'src/app/Services/DisplayModeService';
 import { ListMenu, ListMenuItem } from '../../General/ListMenu/ListMenu.component';
 
 @Component({
@@ -20,13 +20,14 @@ export class SideMenu {
   public static isProfileMenuVisible : boolean = false;
 
   profileMenuItems : ListMenuItem[] = [
-    {content: "Logout", onClick: {func: this.Logout, src: this }}
+    {content: "Logout", onClick: {func: this.Logout, src: this }},
+    {content: "Settings", onClick: {func: this.Settings, src: this }, iconSrc: "/assets/CogIcon.svg"}
   ]
 
   constructor(private authService : AuthService, private router : Router) {
     effect(() => {
       this.noteCount = NotesList.GetNoteCount();
-      this.authService.GetUsername().subscribe(username => this.username = username);
+      this.authService.GetUsername().subscribe(username => {this.username = username});
     })
   }
 
@@ -61,9 +62,13 @@ export class SideMenu {
       if (result) {
         SideMenu.HideProfileMenu();
         DisplayModeService.SetSideMenuDisplayMode(SideMenuDisplayMode.HIDDEN);
-        DisplayModeService.SetAppDisplayMode(AppDisplayMode.INDEX_DISPLAY);
         DisplayModeService.SetIndexDisplayMode(IndexDisplayMode.LOGIN);
       }
     });
+  }
+
+  Settings() {
+    this.router.navigate(['settings']);
+    DisplayModeService.SetSideMenuDisplayMode(SideMenuDisplayMode.HIDDEN);
   }
 }

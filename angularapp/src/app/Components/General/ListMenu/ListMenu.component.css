@@ -11,14 +11,39 @@ ul {
         padding-left: 1rem;
         display: grid;
         align-items: center;
-        grid-template-columns: 40% auto;
         color: white;   
+        grid-template-columns: 40% auto;
         cursor: pointer;
+
+        span {
+            grid-column: 1;
+        }
 
         img {
             width: 1rem;
             height: 1rem;
+            visibility: inherit ;
+        }
+
+        img#check-mark {
             visibility: hidden;
+            grid-column: 2;
+        }
+    }
+    
+    li.list-item-icons {
+        grid-template-columns: 2rem 40% auto;
+
+        img#list-item-icon {
+            grid-column: 1;
+        }
+
+        span {
+            grid-column: 2;
+        }
+
+        img#check-mark {
+            grid-column: 3;
         }
     }
 
@@ -38,7 +63,7 @@ ul {
 
     li.selected {
         color: var(--AppHighlightColor);
-        img {
+        img#check-mark {
             visibility: inherit;
         }
     }

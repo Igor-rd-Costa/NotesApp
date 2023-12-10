@@ -1,11 +1,6 @@
-<ng-container *ngIf="DisplayModeService.GetAppDisplayMode() === AppDisplayMode.INDEX_DISPLAY; else NotesListView">
-    <main>
-        <h1>Notes App</h1>
-        <IndexErrorBox></IndexErrorBox>
-        <Login *ngIf="DisplayModeService.GetIndexDisplayMode() === IndexDisplayMode.LOGIN" (LoginError)="HandleError($event)"></Login>
-        <Register *ngIf="DisplayModeService.GetIndexDisplayMode() === IndexDisplayMode.REGISTER" (RegisterError)="HandleError($event)"></Register>
-    </main>
-</ng-container>
-<ng-template #NotesListView>
-    <NotesList *ngIf="DisplayModeService.GetAppDisplayMode() === AppDisplayMode.NOTE_LIST"></NotesList>
-</ng-template>
+<main>
+    <h1>Notes App</h1>
+    <FormErrorBox></FormErrorBox>
+    <Login *ngIf="DisplayModeService.GetIndexDisplayMode() === IndexDisplayMode.LOGIN" (LoginError)="HandleError($event)"></Login>
+    <Register *ngIf="DisplayModeService.GetIndexDisplayMode() === IndexDisplayMode.REGISTER" (RegisterError)="HandleError($event)"></Register>
+</main>

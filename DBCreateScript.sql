@@ -33,7 +33,6 @@ CREATE TABLE if NOT EXISTS notes
 );
 
 ALTER TABLE notes OWNER to "NotesAppUser";
-
 GRANT ALL ON TABLE notes TO "NotesAppUser";
 
 CREATE TABLE if NOT EXISTS users
@@ -60,5 +59,12 @@ CREATE TABLE if NOT EXISTS users
 
 ALTER TABLE users OWNER to "NotesAppUser";
 GRANT ALL ON TABLE users TO "NotesAppUser";
+
+CREATE OR REPLACE PROCEDURE delete_account (IN userId int)
+language sql
+AS $$
+	DELETE FROM notes WHERE notes."UserId" = userId;
+	DELETE FROM users WHERE users."Id" = userId;	
+$$
 
 \q

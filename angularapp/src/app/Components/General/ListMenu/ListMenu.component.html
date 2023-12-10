@@ -1,9 +1,11 @@
 <ul [class]="isVisible ? 'visible' : 'hidden'" id="{{id}}" [style.top]="top" [style.left]="left" [style.bottom]="bottom" [style.right]="right" 
 [style.width]="width" [style.height]="height"
 (click)="OnClick($event)" #listElement>
-    <li *ngFor="let item of items" [style.height]="itemHeight" (click)="CallItemFunc(item, $event)"
-    (mousedown)="ClickStart($event)" (mouseup)="ClickEnd($event)" (touchstart)="ClickStart($event)" (touchend)="ClickEnd($event)" (mouseout)="MouseOut($event)">
-        {{item.content}}
-        <img *ngIf="selectable" src="/assets/PurpleCheckMarkIcon.svg">
+    <li *ngFor="let item of items" [style.height]="itemHeight" [class]="(hasIcons === true) ? 'list-item-icons' : ''" 
+    (click)="CallItemFunc(item, $event)" (mousedown)="ClickStart($event)" (mouseup)="ClickEnd($event)" 
+    (touchstart)="ClickStart($event)" (touchend)="ClickEnd($event)" (mouseout)="MouseOut($event)">
+        <img id="list-item-icon" *ngIf="hasIcons === true && item.iconSrc !== undefined" [src]="item.iconSrc">
+        <span>{{item.content}}</span>
+        <img id="check-mark" *ngIf="selectable" src="/assets/PurpleCheckMarkIcon.svg">
     </li>
 </ul>

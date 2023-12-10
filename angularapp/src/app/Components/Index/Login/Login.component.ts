@@ -1,11 +1,13 @@
-import { AfterViewInit, Component, EventEmitter, Output, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Output, ViewChild, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppDisplayMode, DisplayModeService, IndexDisplayMode } from 'src/app/Services/DisplayModeService';
+import { DisplayModeService, IndexDisplayMode } from 'src/app/Services/DisplayModeService';
 import { AuthService } from 'src/app/Services/AuthService';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { IndexErrorType } from '../IndexErrorBox/IndexErrorBox.component';
+import { FormControl, FormControlStatus, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UpdateDefaultButtonState } from 'src/app/Utils/GlobalEventHandlers';
 import { FormButton } from '../../General/FormButton/FormButton';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { FormErrorCodes } from '../../General/FormErrorBox/FormErrorBox.component';
 
 @Component({
   selector: 'Login',
@@ -15,15 +17,16 @@ import { FormButton } from '../../General/FormButton/FormButton';
   styleUrls: ['./Login.component.css']
 })
 export class Login implements AfterViewInit {
-  AppDisplayMode = AppDisplayMode;
   @Output() LoginError : EventEmitter<number> =  new EventEmitter<number>();
 
-  @ViewChildren(FormButton) formButtons! : FormButton[];
-  constructor(private authService : AuthService) {}
+  @ViewChild("loginButton") loginButton! : FormButton;
+  constructor(private router : Router, private authService : AuthService) {
+    this.loginForm.statusChanges.subscribe(this.OnStatusChange.bind(this));
+  }
 
   loginForm = new FormGroup({
-    Username: new FormControl(''),
-    Password: new FormControl('')
+    Username: new FormControl('', {validators: [Validators.required]}),
+    Password: new FormControl('', {validators: [Validators.required]})
   })
 
   
@@ -35,32 +38,34 @@ export class Login implements AfterViewInit {
     this.authService.Login(
       this.loginForm.value.Username ?? '',
       this.loginForm.value.Password ?? ''
-    ).then(status => {
-      if (status)
-        DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_LIST);
-      else
-        this.LoginError.emit(IndexErrorType.INVALID_CREDENTIALS);
+    ).subscribe({
+      next: () => {
+        this.router.navigate(['']);
+      },
+      error: (error : HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.LoginError.emit(FormErrorCodes.INVALID_CREDENTIALS);
+        }
+        else if (error.status === 0) {
+          this.LoginError.emit(FormErrorCodes.NO_CONNECTION);
+        }
+        else {
+          console.error("Login error:", error);
+        }
+      }
     });
   }
 
   Register(event : MouseEvent) {
+    this.router.navigate(['register']);
     DisplayModeService.SetIndexDisplayMode(IndexDisplayMode.REGISTER);
   }
 
-  OnKeyUp(event : Event) {
-    const buttonState = FormButton.UpdateFormButtonState(event);
-    this.formButtons.forEach(button => {
-      if (button.type === "submit") {
-        button.SetActiveState(buttonState);
-      }
-    })
-  }
-
-  Test() {
-    this.formButtons.forEach(button => {
-      if (button.type === "submit") {
-        button.SetActiveState(true);
-      }
-    })
+  OnStatusChange(status : FormControlStatus) {
+    if (status === "VALID") {
+      this.loginButton.SetActiveState(true);
+    } else {
+      this.loginButton.SetActiveState(false);
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 import { ClickHighlight } from 'src/app/Utils/ClickHighlight';
 
@@ -15,6 +15,7 @@ export class FormButton extends ClickHighlight {
   @Input() isActive : boolean = false;
   @Input() onClick : (event : MouseEvent) => void = (event) => {}
 
+  @ViewChild("formButton") formButton! : ElementRef;
   constructor() {
     super();
   }
@@ -23,21 +24,27 @@ export class FormButton extends ClickHighlight {
     this.isActive = state;
   }
 
-  public static UpdateFormButtonState(event : Event) : boolean {
+  public UpdateFormButtonState(event : Event) : void {
     if (event.target === null || (event.target as HTMLElement).tagName !== "INPUT" || !(event.target as HTMLInputElement).required)
-        return false;
+        return;
   
-      const target = event.target as HTMLInputElement;
-      const inputList = target.closest("FORM")?.getElementsByTagName("INPUT") as HTMLCollectionOf<HTMLInputElement>;
-      if (inputList === undefined) 
-        return false;
-  
+
+      const form = (event.target as HTMLInputElement).closest("FORM");
+      if (!form)
+        return;
+
+      const inputList = form.getElementsByTagName("INPUT") as HTMLCollectionOf<HTMLInputElement>;
+      const formButtons = form.getElementsByTagName("FormButton");
+      if (inputList === undefined || formButtons === undefined) 
+        return;
+
+      
       let buttonState : boolean = true;
       for (let i = 0; i < inputList.length; i++) {
         if (inputList[i].required && inputList[i].value.trim().length === 0) {
           buttonState = false;
         }
       }
-      return buttonState;
+      this.isActive = buttonState;
   }
 }

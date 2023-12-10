@@ -2,7 +2,6 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable, tap } from "rxjs";
-import { AppDisplayMode, DisplayModeService } from "src/app/Services/DisplayModeService";
 
 @Injectable()
 export class NoAuthInterceptor implements HttpInterceptor {
@@ -14,11 +13,10 @@ export class NoAuthInterceptor implements HttpInterceptor {
             next: () => {},
             error: (err : any) => {
                 if (err instanceof HttpErrorResponse) {
-                    if (err.status !== 401)
+                    if (err.status !== 401 && err.status !== 0)
                         return;
 
-                    DisplayModeService.SetAppDisplayMode(AppDisplayMode.INDEX_DISPLAY);
-                    this.router.navigate(["/"]);
+                    this.router.navigate(["login"]);
                 }
             }
         }));

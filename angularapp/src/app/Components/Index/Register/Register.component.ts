@@ -1,11 +1,12 @@
-import { AfterViewInit, Component, EventEmitter, Output, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppDisplayMode, DisplayModeService, IndexDisplayMode } from 'src/app/Services/DisplayModeService';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { DisplayModeService, IndexDisplayMode } from 'src/app/Services/DisplayModeService';
+import { FormControl, FormControlStatus, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/Services/AuthService';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UpdateDefaultButtonState } from 'src/app/Utils/GlobalEventHandlers';
 import { FormButton } from '../../General/FormButton/FormButton';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'Register',
@@ -16,13 +17,15 @@ import { FormButton } from '../../General/FormButton/FormButton';
 })
 export class Register implements AfterViewInit {
   @Output() RegisterError : EventEmitter<number> = new EventEmitter<number>();
-  @ViewChildren(FormButton) formButtons! : FormButton[];
-  constructor(private authService : AuthService) {}
+  @ViewChild("registerButton") registerButton! : FormButton;
+  constructor(private router : Router, private authService : AuthService) {
+    this.registerForm.statusChanges.subscribe(this.OnStatusChange.bind(this));
+  }
 
   registerForm = new FormGroup({
-    Username: new FormControl(''),
-    Email: new FormControl(''),
-    Password: new FormControl('')
+    Username: new FormControl('', {validators: [Validators.minLength(3), Validators.required]}),
+    Email: new FormControl('', {validators: [Validators.email, Validators.required]}),
+    Password: new FormControl('', {validators: [Validators.minLength(8), Validators.required]})
   });
 
   ngAfterViewInit(): void {
@@ -35,7 +38,7 @@ export class Register implements AfterViewInit {
       this.registerForm.value.Email ?? '',
       this.registerForm.value.Password ?? ''
     ).subscribe({next: () => {
-      DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_LIST);
+      this.router.navigate(['']);
     },
     error: (error : HttpErrorResponse) => {
       let errorCode : number = error.error;
@@ -44,15 +47,16 @@ export class Register implements AfterViewInit {
   }
 
   Return() {
+    this.router.navigate(['login']);
     DisplayModeService.SetIndexDisplayMode(IndexDisplayMode.LOGIN);
   }
 
-  OnKeyUp(event : Event) {
-    const buttonState = FormButton.UpdateFormButtonState(event);
-    this.formButtons.forEach(button => {
-      if (button.type === "submit") {
-        button.SetActiveState(buttonState);
-      }
-    })
+  OnStatusChange(status : FormControlStatus) {
+    if (status === "VALID") {
+      this.registerButton.SetActiveState(true);
+    }
+    else {
+      this.registerButton.SetActiveState(false);
+    }
   }
 }

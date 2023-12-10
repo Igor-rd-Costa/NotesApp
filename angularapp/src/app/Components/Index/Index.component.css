@@ -16,7 +16,7 @@ main {
         color: white;
     }
 
-    IndexErrorBox {
+    FormErrorBox {
         grid-row: 2;
         grid-column: 1;
         background-color: white;

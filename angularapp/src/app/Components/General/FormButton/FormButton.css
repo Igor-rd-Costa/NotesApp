@@ -7,6 +7,10 @@
     color: white;
 }
 
+:host {
+    width: fit-content;
+}
+
 button {
     background-color: var(--ButtonColor);
     box-shadow: var(--WhiteShadow);

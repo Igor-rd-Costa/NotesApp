@@ -1,11 +1,11 @@
-<button *ngIf="isActive else inactive" class="active" type="{{type}}" 
+<button *ngIf="isActive else inactive" class="active" type="{{type}}" #formButton
 (click)="onClick($event)" (mousedown)="ClickStart($event)" (touchstart)="ClickStart($event)" 
 (mouseup)="ClickEnd($event)" (touchend)="ClickEnd($event)" (mouseout)="MouseOut($event)">
     {{text}}
 </button>
 
 <ng-template #inactive>
-    <button class="inactive" type="{{type}}" (click)="onClick($event)" disabled>
+    <button class="inactive" type="{{type}}" (click)="onClick($event)" disabled #formButton>
         {{text}}
     </button>        
 </ng-template>

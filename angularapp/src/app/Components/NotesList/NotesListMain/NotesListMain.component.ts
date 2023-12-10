@@ -1,8 +1,7 @@
-import { Component, AfterViewChecked, effect } from '@angular/core';
+import { Component, AfterViewChecked, effect, Output, EventEmitter } from '@angular/core';
 import { NoteCard } from './NoteCard/NoteCard.component';
-import { SetScrollTop } from 'src/app/App.component';
 import { touchInfo } from '../../../Utils/GlobalEventHandlers';
-import { AppDisplayMode, DisplayModeService, HeaderDisplayMode } from '../../../Services/DisplayModeService';
+import { DisplayModeService, HeaderDisplayMode } from '../../../Services/DisplayModeService';
 import { NgFor } from '@angular/common';
 import { NotesService } from 'src/app/Services/NotesService';
 import AnimateElement from 'src/app/Utils/Animate';
@@ -44,6 +43,7 @@ interface NoteCardInfo {
   imports: [ NoteCard, NgFor ]
 })
 export class NotesListMain implements AfterViewChecked {
+  @Output() scrolltop : EventEmitter<void> = new EventEmitter<void>;
   notes : NoteCardInfo[] = [];
   private isBackToTopButtonHidden : boolean = true;
 
@@ -79,11 +79,6 @@ export class NotesListMain implements AfterViewChecked {
           main.style.overflow = "hidden";
         } break;
       }
-
-      if (DisplayModeService.GetAppDisplayMode() === AppDisplayMode.NOTE_DISPLAY) {
-        const main = document.getElementById("notes-main") as HTMLElement;
-        main.style.height = "93.46dvh";
-      }
     })
   }
 
@@ -94,7 +89,7 @@ export class NotesListMain implements AfterViewChecked {
   OnBackToTopClick() {
     const Main = document.getElementById("notes-main") as HTMLElement;
     Main.scrollTo({ top: 0, behavior: "smooth" });
-    SetScrollTop(0);
+    this.scrolltop.emit();
     touchInfo.touchStart.X = -1;
     touchInfo.touchStart.Y = -1;
     touchInfo.touchMove.X = -1;
@@ -103,7 +98,6 @@ export class NotesListMain implements AfterViewChecked {
 
   OnCreateNoteClick() {
     this.notesService.Create().subscribe(id => {
-      DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_DISPLAY);
       this.router.navigate(["note", id]);
     });
   }

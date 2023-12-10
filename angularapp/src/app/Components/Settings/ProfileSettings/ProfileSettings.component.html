@@ -1,0 +1,34 @@
+<section id="profile-info">
+    <div id="wrapper">
+        <div id="profile-pic">
+            <img src="/assets/UserIcon.svg"/>
+        </div>
+    </div>
+    <div id="profile-info-wrapper">
+        <div id="username-email-wrapper">
+            <label>Username:</label>
+            <EditableDataField fieldName="Username" [minLength]="3" 
+                successMessage="Username available." errorMessage="This username is already in use." #usernameField
+                (Save)="SaveUsername($event)" [customValidator]="ValidateUsername.bind(this)" type="text"
+                [content]="username" [maxLength]="50"></EditableDataField>
+            <label>Email:</label>
+            <EditableDataField fieldName="Email" [minLength]="3" 
+                (Save)="SaveEmail($event)" [customValidator]="ValidateEmail.bind(this)" type="email"
+                successMessage="Email available." errorMessage="This email is already in use." #emailField
+                [content]="email" [maxLength]="100"></EditableDataField>
+        </div>
+        <div id="password-wrapper">
+            <form id="change-password-form" [formGroup]="changePasswordForm" (submit)="ChangePassword()">
+                <label for="current-password">Current Password</label>
+                <input name="current-password" type="password" formControlName="OldPassword">
+                
+                <label for="new-password">New Password</label>
+                <input name="new-password" type="password" formControlName="NewPassword">
+                <FormButton type="submit" text="Change Password" [isActive]="false" #changePasswordButton></FormButton>
+            </form>
+            <FormErrorBox #changePasswordErrorBox></FormErrorBox>
+        </div>
+        <button id="delete-account" (click)="ShowDeleteAccountPopUp()">Delete Account</button>
+    </div>
+</section>
+<AuthPopUp></AuthPopUp>

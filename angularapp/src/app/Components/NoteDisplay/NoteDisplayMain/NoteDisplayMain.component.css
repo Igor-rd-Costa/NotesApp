@@ -3,11 +3,10 @@ main {
 }
 
 section.pages {
-    flex: 1;
     padding-top: max(7.97vh, 3.62rem);
     padding-bottom: max(7.97vh, 3.62rem);
     overflow: scroll;
-    background-color: #252525;
+    background-color: var(--BackgroundLightColor);
     display: flex;
     flex-direction: column;
     align-items: center;

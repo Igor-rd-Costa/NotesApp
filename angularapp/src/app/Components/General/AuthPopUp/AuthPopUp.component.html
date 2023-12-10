@@ -1,0 +1,9 @@
+<section *ngIf="isVisible">
+    <p>{{message}}</p>
+    <form [formGroup]="form" (submit)="Accept()">
+        <FormErrorBox></FormErrorBox>
+        <input type="password" formControlName="Password" minlength="8" placeholder="password" required>
+        <FormButton [text]="acceptText" type="submit" [isActive]="false" #submitButton></FormButton>
+        <FormButton text="Cancel" type="button" [isActive]="true" (click)="Cancel()"></FormButton>
+    </form>
+</section>

@@ -1,0 +1,35 @@
+:host {
+    background-color: white;
+    width: fit-content;
+    border-radius: 0.5rem;
+}
+
+section {
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 21rem;
+    max-height: 9rem;
+    min-height: 5rem;
+    height: fit-content;
+    overflow: scroll;   
+
+    ul {
+        margin: 0;
+    }
+}
+
+section.errorBox {
+    background-color: #FF00002F;
+    border: 0.1rem solid red;
+    color: #FF0000FF;
+}
+
+section.successBox {
+    background-color: #00FF002F;
+    border: 0.1rem solid #00FF00FF;
+    color: #00FF00FF;
+    min-height: 3rem;
+}

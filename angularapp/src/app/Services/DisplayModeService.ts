@@ -2,10 +2,6 @@ import { signal } from "@angular/core";
 import AnimateElement from "../Utils/Animate";
 import { ResetTouchInfoData, touchInfo } from "../Utils/GlobalEventHandlers";
 
-export enum AppDisplayMode {
-  INDEX_DISPLAY, NOTE_LIST, NOTE_DISPLAY
-}
-
 export enum HeaderDisplayMode {
   HEADER_LARGE, HEADER_HIDDEN
 }
@@ -22,21 +18,17 @@ export enum SideMenuDisplayMode {
   HIDDEN, VISIBLE
 }
 
+export enum SettingsDisplayMode {
+  PROFILE_SETTINGS, NEW_NOTES_SETTINGS, NOTES_SETTINGS
+}
+
 export class DisplayModeService 
 {
   private static headerDisplayMode = signal<HeaderDisplayMode>(HeaderDisplayMode.HEADER_LARGE);
-  private static appDisplayMode = signal<AppDisplayMode>(AppDisplayMode.INDEX_DISPLAY);
   private static noteDisplayMode = signal<NoteDisplayMode>(NoteDisplayMode.DISPLAY);
   private static indexDisplayMode = signal<IndexDisplayMode>(IndexDisplayMode.LOGIN);
   private static sideMenuDisplayMode = signal<SideMenuDisplayMode>(SideMenuDisplayMode.HIDDEN);
-
-  public static SetAppDisplayMode(mode: AppDisplayMode) : void {
-    DisplayModeService.appDisplayMode.set(mode);
-  }
-  
-  public static GetAppDisplayMode(): AppDisplayMode {
-    return DisplayModeService.appDisplayMode();
-  }
+  private static settingsDisplayMode = signal<SettingsDisplayMode>(SettingsDisplayMode.PROFILE_SETTINGS);
 
   public static SetNoteDisplayMode(mode : NoteDisplayMode) : void {
     DisplayModeService.noteDisplayMode.set(mode);
@@ -70,11 +62,16 @@ export class DisplayModeService
     DisplayModeService.sideMenuDisplayMode.set(mode);
   }
 
+  public static GetSettingsDisplayMode() : SettingsDisplayMode {
+    return DisplayModeService.settingsDisplayMode();
+  }
+
+  public static SetSettingsDisplayMode(mode : SettingsDisplayMode) : void {
+    DisplayModeService.settingsDisplayMode.set(mode);
+  }
+
   public static NotesListDisplayMode = {
     ShowSideMenu: () => {
-      if (DisplayModeService.GetAppDisplayMode() != AppDisplayMode.NOTE_LIST)
-        return;
-
       const sideMenu = document.getElementById("side-menu") as HTMLElement;
       const createNoteButton = document.getElementById("create-note") as HTMLElement;
       const main = document.getElementById("notes-main") as HTMLElement;
@@ -94,10 +91,8 @@ export class DisplayModeService
         DisplayModeService.SetSideMenuDisplayMode(SideMenuDisplayMode.VISIBLE);
       });
     },
+
     HideSideMenu: () => {
-      if (DisplayModeService.GetAppDisplayMode() != AppDisplayMode.NOTE_LIST)
-        return;
-    
       const sideMenu = document.getElementById("side-menu") as HTMLElement;
       const createNoteButton = document.getElementById("create-note") as HTMLElement;
       const main = document.getElementById("notes-main") as HTMLElement;

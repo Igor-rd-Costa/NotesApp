@@ -1,0 +1,29 @@
+<header>
+    <div id="menu-wrapper">
+        <ImgButton (click)="OnBackButtonClick($event)" class="back" [props]="backButtonProps"></ImgButton>
+        <span>Settings</span>
+    </div>
+</header>
+<main>
+    <section id="side-menu">
+        <ul (click)="OnSelect($event)" #itemList>
+            <li [class]="displayMode === SettingsDisplayMode.PROFILE_SETTINGS ? 'selected' : ''" id="profile-settings">
+                <img src="/assets/UserIcon.svg"/>
+                <span>Profile</span>
+            </li>
+            <li [class]="displayMode === SettingsDisplayMode.NEW_NOTES_SETTINGS ? 'selected' : ''" id="new-notes-settings">
+                <img src="/assets/NoteSettingsIcon.svg"/>
+                <span>New Notes</span>
+            </li>
+            <li [class]="displayMode === SettingsDisplayMode.NOTES_SETTINGS ? 'selected' : ''" id="notes-settings">
+                <img src="/assets/NoteSettingsIcon.svg"/>
+                <span>Notes</span>
+            </li>
+        </ul>
+    </section>
+    <section id="settings-display">
+        <ProfileSettings  *ngIf="displayMode === SettingsDisplayMode.PROFILE_SETTINGS"></ProfileSettings>
+        <NewNotesSettings *ngIf="displayMode === SettingsDisplayMode.NEW_NOTES_SETTINGS"></NewNotesSettings>
+        <NotesSettings    *ngIf="displayMode === SettingsDisplayMode.NOTES_SETTINGS"></NotesSettings>
+    </section>
+</main>

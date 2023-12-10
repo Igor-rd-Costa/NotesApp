@@ -31,7 +31,7 @@ var auth = builder.Services.AddAuthentication(options =>
 auth.AddCookie(IdentityConstants.ApplicationScheme, options =>
 {
     options.Cookie.SameSite = SameSiteMode.None;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
     options.Events.OnRedirectToLogin = (context) =>
     {
         context.Response.StatusCode = 401;
@@ -46,7 +46,7 @@ auth.AddCookie(IdentityConstants.ApplicationScheme, options =>
 auth.AddCookie(IdentityConstants.ExternalScheme, options =>
 {
     options.Cookie.SameSite = SameSiteMode.None;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
     options.Events.OnRedirectToLogin = (context) =>
     {
         context.Response.StatusCode = 401;
@@ -61,7 +61,7 @@ auth.AddCookie(IdentityConstants.ExternalScheme, options =>
 auth.AddCookie(IdentityConstants.TwoFactorUserIdScheme, options =>
 {
     options.Cookie.SameSite = SameSiteMode.None;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
     options.Events.OnRedirectToLogin = (context) =>
     {
         context.Response.StatusCode = 401;

@@ -1,9 +1,9 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImgButton, ImgButtonProp } from '../../General/ImgButton/ImgButton.component';
-import { AppDisplayMode, DisplayModeService } from '../../../Services/DisplayModeService';
 import { NotesService } from 'src/app/Services/NotesService';
 import { ListMenu, ListMenuItem } from '../../General/ListMenu/ListMenu.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'NoteDisplayHeader',
@@ -18,14 +18,15 @@ export class NoteDisplayHeader {
 
   @ViewChild(ListMenu) listMenu! : ListMenu;
   moreOptionsMenuItems : ListMenuItem[] = [
-    {content: "Delete", onClick: { func: this.Delete, src: this }}
+    {content: "Delete", onClick: { func: this.Delete, src: this }},
+    {content: "Settings", onClick: { func: this.OpenSettings, src: this }, iconSrc: "/assets/NoteSettingsIcon.svg"}
   ]
 
-  constructor(private notesService : NotesService) {}
+  constructor(private notesService : NotesService, private router : Router) {}
 
   Delete() {
     this.notesService.Delete(this.noteId).subscribe(() => {
-        DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_LIST);
+      this.router.navigate(['']);
     })
   }
   
@@ -69,18 +70,21 @@ export class NoteDisplayHeader {
 
     if (name.value === "" && (content.innerText === "" || content.innerText === '\n')) {
       this.notesService.CheckDelete(this.noteId).subscribe({
-        next: () => { DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_LIST)},
-        error: (error : any) => { console.error(error) }
+        next: () => { 
+          this.router.navigate(['']);
+        },
+        error: (error : any) => { 
+          console.error("CheckDelete error:", error) 
+        }
       })
     }
     else {
-      DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_LIST);
+      this.router.navigate(['']);
     }
   }
 
   OnMoreOptionsClick(event : MouseEvent) {
     this.listMenu.ToggleVisibility();
-    //event.stopPropagation();
   }
 
   OnBlur() {
@@ -96,5 +100,9 @@ export class NoteDisplayHeader {
         }
       });
     }
+  }
+
+  OpenSettings(event : MouseEvent | TouchEvent) {
+    this.router.navigate(['note', this.noteId, 'settings'])
   }
 }

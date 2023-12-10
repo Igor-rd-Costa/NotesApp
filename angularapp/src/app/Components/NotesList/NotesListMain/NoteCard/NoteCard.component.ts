@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppDisplayMode, DisplayModeService, SideMenuDisplayMode } from 'src/app/Services/DisplayModeService';
+import { DisplayModeService, SideMenuDisplayMode } from 'src/app/Services/DisplayModeService';
 
 @Component({
   standalone: true,
@@ -32,7 +32,6 @@ export class NoteCard implements AfterViewInit {
 
   OnClick() {
     if (DisplayModeService.GetSideMenuDisplayMode() != SideMenuDisplayMode.VISIBLE) {
-      DisplayModeService.SetAppDisplayMode(AppDisplayMode.NOTE_DISPLAY);
       this.router.navigate(["note", this.noteId]);
     }
   }

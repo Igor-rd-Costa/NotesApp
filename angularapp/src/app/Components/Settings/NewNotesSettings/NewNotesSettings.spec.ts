@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { IndexErrorBox } from './IndexErrorBox.component';
+import { NewNotesSettings } from './NewNotesSettings.component';
 
-describe('IndexErrorBox', () => {
-  let component: IndexErrorBox;
-  let fixture: ComponentFixture<IndexErrorBox>;
+describe('NewNotesSettings', () => {
+  let component: NewNotesSettings;
+  let fixture: ComponentFixture<NewNotesSettings>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [IndexErrorBox]
+      imports: [NewNotesSettings]
     });
-    fixture = TestBed.createComponent(IndexErrorBox);
+    fixture = TestBed.createComponent(NewNotesSettings);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

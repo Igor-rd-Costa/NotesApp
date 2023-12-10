@@ -1,0 +1,8 @@
+<section *ngIf="showBox" [class]="state === BoxState.ERROR_STATE ? 'errorBox' : 'successBox'">
+        <ul *ngIf="state === BoxState.ERROR_STATE else message">
+            <li *ngFor="let msg of messages">{{msg}}</li>
+        </ul>
+</section>
+<ng-template #message>
+    <p>{{messages[0]}}</p>
+</ng-template>

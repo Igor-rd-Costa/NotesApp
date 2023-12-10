@@ -1,8 +1,8 @@
-<form [formGroup]="registerForm" (submit)="Register()" (keyup)="OnKeyUp($event)">
+<form [formGroup]="registerForm" (submit)="Register()">
     <h2>Register</h2>
-    <input id="username" type="text" placeholder="Username" formControlName="Username" required/>
-    <input id="email" type="email" placeholder="Email" formControlName="Email" required/>
-    <input id="password" type="password" placeholder="Password" formControlName="Password" required/>
-    <FormButton [isActive]="false" [type]="'submit'" [text]="'Register'"></FormButton>
-    <FormButton [isActive]="true" [type]="'button'" [text]="'Return'" [onClick]="Return"></FormButton>
+    <input id="username" type="text" placeholder="Username" formControlName="Username"/>
+    <input id="email" type="email" placeholder="Email" formControlName="Email"/>
+    <input id="password" type="password" placeholder="Password" formControlName="Password"/>
+    <FormButton [isActive]="false" [type]="'submit'" [text]="'Register'" #registerButton></FormButton>
+    <FormButton [isActive]="true" [type]="'button'" [text]="'Return'" [onClick]="Return.bind(this)"></FormButton>
 </form>

@@ -8,7 +8,8 @@ export interface ListMenuItem {
   onClick: {
     func: (event : MouseEvent | TouchEvent) => void,
     src : object 
-  } | null
+  } | null,
+    iconSrc?: string
 }
 
 export interface ListMenuPosition {
@@ -33,10 +34,11 @@ export class ListMenu extends ClickHighlight {
   @Input() left: string = "auto";
   @Input() bottom: string = "auto";
   @Input() right: string = "auto";
-  @Input() width : string = '100px';
+  @Input() width : string = '8rem';
   @Input() height : string = 'fit-content';
   @Input() itemHeight : string = "2rem";
   @Input() selectable : boolean = true;
+  @Input() hasIcons : boolean = false;
   
   @Output() select : EventEmitter<HTMLLIElement> = new EventEmitter<HTMLLIElement>;
   

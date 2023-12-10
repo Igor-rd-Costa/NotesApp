@@ -1,0 +1,80 @@
+:host {
+    display: grid;
+    grid-template-rows: clamp(2.5rem, 6.48vh, 5rem) 1fr;
+    height: 100vh;
+}
+
+header {
+    height: clamp(2.5rem, 6.48vh, 5rem);
+    background-color: var(--BackgroundColor);
+    display: grid;
+    align-items: center;
+    border-bottom: 0.1rem solid #444444;
+
+    div#menu-wrapper {
+        height: fit-content;
+
+        imgButton {
+            width: 0.9rem;
+            height: 0.9rem;
+            margin-left: min(2rem, 9.3%);
+            margin-right: min(1rem, 6%);
+        }
+
+        span {
+            font-weight: 500;
+            font-size: 1.3rem;
+            margin: 0px;
+            padding: 0px;
+            padding-bottom: 5px;
+            margin-top: 7px;
+            margin-right: 0.8rem;
+            color: white;
+            background-color: transparent;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 5rem;
+            max-width: 85%;
+            min-height: 1.8rem;
+        }
+    }
+}
+
+main {
+    background-color: var(--BackgroundLightColor);
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+    section#side-menu {
+        background-color: red;
+        width: 12rem;
+        height: 100%;
+        background-color: var(--BackgroundColor);
+
+        ul {
+            li.selected {
+                background-color: var(--ButtonHighlightColor);
+            }
+
+            li {
+                display: flex;
+                align-items: center;
+                height: 4rem;
+                color: white;
+                cursor: pointer;
+
+                img {
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    margin-left: 1rem;
+                    margin-right: 1.5rem;
+                }
+
+                span {
+                    font-weight: 500;
+                    font-size: 1.25rem;
+                }
+            }
+        }
+    }
+}

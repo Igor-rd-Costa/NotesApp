@@ -1,9 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
+  --BackgroundColor: #222222FF;
+  --BackgroundLightColor: #252525FF;
   --ButtonColor: #222222FF;
   --ButtonHighlightColor: #333333FF;
   --AppHighlightColor: #7700FFFF;
   --WhiteShadow: 0.1rem 0.2rem 0.3rem #FFFFFF33;
+}
+
+ul {
+  margin: 0;
 }
 
 body {
