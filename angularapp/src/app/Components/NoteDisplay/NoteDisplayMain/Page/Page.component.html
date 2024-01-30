@@ -1,2 +1,4 @@
-<div class="note-page" (blur)="Blur($event)" contenteditable>
+<div [style]="{paddingLeft: marginLeft+marginFormat, paddingRight: marginRight+marginFormat,
+            paddingTop: marginTop+marginFormat, paddingBottom: marginBottom+marginFormat, backgroundColor: backgroundColor}" 
+class="note-page" (blur)="Blur($event)" contenteditable>
 </div>

@@ -10,23 +10,18 @@ export enum NoteDisplayMode {
   DISPLAY, EDIT
 }
 
-export enum IndexDisplayMode {
-  LOGIN, REGISTER
-}
-
 export enum SideMenuDisplayMode {
   HIDDEN, VISIBLE
 }
 
 export enum SettingsDisplayMode {
-  PROFILE_SETTINGS, NEW_NOTES_SETTINGS, NOTES_SETTINGS
+  PROFILE_SETTINGS, NEW_NOTES_SETTINGS, NOTES_SETTINGS, NOTE_SETTINGS
 }
 
 export class DisplayModeService 
 {
   private static headerDisplayMode = signal<HeaderDisplayMode>(HeaderDisplayMode.HEADER_LARGE);
   private static noteDisplayMode = signal<NoteDisplayMode>(NoteDisplayMode.DISPLAY);
-  private static indexDisplayMode = signal<IndexDisplayMode>(IndexDisplayMode.LOGIN);
   private static sideMenuDisplayMode = signal<SideMenuDisplayMode>(SideMenuDisplayMode.HIDDEN);
   private static settingsDisplayMode = signal<SettingsDisplayMode>(SettingsDisplayMode.PROFILE_SETTINGS);
 
@@ -44,14 +39,6 @@ export class DisplayModeService
 
   public static GetHeaderDisplayMode(): HeaderDisplayMode {
     return DisplayModeService.headerDisplayMode();
-  }
-
-  public static SetIndexDisplayMode(mode : IndexDisplayMode) : void {
-    DisplayModeService.indexDisplayMode.set(mode);
-  }
-
-  public static GetIndexDisplayMode() : IndexDisplayMode {
-    return DisplayModeService.indexDisplayMode();
   }
 
   public static GetSideMenuDisplayMode() : SideMenuDisplayMode {

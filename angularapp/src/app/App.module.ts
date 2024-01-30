@@ -12,6 +12,7 @@ import { AuthService } from './Services/AuthService';
 import { NoAuthInterceptor } from './Components/General/NoAuthInterceptor';
 import { NoteManager } from './Services/NoteManager';
 import { NoteFormater } from './Services/NoteFormater';
+import { RouteService } from './Services/RouteService';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,7 @@ import { NoteFormater } from './Services/NoteFormater';
     NoteDisplay,
     NgIf
   ],
-  providers: [ DisplayModeService, NotesService, AuthService, NoteManager, NoteFormater, {provide: HTTP_INTERCEPTORS, useClass: NoAuthInterceptor, multi: true } ],
+  providers: [ DisplayModeService, NotesService, AuthService, NoteManager, NoteFormater, RouteService, {provide: HTTP_INTERCEPTORS, useClass: NoAuthInterceptor, multi: true } ],
   bootstrap: [App]
 })
 export class AppModule { 

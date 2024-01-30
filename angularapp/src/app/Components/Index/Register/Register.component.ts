@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DisplayModeService, IndexDisplayMode } from 'src/app/Services/DisplayModeService';
 import { FormControl, FormControlStatus, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/Services/AuthService';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -48,7 +47,6 @@ export class Register implements AfterViewInit {
 
   Return() {
     this.router.navigate(['login']);
-    DisplayModeService.SetIndexDisplayMode(IndexDisplayMode.LOGIN);
   }
 
   OnStatusChange(status : FormControlStatus) {

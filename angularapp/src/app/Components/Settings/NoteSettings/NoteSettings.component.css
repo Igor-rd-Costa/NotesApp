@@ -1,0 +1,46 @@
+section#note-settings-wrapper {
+    padding-left: 2rem;
+    padding-top: 3rem;
+
+    display: grid;
+    grid-template-columns: 18rem 1fr;
+    grid-template-rows: 23rem 1fr;
+    
+    div.settigs-section-wrapper {
+        width: fit-content;
+        padding-left: 0.5rem;
+        padding-top: 1rem;
+        h3.settings-title {
+            align-self: start;
+            margin: 0;
+            padding-left: 0.5rem;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+            width: 20rem;
+            margin-bottom: 1rem;
+            border-bottom: 0.1rem solid #FFFFFFAA;
+            font-size: 1.3rem;
+            font-family: arial;
+            color: white;
+        }
+
+        #margin-format-select {
+            height: 2rem;
+            padding-left: 0.5rem;
+            font-size: 1.3rem;
+            font-family: Arial;
+            color: white;
+            background-color: #303030FF;
+            border-bottom: 0.1rem solid #3F3F3FFF;
+        }
+
+        div#margin-inputs-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 2rem;
+            grid-template-rows: 2.5rem 2.5rem 2.5rem;
+            align-items: center;
+            width: fit-content;
+        }
+    }
+}

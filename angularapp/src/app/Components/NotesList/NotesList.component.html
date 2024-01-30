@@ -1,5 +1,5 @@
 <div id="notes-list-wrapper" (click)="OnClick($event)" (touchstart)="OnTouchStart($event)" (touchmove)="OnTouchMove($event)" (touchend)="OnTouchEnd()" (wheel)="OnWheel($event)">
-    <SideMenu id="side-menu"></SideMenu>
-    <NotesListHeader id="notes-list-header"></NotesListHeader>
+    <SideMenu [noteCount]="noteCount()" id="side-menu"></SideMenu>
+    <NotesListHeader id="notes-list-header" [noteCount]="noteCount()"></NotesListHeader>
     <NotesListMain (scrolltop)="this.OnMainScrollTop" id="notes-list-main"></NotesListMain>
 </div>

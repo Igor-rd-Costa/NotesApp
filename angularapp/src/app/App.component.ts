@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from './Services/AuthService';
 import { Router } from '@angular/router';
+import { RouteService } from './Services/RouteService';
 
 interface ClickWatcher {
   watcher: (event : Event) => void,
@@ -16,7 +17,7 @@ export class App {
   title = 'notes-app';
   private static clickWatchers : ClickWatcher[] = [];
 
-  constructor(private router : Router, private authService : AuthService) {
+  constructor(private router : Router, private authService : AuthService, private lastRoute : RouteService) {
     this.authService.IsLogged().subscribe((isLogged) => {
       if (!isLogged)
         this.router.navigate(['login']);

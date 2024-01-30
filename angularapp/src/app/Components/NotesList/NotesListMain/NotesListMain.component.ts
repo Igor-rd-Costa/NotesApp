@@ -29,7 +29,7 @@ function SetNoteWrapperSize() {
 }
 
 interface NoteCardInfo {
-  id: string,
+  guid: string,
   name : string,
   modifyDate : string,
   preview : HTMLParagraphElement[]
@@ -53,7 +53,7 @@ export class NotesListMain implements AfterViewChecked {
       result.forEach(note => {
         const date : Date = new Date(note.modifyDate); 
         let noteCard : NoteCardInfo = {
-          id: note.id,
+          guid: note.guid,
           name: note.name,
           modifyDate: this.notesService.GetNotePreviewDateText(date),
           preview: this.noteFormater.NoteToHMTL(note.preview)
@@ -97,8 +97,8 @@ export class NotesListMain implements AfterViewChecked {
   }
 
   OnCreateNoteClick() {
-    this.notesService.Create().subscribe(id => {
-      this.router.navigate(["note", id]);
+    this.notesService.Create().subscribe(guid => {
+      this.router.navigate(["note", guid]);
     });
   }
 

@@ -4,6 +4,7 @@ import { ImgButton, ImgButtonProp } from '../../General/ImgButton/ImgButton.comp
 import { NotesService } from 'src/app/Services/NotesService';
 import { ListMenu, ListMenuItem } from '../../General/ListMenu/ListMenu.component';
 import { Router } from '@angular/router';
+import { NoteManager } from 'src/app/Services/NoteManager';
 
 @Component({
   selector: 'NoteDisplayHeader',
@@ -13,8 +14,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./NoteDisplayHeader.component.css']
 })
 export class NoteDisplayHeader {
-  @Input() noteName : string = "";
-  @Input() noteId : string = "";
+  NoteManager = NoteManager;
 
   @ViewChild(ListMenu) listMenu! : ListMenu;
   moreOptionsMenuItems : ListMenuItem[] = [
@@ -22,10 +22,10 @@ export class NoteDisplayHeader {
     {content: "Settings", onClick: { func: this.OpenSettings, src: this }, iconSrc: "/assets/NoteSettingsIcon.svg"}
   ]
 
-  constructor(private notesService : NotesService, private router : Router) {}
+  constructor(private notesService : NotesService, private router : Router, protected noteManager : NoteManager) {}
 
   Delete() {
-    this.notesService.Delete(this.noteId).subscribe(() => {
+    this.notesService.Delete(this.noteManager.GetNoteGuid()).subscribe(() => {
       this.router.navigate(['']);
     })
   }
@@ -69,7 +69,7 @@ export class NoteDisplayHeader {
       return;
 
     if (name.value === "" && (content.innerText === "" || content.innerText === '\n')) {
-      this.notesService.CheckDelete(this.noteId).subscribe({
+      this.notesService.CheckDelete(this.noteManager.GetNoteGuid()).subscribe({
         next: () => { 
           this.router.navigate(['']);
         },
@@ -93,16 +93,12 @@ export class NoteDisplayHeader {
       return;
 
     const newName : string = nameField.value;
-    if (newName != this.noteName) {
-      this.notesService.Rename(this.noteId, newName).subscribe(result => {
-        if (result) {
-          this.noteName = newName;
-        }
-      });
+    if (newName != this.noteManager.GetNoteName()) {
+      this.notesService.Rename(this.noteManager.GetNoteGuid(), newName).subscribe();
     }
   }
 
   OpenSettings(event : MouseEvent | TouchEvent) {
-    this.router.navigate(['note', this.noteId, 'settings'])
+    this.router.navigate(['settings', 'note', this.noteManager.GetNoteGuid()]);
   }
 }

@@ -1,0 +1,10 @@
+section {
+    padding: 1.5rem;
+}
+
+div#note-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    width: fit-content;
+    min-width: 33rem;
+}

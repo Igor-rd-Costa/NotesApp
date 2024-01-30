@@ -16,15 +16,14 @@ import { SideMenu } from './SideMenu/SideMenu.component';
   styleUrls: ['./NotesList.component.css']
 })
 export class NotesList {
-  private static noteCount = signal<number>(0);
+  protected noteCount = signal<number>(0);
   private scrollTargetId: string = "notes-app";
   private scrollTopAtTouch : number = 0;
   private folderDisplayLargeHeight : string = "";
   private isHeaderVisible : boolean = true;
   
-  constructor(private notesService : NotesService) {
-    this.notesService.GetNoteCount().subscribe(count => NotesList.noteCount.set(count));
-
+  constructor(private noteService : NotesService) {
+    this.noteService.GetNoteCount().subscribe(count => {this.noteCount.set(count)});
     effect(() => {
           const headerDisplay: HeaderDisplayMode = DisplayModeService.GetHeaderDisplayMode();
           if (headerDisplay === HeaderDisplayMode.HEADER_LARGE) {
@@ -38,10 +37,6 @@ export class NotesList {
             ResetTouchInfoData(touchInfo);
           }
     });
-  }
-
-  public static GetNoteCount() : number {
-    return NotesList.noteCount();
   }
 
   protected OnClick(event : MouseEvent) : void { 

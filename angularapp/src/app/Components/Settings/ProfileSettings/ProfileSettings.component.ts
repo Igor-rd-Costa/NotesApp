@@ -130,7 +130,7 @@ export class ProfileSettings {
   }
 
   ShowDeleteAccountPopUp() {
-    this.authPopUp.Show(this.DeleteAccount.bind(this), "This action is permanent and all your data will be lost.", "Delete");
+    this.authPopUp.Show(this.DeleteAccount.bind(this), "This action is permanent. All your data will be lost.", "Delete");
   }
 
   ChangePassword() {
@@ -154,7 +154,7 @@ export class ProfileSettings {
   DeleteAccount() {
     this.authService.DeleteAccount().subscribe({
       next: () => {
-        this.router.navigate(['']);
+        this.router.navigate(['login']);
       }, 
       error: (error) => {
         console.error("DeleteAccount error:", error);

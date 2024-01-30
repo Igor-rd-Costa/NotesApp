@@ -1,10 +1,11 @@
-import { Component, ViewChild, effect } from '@angular/core';
+import { Component, Input, ViewChild, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotesList } from '../NotesList.component';
 import { AuthService } from 'src/app/Services/AuthService';
 import { Router } from '@angular/router';
-import { DisplayModeService, IndexDisplayMode, SideMenuDisplayMode } from 'src/app/Services/DisplayModeService';
+import { DisplayModeService, SideMenuDisplayMode } from 'src/app/Services/DisplayModeService';
 import { ListMenu, ListMenuItem } from '../../General/ListMenu/ListMenu.component';
+import { NotesService } from 'src/app/Services/NotesService';
 
 @Component({
   selector: 'SideMenu',
@@ -15,7 +16,7 @@ import { ListMenu, ListMenuItem } from '../../General/ListMenu/ListMenu.componen
 })
 export class SideMenu {
   @ViewChild(ListMenu) listMenu! : ListMenu;
-  noteCount : number = 0;
+  @Input() noteCount : number = 0;
   username : string = "";
   public static isProfileMenuVisible : boolean = false;
 
@@ -26,8 +27,7 @@ export class SideMenu {
 
   constructor(private authService : AuthService, private router : Router) {
     effect(() => {
-      this.noteCount = NotesList.GetNoteCount();
-      this.authService.GetUsername().subscribe(username => {this.username = username});
+      this.authService.GetUsername().subscribe(username => this.username = username);
     })
   }
 
@@ -60,9 +60,10 @@ export class SideMenu {
   Logout() {
     this.authService.Logout().subscribe(result => {
       if (result) {
+        console.log("Logout Result:", result)
         SideMenu.HideProfileMenu();
         DisplayModeService.SetSideMenuDisplayMode(SideMenuDisplayMode.HIDDEN);
-        DisplayModeService.SetIndexDisplayMode(IndexDisplayMode.LOGIN);
+        this.router.navigate(['login']);
       }
     });
   }

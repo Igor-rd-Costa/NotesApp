@@ -13,15 +13,8 @@ import { NoteManager } from 'src/app/Services/NoteManager';
   styleUrls: ['./NoteDisplay.component.css']
 })
 export class NoteDisplay {
-  noteId : string = "";
-  noteName : string = "";
 
-  constructor(private router : Router, private route : ActivatedRoute, private noteManager : NoteManager) {
-    effect(() => {
-      this.noteId = this.noteManager.GetNoteId();
-      this.noteName = this.noteManager.GetNoteName();
-    })
-
+  constructor(private router : Router, private route : ActivatedRoute, protected noteManager : NoteManager) {
     this.route.paramMap.subscribe(value => {
       const guid = value.get("guid");
       if (guid == null) {

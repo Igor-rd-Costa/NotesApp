@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using webapi.Models;
+using webapi.Types;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace webapi.Controllers
@@ -57,7 +57,7 @@ namespace webapi.Controllers
             IdentityUser<int> user = new()
             {
                 UserName = info.Username,
-                Email = info.Email
+                Email = info.Email,
             };
             IdentityResult result = await m_UserManager.CreateAsync(user, info.Password);
             if (!result.Succeeded)

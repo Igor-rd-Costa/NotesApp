@@ -15,10 +15,9 @@ import { SelectionManager } from 'src/app/Services/SelectionManager';
   styleUrls: ['./NoteDisplayMain.component.css']
 })
 export class NoteDisplayMain {
-  constructor(private noteManager : NoteManager, private noteFormater : NoteFormater) {
+  constructor(protected noteManager : NoteManager, private noteFormater : NoteFormater) {
     
   }
-  @Input() noteId : string = "";
   @ViewChild(EditMenu) editMenu! : EditMenu;
 
   OnKeyDown(event : KeyboardEvent) { 

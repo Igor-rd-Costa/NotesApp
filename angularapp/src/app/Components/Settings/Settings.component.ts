@@ -1,31 +1,45 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, effect, signal } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
+import { Component, ElementRef, ViewChild, effect } from '@angular/core';
+import { CommonModule, NgIf, NgSwitch } from '@angular/common';
 import { ImgButton, ImgButtonProp } from '../General/ImgButton/ImgButton.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DisplayModeService } from 'src/app/Services/DisplayModeService';
+import { Router } from '@angular/router';
+import { DisplayModeService, SettingsDisplayMode } from 'src/app/Services/DisplayModeService';
 import { ProfileSettings } from './ProfileSettings/ProfileSettings.component';
 import { NewNotesSettings } from './NewNotesSettings/NewNotesSettings.component';
 import { NotesSettings } from './NotesSettings/NotesSettings.component';
+import { NoteSettings } from './NoteSettings/NoteSettings.component';
+import { RouteService } from 'src/app/Services/RouteService';
 
-enum SettingsDisplayMode {
-  PROFILE_SETTINGS, NEW_NOTES_SETTINGS, NOTES_SETTINGS
-}
 
+//TODO make all of this look good on mobile
 @Component({
   selector: 'Settings',
   standalone: true,
-  imports: [CommonModule, ImgButton, NgIf, ProfileSettings, NewNotesSettings, NotesSettings ],
+  imports: [CommonModule, ImgButton, NgIf, NgSwitch, ProfileSettings, NewNotesSettings, NotesSettings, NoteSettings ],
   templateUrl: './Settings.component.html',
   styleUrls: ['./Settings.component.css']
 })
 export class Settings {
   SettingsDisplayMode = SettingsDisplayMode;
   displayMode = SettingsDisplayMode.PROFILE_SETTINGS;
+  parentRoute : string = "";
 
+  lastRoute = "";
   @ViewChild("itemList") items! : ElementRef;
-  constructor(private router : Router, private route : ActivatedRoute,) {
-    if (this.router.url !== "/settings/profile") {
+  constructor(private router : Router) {
+
+    const lastRoute = RouteService.GetLastRoute();
+    if (!lastRoute.startsWith("/settings")) {
+      this.lastRoute = lastRoute;
+    }
+
+    if (this.router.url.startsWith("/settings/note/")) {
+      DisplayModeService.SetSettingsDisplayMode(SettingsDisplayMode.NOTE_SETTINGS);
+    }
+    else {
       switch(this.router.url) {
+        case "/settings/profile": {
+          DisplayModeService.SetSettingsDisplayMode(SettingsDisplayMode.PROFILE_SETTINGS);
+        } break;
         case "/settings/new-notes": {
           DisplayModeService.SetSettingsDisplayMode(SettingsDisplayMode.NEW_NOTES_SETTINGS);
         } break;
@@ -34,6 +48,7 @@ export class Settings {
         } break;
       }
     }
+
 
     effect(() => {
       this.displayMode = DisplayModeService.GetSettingsDisplayMode();
@@ -49,7 +64,7 @@ export class Settings {
   }
 
   OnBackButtonClick(event : MouseEvent) {
-    this.router.navigate(['']);
+    this.router.navigateByUrl(this.lastRoute);
   }
 
   OnSelect(event : MouseEvent | TouchEvent) {

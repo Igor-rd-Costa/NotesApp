@@ -5,7 +5,9 @@ namespace webapi.Data
 {
     public class UsersContext : DbContext
     {
-        public UsersContext(DbContextOptions<UsersContext> options) : base(options) { }
+        public UsersContext(DbContextOptions<UsersContext> options) 
+            : base(options) 
+        { }
 
         public DbSet<IdentityUser<int>> users { get; set; }
     }

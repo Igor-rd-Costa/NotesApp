@@ -12,7 +12,7 @@
                 <span>Profile</span>
             </li>
             <li [class]="displayMode === SettingsDisplayMode.NEW_NOTES_SETTINGS ? 'selected' : ''" id="new-notes-settings">
-                <img src="/assets/NoteSettingsIcon.svg"/>
+                <img src="/assets/CreateNoteWhiteIcon.svg"/>
                 <span>New Notes</span>
             </li>
             <li [class]="displayMode === SettingsDisplayMode.NOTES_SETTINGS ? 'selected' : ''" id="notes-settings">
@@ -22,8 +22,11 @@
         </ul>
     </section>
     <section id="settings-display">
-        <ProfileSettings  *ngIf="displayMode === SettingsDisplayMode.PROFILE_SETTINGS"></ProfileSettings>
-        <NewNotesSettings *ngIf="displayMode === SettingsDisplayMode.NEW_NOTES_SETTINGS"></NewNotesSettings>
-        <NotesSettings    *ngIf="displayMode === SettingsDisplayMode.NOTES_SETTINGS"></NotesSettings>
+        <ng-container [ngSwitch]="displayMode">
+            <ProfileSettings *ngSwitchCase="SettingsDisplayMode.PROFILE_SETTINGS"></ProfileSettings>
+            <NewNotesSettings *ngSwitchCase="SettingsDisplayMode.NEW_NOTES_SETTINGS"></NewNotesSettings>
+            <NotesSettings *ngSwitchCase="SettingsDisplayMode.NOTES_SETTINGS"></NotesSettings>
+            <NoteSettings *ngSwitchCase="SettingsDisplayMode.NOTE_SETTINGS"></NoteSettings>
+        </ng-container>
     </section>
 </main>

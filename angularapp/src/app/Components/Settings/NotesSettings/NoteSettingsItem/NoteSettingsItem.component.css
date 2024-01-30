@@ -1,0 +1,62 @@
+div#wrapper {
+    padding: 0.75rem;
+    width: 15rem;
+    height: 6rem;
+    box-shadow: var(--WhiteShadow);
+    display: grid;
+    grid-template-columns: 2.5rem 1rem 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    margin: 0.5rem;
+    cursor: pointer;
+    align-items: center;
+
+    img#note-icon {
+        width: 2rem;
+        height: 2rem;
+        grid-column: 1;
+        grid-row: 1 / 4;
+        justify-self: center;
+        align-self: start;
+        margin-top: 0.5rem;
+    }
+
+    img#creation-icon {
+        width: 1rem;
+        height: 1rem;
+        grid-column: 2;
+        grid-row: 2;
+        justify-self: center;
+    }
+
+    img#modify-icon {
+        width: 1rem;
+        height: 1rem;
+        grid-column: 2;
+        grid-row: 3;
+    }
+    
+    span#note-name {
+        color: white;
+        font-size: 1.3rem;
+        grid-column: 2 / 4;     
+        grid-row: 1;
+    }
+
+    span#creation-date {
+        grid-column: 3;
+        grid-row: 2;
+        color: gray;
+        margin-left: 0.5rem;
+    }
+    
+    span#modify-date {
+        grid-column: 3;
+        grid-row: 3;
+        color: gray;
+        margin-left: 0.5rem;
+    }
+}
+
+div#wrapper:hover {
+    background-color: var(--ButtonHighlightColor);
+}

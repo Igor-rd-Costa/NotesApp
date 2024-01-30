@@ -34,7 +34,7 @@ const routes: Routes = [{
   component: Settings
 },
 {
-  path: 'settings/notes/:guid',
+  path: 'settings/note/:guid',
   component: Settings
 },
 {

@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, Output, ViewChild, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DisplayModeService, IndexDisplayMode } from 'src/app/Services/DisplayModeService';
+import { DisplayModeService } from 'src/app/Services/DisplayModeService';
 import { AuthService } from 'src/app/Services/AuthService';
 import { FormControl, FormControlStatus, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UpdateDefaultButtonState } from 'src/app/Utils/GlobalEventHandlers';
@@ -58,7 +58,6 @@ export class Login implements AfterViewInit {
 
   Register(event : MouseEvent) {
     this.router.navigate(['register']);
-    DisplayModeService.SetIndexDisplayMode(IndexDisplayMode.REGISTER);
   }
 
   OnStatusChange(status : FormControlStatus) {

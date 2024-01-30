@@ -2,7 +2,7 @@
   <section class="header-section">
     <div id="menu-wrapper">
       <ImgButton (click)="OnBackButtonClick($event)" class="back" [props]="backButtonProps"></ImgButton>
-      <input [value]="noteName" placeholder="Title" id="note-name" (blur)="OnBlur()">
+      <input [value]="this.noteManager.GetNoteName()" placeholder="Title" id="note-name" (blur)="OnBlur()">
     </div>
     <!-- <ImgButton class="read-mode" [props]="readModeButtonProps"></ImgButton>
     <ImgButton class="append" [props]="appendButtonProps"></ImgButton> -->

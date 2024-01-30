@@ -19,25 +19,9 @@ CREATE DATABASE "NotesAppDB"
 
 \connect NotesAppDB
 
-CREATE TABLE if NOT EXISTS notes
-(
-	"Id" serial not null,
-	"UserId" integer not null,
-	"Guid" uuid not null,
-	"Name" varchar(100),
-	"CreationDate" date not null,
-	"ModifyDate" date not null,
-	"Content" text,
-	constraint notes_Id_pkey primary key ("Id"),
-	constraint notes_UserId_fkey foreign key ("UserId") references users("Id")
-);
-
-ALTER TABLE notes OWNER to "NotesAppUser";
-GRANT ALL ON TABLE notes TO "NotesAppUser";
-
 CREATE TABLE if NOT EXISTS users
 (
-	"Id" serial not null,
+	  "Id" serial not null,
     "UserName" character varying(50) not null,
     "NormalizedUserName" character varying(50) not null,
     "Email" character varying(100) not null,
@@ -59,6 +43,22 @@ CREATE TABLE if NOT EXISTS users
 
 ALTER TABLE users OWNER to "NotesAppUser";
 GRANT ALL ON TABLE users TO "NotesAppUser";
+
+CREATE TABLE if NOT EXISTS notes
+(
+	"Id" serial not null,
+	"UserId" integer not null,
+	"Guid" uuid not null,
+	"Name" varchar(100),
+	"CreationDate" timestamptz not null,
+	"ModifyDate" timestamptz not null,
+	"Content" text,
+	constraint notes_Id_pkey primary key ("Id"),
+	constraint notes_UserId_fkey foreign key ("UserId") references users("Id")
+);
+
+ALTER TABLE notes OWNER to "NotesAppUser";
+GRANT ALL ON TABLE notes TO "NotesAppUser";
 
 CREATE OR REPLACE PROCEDURE delete_account (IN userId int)
 language sql

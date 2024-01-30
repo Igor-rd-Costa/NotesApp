@@ -11,6 +11,12 @@ import { NoteFormater } from 'src/app/Services/NoteFormater';
   styleUrls: ['./Page.component.css']
 })
 export class Page {
+  marginFormat = 'px';
+  marginLeft = 0;
+  marginRight = 0;
+  marginTop = 0;
+  marginBottom = 0;
+  backgroundColor = "#FFFFFFFF";
 
   constructor(private noteManager : NoteManager, private noteFormater : NoteFormater) {
     effect(() => {
@@ -23,6 +29,15 @@ export class Page {
       html.forEach(element => {
         page.appendChild(element);
       })
+    })
+
+    effect(() =>{
+      this.marginFormat = this.noteManager.GetNoteMarginFormat();
+      this.marginLeft = this.noteManager.GetNoteMarginLeft();
+      this.marginRight = this.noteManager.GetNoteMarginRight();
+      this.marginTop = this.noteManager.GetNoteMarginTop();
+      this.marginBottom = this.noteManager.GetNoteMarginBottom();
+      this.backgroundColor = this.noteManager.GetNoteBackgroundColor();
     })
   }
 

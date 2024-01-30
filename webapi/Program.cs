@@ -6,9 +6,10 @@ using webapi.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<NotesContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Connection string 'Database' not found.")));
+builder.Services.AddDbContext<NoteSettingsContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Connection string 'Database' not found.")));
 builder.Services.AddDbContext<UsersContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Connection string 'Database' not found.")));
-
 // Add services to the container.
 builder.Services.AddIdentityCore<IdentityUser<int>>()
     .AddUserStore<UserStore>()

@@ -3,8 +3,13 @@ import { CommonModule, NgIf } from '@angular/common';
 import { NotesList } from '../NotesList/NotesList.component';
 import { Login } from './Login/Login.component';
 import { Register } from './Register/Register.component';
-import { DisplayModeService, IndexDisplayMode } from 'src/app/Services/DisplayModeService';
+import { DisplayModeService } from 'src/app/Services/DisplayModeService';
 import { FormErrorBox } from '../General/FormErrorBox/FormErrorBox.component';
+import { ActivatedRoute } from '@angular/router';
+
+enum IndexDisplayMode {
+  LOGIN, REGISTER
+}
 
 @Component({
   selector: 'Index',
@@ -14,13 +19,21 @@ import { FormErrorBox } from '../General/FormErrorBox/FormErrorBox.component';
   styleUrls: ['./Index.component.css']
 })
 export class Index {
-  DisplayModeService = DisplayModeService;
   IndexDisplayMode = IndexDisplayMode;
+  displayMode = IndexDisplayMode.LOGIN;
   @ViewChild(FormErrorBox) errorBox! : FormErrorBox;
 
-  constructor() {
+  constructor(private route : ActivatedRoute) {
+      this.route.url.subscribe(urlSegments => {
+        const path = urlSegments[0].path;
+        if (path === "login" && this.displayMode !== IndexDisplayMode.LOGIN) {
+          this.displayMode = IndexDisplayMode.LOGIN
+        } 
+        else if (path === "register" && this.displayMode !== IndexDisplayMode.REGISTER) {
+          this.displayMode = IndexDisplayMode.REGISTER;
+        }
+      })
       effect(() => {
-        let displayMode = DisplayModeService.GetIndexDisplayMode();
         if (this.errorBox) {
           this.errorBox.Hide();
         }

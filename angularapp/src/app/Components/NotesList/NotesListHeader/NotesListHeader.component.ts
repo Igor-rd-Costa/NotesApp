@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, Input, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DisplayModeService, HeaderDisplayMode } from 'src/app/Services/DisplayModeService';
 import { NgStyle } from '@angular/common';
@@ -15,14 +15,13 @@ import { NotesList } from '../NotesList.component';
 
 export class NotesListHeader {
   folderName: string = "All Notes";
-  noteCount : number = 0;
+  @Input() noteCount : number = 0;
   style : string = "";
   folderNameOpacity : string = "";
   folderNameSmallOpacity : string = "";
   constructor() {
     effect(() => {
         let displayMode: HeaderDisplayMode = DisplayModeService.GetHeaderDisplayMode();
-        this.noteCount = NotesList.GetNoteCount();
         if (displayMode === HeaderDisplayMode.HEADER_LARGE) {
           this.style = '';
           this.folderNameOpacity = '';
