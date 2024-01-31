@@ -1,0 +1,21 @@
+<section>
+    <h3 class="settings-title">Margins</h3>
+    <div id="margin-inputs-wrapper">
+        <select id="margin-format-select" (change)="MarginFormatChange($event)" [selectedIndex]="marginFormat === 'px' ? 0 : 1">
+            <option>px</option>
+            <option>cm</option>
+        </select>
+        <NumberInput [increment]="increment" [value]="marginLeft" [fractionDigits]="fractionDigits" (onChange)="ChangeMarginLeft($event)"
+            style="grid-row: 2; grid-column: 1;" imgSrc="/assets/PaddingLeftIcon.svg">
+        </NumberInput>
+        <NumberInput [increment]="increment" [value]="marginRight" [fractionDigits]="fractionDigits" (onChange)="ChangeMarginRight($event)"
+            style="grid-row: 2; grid-column: 2;" imgSrc="/assets/PaddingRightIcon.svg">
+        </NumberInput>
+        <NumberInput [increment]="increment" [value]="marginTop" [fractionDigits]="fractionDigits" (onChange)="ChangeMarginTop($event)"
+            style="grid-row: 3; grid-column: 1;" imgSrc="/assets/PaddingTopIcon.svg">
+        </NumberInput>
+        <NumberInput [increment]="increment" [value]="marginBottom" [fractionDigits]="fractionDigits" (onChange)="ChangeMarginBottom($event)" 
+            style="grid-row: 3; grid-column: 2;" imgSrc="/assets/PaddingBottomIcon.svg">
+        </NumberInput>
+    </div>
+</section>

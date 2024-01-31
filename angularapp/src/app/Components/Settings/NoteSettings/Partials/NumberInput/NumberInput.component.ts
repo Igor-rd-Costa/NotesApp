@@ -12,6 +12,7 @@ export class NumberInput {
   @Input() imgSrc : string = '';
   @Input() value : number = 0;
   @Input() increment : number = 1;
+  @Input() fractionDigits : number = 0;
   @Output() onChange : EventEmitter<number> = new EventEmitter<number>;
 
   Increase() {

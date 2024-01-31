@@ -1,7 +1,7 @@
 <div id="input-wrapper">
     <img id="setting-icon" [src]="imgSrc"/>
     <div id="input-inner-wrapper">
-        <div id="text" [innerText]="value.toFixed(2)"></div>
+        <div id="text" [innerText]="value.toFixed(fractionDigits)"></div>
         <div (click)="Increase()" id="img-wrapper">
             <img src="/assets/PlusIcon.svg">
         </div>

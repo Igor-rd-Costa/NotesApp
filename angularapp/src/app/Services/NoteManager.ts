@@ -102,6 +102,36 @@ export class NoteManager {
         }
     }
 
+    public UpdateMarginFormat(newFormat : MarginFormat) {
+        this.notesService.UpdateSettings(this.note.guid(), 'marginFormat', newFormat).subscribe(a => {
+            this.noteSettings.marginFormat.set(newFormat);
+        })
+    }
+
+    public UpdateMarginLeft(newVal : number) {
+        this.notesService.UpdateSettings(this.note.guid(), 'marginLeft', newVal.toString()).subscribe(a => {
+            this.noteSettings.marginLeft.set(newVal);
+        });
+    }
+
+    public UpdateMarginRight(newVal : number) {
+        this.notesService.UpdateSettings(this.note.guid(), 'marginRight', newVal.toString()).subscribe(a => {
+            this.noteSettings.marginRight.set(newVal);
+        });
+    }
+
+    public UpdateMarginTop(newVal : number) {
+        this.notesService.UpdateSettings(this.note.guid(), 'marginTop', newVal.toString()).subscribe(a => {
+            this.noteSettings.marginTop.set(newVal);
+        });
+    }
+
+    public UpdateMarginBottom(newVal : number) {
+        this.notesService.UpdateSettings(this.note.guid(), 'marginBottom', newVal.toString()).subscribe(a => {
+            this.noteSettings.marginBottom.set(newVal);
+        });
+    }
+
     private BgColorToHex(color : number) {
         return "#FFFFFFFF";
     }
