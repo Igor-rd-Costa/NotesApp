@@ -3,10 +3,11 @@ import { NoteCard } from './NoteCard/NoteCard.component';
 import { touchInfo } from '../../../Utils/GlobalEventHandlers';
 import { DisplayModeService, HeaderDisplayMode } from '../../../Services/DisplayModeService';
 import { NgFor } from '@angular/common';
-import { NotesService } from 'src/app/Services/NotesService';
+import { NoteSettings, NotesService } from 'src/app/Services/NotesService';
 import AnimateElement from 'src/app/Utils/Animate';
 import { Router } from '@angular/router';
 import { NoteFormater } from 'src/app/Services/NoteFormater';
+import { NotePreview } from '../../Settings/NoteSettings/Partials/NotePreview/NotePreview.component';
 
 function SetNoteWrapperSize() {
   const NoteWrapper = document.getElementById("notes-wrapper");
@@ -33,6 +34,14 @@ interface NoteCardInfo {
   name : string,
   modifyDate : string,
   preview : HTMLParagraphElement[]
+  settings : {
+    backgroundColor: string,
+    marginFormat: string,
+    marginLeft: number,
+    marginRight: number,
+    marginTop: number,
+    marginBottom: number,
+  }
 }
 
 @Component({
@@ -51,12 +60,13 @@ export class NotesListMain implements AfterViewChecked {
     window.addEventListener('resize', SetNoteWrapperSize);
     this.notesService.GetNotePreviews().subscribe(result => {
       result.forEach(note => {
-        const date : Date = new Date(note.modifyDate); 
+        const date : Date = new Date(note.preview.modifyDate);  
         let noteCard : NoteCardInfo = {
-          guid: note.guid,
-          name: note.name,
+          guid: note.preview.guid,
+          name: note.preview.name,
           modifyDate: this.notesService.GetNotePreviewDateText(date),
-          preview: this.noteFormater.NoteToHMTL(note.preview)
+          preview: this.noteFormater.NoteToHMTL(note.preview.preview),
+          settings: note.settings
         };
         if (noteCard.name === "") {
           noteCard.name = `Text note<br>${date.getMonth() + 1}/${date.getDate()}`;

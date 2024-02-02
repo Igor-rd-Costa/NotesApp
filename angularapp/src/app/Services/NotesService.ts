@@ -42,7 +42,7 @@ export interface NoteSettings {
     marginRight: number,
     marginTop: number,
     marginBottom: number,
-    backgroundColor: number,
+    backgroundColor: string,
 }
 
 @Injectable()
@@ -74,8 +74,8 @@ export class NotesService {
         return this.http.patch<boolean>("https://localhost:7216/note/rename/", { Guid: guid, NewName: newName }, {withCredentials: true});
     }
 
-    public GetNotePreviews() : Observable<NotePreview[]> {
-        return this.http.get<Array<NotePreview>>('https://localhost:7216/', {withCredentials: true});
+    public GetNotePreviews() : Observable<{preview: NotePreview, settings: NoteSettings}[]> {
+        return this.http.get<{preview: NotePreview, settings: NoteSettings}[]>('https://localhost:7216/', {withCredentials: true});
     }
 
     public GetSettingsNoteCards() : Observable<NoteSettingsCardInfo[]> {

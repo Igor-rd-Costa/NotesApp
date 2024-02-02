@@ -38,7 +38,7 @@ export class NoteManager {
             this.noteSettings.marginRight.set(noteData.settings.marginRight);
             this.noteSettings.marginTop.set(noteData.settings.marginTop);
             this.noteSettings.marginBottom.set(noteData.settings.marginBottom);
-            this.noteSettings.backgroundColor.set(this.BgColorToHex(noteData.settings.backgroundColor));
+            this.noteSettings.backgroundColor.set(noteData.settings.backgroundColor);
         })
     }
 
@@ -132,7 +132,13 @@ export class NoteManager {
         });
     }
 
-    private BgColorToHex(color : number) {
-        return "#FFFFFFFF";
+    public UpdateBackgroundColor(newVal : string) {
+        if (newVal.length !== 9) {
+            console.error("UpdateBackgroundColor: invalid value '" + newVal + "'");
+            return;
+        }
+        this.notesService.UpdateSettings(this.note.guid(), 'backgroundColor', newVal).subscribe(a => {
+            this.noteSettings.backgroundColor.set(newVal);
+        })
     }
 }

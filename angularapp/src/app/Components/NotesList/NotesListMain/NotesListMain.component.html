@@ -8,7 +8,8 @@
     </section>  
     <section class="notes">
         <div id="notes-wrapper">
-            <NoteCard id="note" class="note" *ngFor="let note of notes" [noteId]="note.guid" [noteName]="note.name" [noteDate]="note.modifyDate" [notePreview]="note.preview"/>
+            <NoteCard id="note" class="note" *ngFor="let note of notes" 
+            [noteId]="note.guid" [noteName]="note.name" [noteDate]="note.modifyDate" [notePreview]="note.preview" [settings]="note.settings"/>
         </div>
         <button id="create-note" (click)="OnCreateNoteClick()">
             <img src="/assets/CreateNoteIcon.svg"/>

@@ -23,7 +23,7 @@ export class NoteDisplayHeader {
   ]
 
   constructor(private notesService : NotesService, private router : Router, protected noteManager : NoteManager) {}
-
+  
   Delete() {
     this.notesService.Delete(this.noteManager.GetNoteGuid()).subscribe(() => {
       this.router.navigate(['']);

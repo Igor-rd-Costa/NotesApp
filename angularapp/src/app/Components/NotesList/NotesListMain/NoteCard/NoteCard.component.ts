@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { DisplayModeService, SideMenuDisplayMode } from 'src/app/Services/DisplayModeService';
+import { NoteSettings } from 'src/app/Services/NotesService';
 
 @Component({
   standalone: true,
@@ -13,6 +14,14 @@ export class NoteCard implements AfterViewInit {
   @Input() noteName: string = "";
   @Input() noteDate: string = "";
   @Input() notePreview: HTMLParagraphElement[] = [];
+  @Input() settings : {
+    backgroundColor: string,
+    marginFormat: string,
+    marginLeft: number,
+    marginRight: number,
+    marginTop: number,
+    marginBottom: number,
+  } = {backgroundColor: "#FFFFFFFF", marginFormat: 'px', marginLeft: 0, marginRight: 0, marginTop: 0, marginBottom: 0};
 
   constructor(private router : Router) {
     

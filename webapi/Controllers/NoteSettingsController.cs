@@ -93,23 +93,13 @@ namespace webapi.Controllers
                 break;
                 case "backgroundColor":
                 {
-                    int? newVal = HexStringToInt(updateInfo.NewValue);
-                    if (newVal == null)
-                    {
-                        return BadRequest();
-                    }
-                    settings.BackgroundColor = (int)newVal;
+                    settings.BackgroundColor = updateInfo.NewValue;
                 } break;
             }
 
             m_NoteSettingsContext.note_settings.Update(settings);
             m_NoteSettingsContext.SaveChanges();
             return Ok(true);
-        }
-
-        private int? HexStringToInt(string hexString)
-        {
-            return null;
         }
     }
 }

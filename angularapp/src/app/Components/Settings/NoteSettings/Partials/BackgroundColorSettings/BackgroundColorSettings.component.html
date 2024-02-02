@@ -1,0 +1,16 @@
+<section>
+    <SettingTitle title="Background Color"></SettingTitle>
+    <div id="color-picker">
+        <img id="navigate-left" src="/assets/BackArrow.png" (click)="GoLeft()">
+        <img id="navigate-right" src="/assets/BackArrow.png" (click)="GoRight()">
+        <div id="scroller" (click)="UpdateSelection($event)" #scroller>
+            <div id="cards-wrapper" #cardsWrapper>
+                <div *ngFor="let color of colors" class="color-card" [ngStyle]="{backgroundColor: color}" [attr.color]="color"></div>
+            </div>
+        </div>
+        <div id="tab-icons" #tabIcons>
+            <div *ngFor="let icon of GenerateIcons()" class="tab-icon"></div>
+        </div>
+    </div>
+
+</section>

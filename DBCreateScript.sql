@@ -68,7 +68,7 @@ CREATE TABLE if NOT EXISTS note_settings (
 	"MarginRight" decimal default 0 not null,
 	"MarginTop" decimal default 0 not null,
 	"MarginBottom" decimal default 0 not null,
-	"BackgroundColor" int default 0xFFFFFFFF not null,
+	"BackgroundColor" char(9) default '#FFFFFFFF' not null,
 	PRIMARY KEY("Id"),
 	FOREIGN KEY("NoteId") REFERENCES notes("Id")
 );

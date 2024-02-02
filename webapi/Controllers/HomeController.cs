@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
+using System.Xml.Linq;
 using webapi.Data;
 using webapi.Models;
 using webapi.Types;
@@ -35,12 +36,17 @@ namespace webapi.Controllers
             if (userId == null)
                 return Unauthorized();
 
-            var notes = m_NoteContext.notes.Where(note => note.UserId == int.Parse(userId)).Select(note => new NotePreview
+            var ids = m_NoteContext.notes.Where(note => note.UserId == int.Parse(userId)).Select(nt => nt.Id).ToList();
+            var notes = m_NoteContext.notes.Where(note => note.UserId == int.Parse(userId)).Select(note => new
             {
-                Guid = note.Guid,
-                Name = note.Name,
-                ModifyDate = note.ModifyDate,
-                Preview = note.Content
+                Preview = new NotePreview
+                {
+                    Guid = note.Guid,
+                    Name = note.Name,
+                    ModifyDate = note.ModifyDate,
+                    Preview = note.Content
+                },
+                Settings = m_NoteContext.note_settings.Where(ns => ns.NoteId == note.Id).FirstOrDefault()
             }).ToList();
             return Ok(notes);
         }
@@ -118,7 +124,7 @@ namespace webapi.Controllers
             m_NoteContext.SaveChanges();
             NoteSettings settings = new()
             {
-                NoteId = note.Id
+                NoteId = note.Id,
             };
             var res = m_NoteSettingsContext.Add(settings);
             if (res.State != EntityState.Added)

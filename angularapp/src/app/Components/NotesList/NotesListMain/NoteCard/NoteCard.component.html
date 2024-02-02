@@ -1,5 +1,8 @@
 <div class="note">
-    <div id="note-preview" class="{{noteId}}" (click)="OnClick()">
+    <div id="note-preview" class="{{noteId}}" (click)="OnClick()"
+        [style]="{backgroundColor: settings.backgroundColor, paddingLeft: 
+        settings.marginLeft+settings.marginFormat, paddingRight: settings.marginRight+settings.marginFormat, paddingTop: 
+        settings.marginTop+settings.marginFormat, paddingBottom: settings.marginBottom+settings.marginFormat}">
     </div>
     <div id="note-info">
         <div id="note-name" [innerHTML]="noteName"></div>

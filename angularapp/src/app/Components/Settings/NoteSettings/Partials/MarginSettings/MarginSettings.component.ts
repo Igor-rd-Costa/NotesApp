@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { NumberInput } from '../NumberInput/NumberInput.component';
 import { MarginFormat } from 'src/app/Services/NotesService';
 import { NoteManager } from 'src/app/Services/NoteManager';
+import { SettingTitle } from '../SettingTitle/SettingTitle.component';
 
 @Component({
   selector: 'MarginSettings',
   standalone: true,
-  imports: [CommonModule, NumberInput ],
+  imports: [CommonModule, NumberInput, SettingTitle ],
   templateUrl: './MarginSettings.component.html',
   styleUrls: ['./MarginSettings.component.css']
 })

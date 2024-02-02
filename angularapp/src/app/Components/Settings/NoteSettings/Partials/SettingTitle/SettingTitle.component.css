@@ -1,0 +1,13 @@
+h3 {
+    align-self: start;
+    margin: 0;
+    padding-left: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    width: 20rem;
+    margin-bottom: 1rem;
+    border-bottom: 0.1rem solid #FFFFFFAA;
+    font-size: 1.3rem;
+    font-family: arial;
+    color: white;
+}

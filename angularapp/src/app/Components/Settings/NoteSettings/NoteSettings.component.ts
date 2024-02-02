@@ -6,11 +6,12 @@ import { MarginFormat, NotesService } from 'src/app/Services/NotesService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NoteManager } from 'src/app/Services/NoteManager';
 import { MarginSettings } from './Partials/MarginSettings/MarginSettings.component';
+import { BackgroundColorSettings } from './Partials/BackgroundColorSettings/BackgroundColorSettings.component';
 
 @Component({
   selector: 'NoteSettings',
   standalone: true,
-  imports: [CommonModule, NotePreview, MarginSettings, NumberInput ],
+  imports: [CommonModule, NotePreview, MarginSettings, BackgroundColorSettings, NumberInput ],
   templateUrl: './NoteSettings.component.html',
   styleUrls: ['./NoteSettings.component.css']
 })
@@ -41,9 +42,7 @@ export class NoteSettings {
           this.increment = 0.1;
           this.fractionDigits = 2;
         }
-        let left = this.noteManager.GetNoteMarginLeft();
-        console.log("LEFT:", left);
-        this.marginLeft = left;
+        this.marginLeft = this.noteManager.GetNoteMarginLeft();
         this.marginRight = this.noteManager.GetNoteMarginRight();
         this.marginTop = this.noteManager.GetNoteMarginTop();
         this.marginBottom = this.noteManager.GetNoteMarginBottom();

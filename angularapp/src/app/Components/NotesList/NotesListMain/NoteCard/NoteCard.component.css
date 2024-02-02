@@ -10,11 +10,10 @@ div.note {
         box-shadow: var(--WhiteShadow);
         background-color: white;
         overflow: hidden;
-        padding: 0.4rem;
         cursor: pointer;
         line-break: anywhere;
 
-        p#preview-text {
+        p {
             margin: 0rem;
             word-wrap: break-word;
         }
