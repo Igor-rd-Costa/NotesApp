@@ -18,8 +18,8 @@ export class NoteDisplayHeader {
 
   @ViewChild(ListMenu) listMenu! : ListMenu;
   moreOptionsMenuItems : ListMenuItem[] = [
+    {content: "Settings", onClick: { func: this.OpenSettings, src: this }, iconSrc: "/assets/NoteSettingsIcon.svg"},
     {content: "Delete", onClick: { func: this.Delete, src: this }},
-    {content: "Settings", onClick: { func: this.OpenSettings, src: this }, iconSrc: "/assets/NoteSettingsIcon.svg"}
   ]
 
   constructor(private notesService : NotesService, private router : Router, protected noteManager : NoteManager) {}

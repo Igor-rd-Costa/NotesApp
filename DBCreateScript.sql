@@ -60,6 +60,22 @@ CREATE TABLE if NOT EXISTS notes
 ALTER TABLE notes OWNER to "NotesAppUser";
 GRANT ALL ON TABLE notes TO "NotesAppUser";
 
+CREATE TABLE if NOT EXISTS note_default_settings (
+	"Id" serial not null,
+	"UserId" int not null,
+	"MarginFormat" char(2) default 'px' not null,
+	"MarginLeft" decimal default 0 not null,
+	"MarginRight" decimal default 0 not null,
+	"MarginTop" decimal default 0 not null,
+	"MarginBottom" decimal default 0 not null,
+	"BackgroundColor" char(9) default '#FFFFFFFF' not null,
+	PRIMARY KEY("Id"),
+	FOREIGN KEY("UserId") REFERENCES users("Id")
+);
+
+ALTER TABLE note_default_settings OWNER to "NotesAppUser";
+GRANT ALL ON TABLE note_default_settings TO "NotesAppUser";
+
 CREATE TABLE if NOT EXISTS note_settings (
 	"Id" serial not null,
 	"NoteId" int not null,
@@ -82,6 +98,7 @@ AS $$
   DELETE FROM note_settings WHERE "NoteId" IN (
     SELECT "Id" FROM notes WHERE "UserId" = userId
   );
+  DELETE FROM note_default_settings WHERE note_default_settings."UserId" = userId;
 	DELETE FROM notes WHERE notes."UserId" = userId;
 	DELETE FROM users WHERE users."Id" = userId;	
 $$

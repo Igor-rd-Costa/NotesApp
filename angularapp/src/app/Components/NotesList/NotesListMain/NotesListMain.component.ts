@@ -3,11 +3,10 @@ import { NoteCard } from './NoteCard/NoteCard.component';
 import { touchInfo } from '../../../Utils/GlobalEventHandlers';
 import { DisplayModeService, HeaderDisplayMode } from '../../../Services/DisplayModeService';
 import { NgFor } from '@angular/common';
-import { NoteSettings, NotesService } from 'src/app/Services/NotesService';
+import { NotesService } from 'src/app/Services/NotesService';
 import AnimateElement from 'src/app/Utils/Animate';
 import { Router } from '@angular/router';
 import { NoteFormater } from 'src/app/Services/NoteFormater';
-import { NotePreview } from '../../Settings/NoteSettings/Partials/NotePreview/NotePreview.component';
 
 function SetNoteWrapperSize() {
   const NoteWrapper = document.getElementById("notes-wrapper");

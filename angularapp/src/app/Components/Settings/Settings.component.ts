@@ -3,10 +3,10 @@ import { CommonModule, NgIf, NgSwitch } from '@angular/common';
 import { ImgButton, ImgButtonProp } from '../General/ImgButton/ImgButton.component';
 import { Router } from '@angular/router';
 import { DisplayModeService, SettingsDisplayMode } from 'src/app/Services/DisplayModeService';
-import { ProfileSettings } from './ProfileSettings/ProfileSettings.component';
-import { NewNotesSettings } from './NewNotesSettings/NewNotesSettings.component';
-import { NotesSettings } from './NotesSettings/NotesSettings.component';
-import { NoteSettings } from './NoteSettings/NoteSettings.component';
+import { ProfileSettings } from './Partials/ProfileSettings/ProfileSettings.component';
+import { DefaultNoteSettings } from './Partials/DefaultNoteSettings/DefaultNoteSettings.component';
+import { NotesSettings } from './Partials/NotesSettings/NotesSettings.component';
+import { NoteSettings } from './Partials/NoteSettings/NoteSettings.component';
 import { RouteService } from 'src/app/Services/RouteService';
 
 
@@ -14,7 +14,7 @@ import { RouteService } from 'src/app/Services/RouteService';
 @Component({
   selector: 'Settings',
   standalone: true,
-  imports: [CommonModule, ImgButton, NgIf, NgSwitch, ProfileSettings, NewNotesSettings, NotesSettings, NoteSettings ],
+  imports: [CommonModule, ImgButton, NgIf, NgSwitch, ProfileSettings, DefaultNoteSettings, NotesSettings, NoteSettings ],
   templateUrl: './Settings.component.html',
   styleUrls: ['./Settings.component.css']
 })

@@ -1,12 +1,12 @@
 import { Component, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NotePreview } from './Partials/NotePreview/NotePreview.component';
-import { NumberInput } from './Partials/NumberInput/NumberInput.component';
+import { NotePreview } from '../Components/NotePreview/NotePreview.component';
+import { NumberInput } from '../Components/NumberInput/NumberInput.component';
 import { MarginFormat, NotesService } from 'src/app/Services/NotesService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NoteManager } from 'src/app/Services/NoteManager';
-import { MarginSettings } from './Partials/MarginSettings/MarginSettings.component';
-import { BackgroundColorSettings } from './Partials/BackgroundColorSettings/BackgroundColorSettings.component';
+import { MarginInputChange, MarginInputType, MarginSettings } from '../Components/MarginSettings/MarginSettings.component';
+import { BackgroundColorSettings } from '../Components/BackgroundColorSettings/BackgroundColorSettings.component';
 
 @Component({
   selector: 'NoteSettings',
@@ -25,11 +25,11 @@ export class NoteSettings {
   protected marginBottom : number = 0;
   protected backgroundColor : string = "0xFFFFFFFF";
   
-  constructor(private router : Router, private route : ActivatedRoute, private noteManager : NoteManager, private noteService : NotesService) {
+  constructor(private router : Router, private route : ActivatedRoute, protected noteManager : NoteManager, private noteService : NotesService) {
     this.route.paramMap.subscribe(value => {
       const guid = value.get('guid');
       if (guid === null) {
-        this.router.navigate(['']);
+        //this.router.navigate(['']);
         return;
       }
       this.noteManager.Load(guid);
@@ -46,6 +46,9 @@ export class NoteSettings {
         this.marginRight = this.noteManager.GetNoteMarginRight();
         this.marginTop = this.noteManager.GetNoteMarginTop();
         this.marginBottom = this.noteManager.GetNoteMarginBottom();
+      })
+
+      effect(() => {
         this.backgroundColor = this.noteManager.GetNoteBackgroundColor();
       })
     })
@@ -91,10 +94,34 @@ export class NoteSettings {
     this.noteService.UpdateSettings(this.noteManager.GetNoteGuid(), 'marginTop', newVal.toString()).subscribe();
   }
 
-  protected ChangeMarginBottom(newVal : number) {
-    if (this.marginFormat === 'px')
-      newVal = Math.floor(newVal);
-    this.marginBottom = newVal;
-    this.noteService.UpdateSettings(this.noteManager.GetNoteGuid(), 'marginBottom', newVal.toString()).subscribe();
+  protected HandleMarginChange(event : MarginInputChange) {
+    switch(event.type) {
+      case MarginInputType.MARGIN_FORMAT: {
+        this.noteManager.UpdateMarginFormat(event.value as MarginFormat);
+      } break;
+      case MarginInputType.MARGIN_LEFT: {
+        this.noteManager.UpdateMarginLeft(event.value);
+      } break;
+      case MarginInputType.MARGIN_RIGHT: {
+        this.noteManager.UpdateMarginRight(event.value);
+      } break;
+      case MarginInputType.MARGIN_BOTTOM: {
+        this.noteManager.UpdateMarginBottom(event.value);
+      } break;
+      case MarginInputType.MARGIN_TOP: {
+        this.noteManager.UpdateMarginTop(event.value);
+      } break;
+    }
   }
+
+  protected HandleBackgroundColorChange(newColor : string) {
+    this.noteManager.UpdateBackgroundColor(newColor);
+  }
+
+  // protected ChangeMarginBottom(newVal : number) {
+  //   if (this.marginFormat === 'px')
+  //     newVal = Math.floor(newVal);
+  //   this.marginBottom = newVal;
+  //   this.noteService.UpdateSettings(this.noteManager.GetNoteGuid(), 'marginBottom', newVal.toString()).subscribe();
+  // }
 }

@@ -1,0 +1,8 @@
+section#note-settings-wrapper {
+    padding-left: 2rem;
+    padding-top: 3rem;
+
+    display: grid;
+    grid-template-columns: 18rem 1fr;
+    grid-template-rows: 23rem 1fr;
+}

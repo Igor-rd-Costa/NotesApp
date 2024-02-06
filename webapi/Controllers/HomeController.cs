@@ -122,10 +122,16 @@ namespace webapi.Controllers
                 return BadRequest();
             }
             m_NoteContext.SaveChanges();
-            NoteSettings settings = new()
+            NoteSettings settings = m_NoteContext.note_default_settings.Where(nds => nds.UserId == id).Select(nds => new NoteSettings
             {
                 NoteId = note.Id,
-            };
+                MarginFormat = nds.MarginFormat,
+                MarginLeft = nds.MarginLeft,
+                MarginRight = nds.MarginRight,
+                MarginBottom = nds.MarginBottom,
+                MarginTop = nds.MarginTop,
+                BackgroundColor = nds.BackgroundColor
+            }).First();
             var res = m_NoteSettingsContext.Add(settings);
             if (res.State != EntityState.Added)
             {

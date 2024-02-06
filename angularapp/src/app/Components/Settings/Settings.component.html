@@ -24,7 +24,7 @@
     <section id="settings-display">
         <ng-container [ngSwitch]="displayMode">
             <ProfileSettings *ngSwitchCase="SettingsDisplayMode.PROFILE_SETTINGS"></ProfileSettings>
-            <NewNotesSettings *ngSwitchCase="SettingsDisplayMode.NEW_NOTES_SETTINGS"></NewNotesSettings>
+            <DefaultNoteSettings *ngSwitchCase="SettingsDisplayMode.NEW_NOTES_SETTINGS"></DefaultNoteSettings>
             <NotesSettings *ngSwitchCase="SettingsDisplayMode.NOTES_SETTINGS"></NotesSettings>
             <NoteSettings *ngSwitchCase="SettingsDisplayMode.NOTE_SETTINGS"></NoteSettings>
         </ng-container>

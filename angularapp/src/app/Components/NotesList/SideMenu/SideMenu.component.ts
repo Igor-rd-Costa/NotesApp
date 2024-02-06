@@ -21,8 +21,8 @@ export class SideMenu {
   public static isProfileMenuVisible : boolean = false;
 
   profileMenuItems : ListMenuItem[] = [
+    {content: "Settings", onClick: {func: this.Settings, src: this }, iconSrc: "/assets/CogIcon.svg"},
     {content: "Logout", onClick: {func: this.Logout, src: this }},
-    {content: "Settings", onClick: {func: this.Settings, src: this }, iconSrc: "/assets/CogIcon.svg"}
   ]
 
   constructor(private authService : AuthService, private router : Router) {

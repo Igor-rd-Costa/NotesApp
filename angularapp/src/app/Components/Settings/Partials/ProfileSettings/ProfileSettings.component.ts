@@ -1,13 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ImgButton, ImgButtonProp } from '../../General/ImgButton/ImgButton.component';
-import { FormButton } from '../../General/FormButton/FormButton';
+import { ImgButton, ImgButtonProp } from '../../../General/ImgButton/ImgButton.component';
+import { FormButton } from '../../../General/FormButton/FormButton';
 import { AbstractControl, FormControl, FormControlStatus, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/Services/AuthService';
-import { FormErrorBox } from '../../General/FormErrorBox/FormErrorBox.component';
+import { FormErrorBox } from '../../../General/FormErrorBox/FormErrorBox.component';
 import { Router } from '@angular/router';
 import { EditableDataField } from './EditableDataField/EditableDataField.component';
-import { AuthPopUp } from '../../General/AuthPopUp/AuthPopUp.component';
+import { AuthPopUp } from '../../..//General/AuthPopUp/AuthPopUp.component';
 
 @Component({
   selector: 'ProfileSettings',

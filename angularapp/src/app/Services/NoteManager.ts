@@ -4,7 +4,7 @@ import { MarginFormat, NotesService } from "./NotesService";
 @Injectable()
 export class NoteManager {
     private note = {
-        id: signal<number>(0),
+        id: signal<number>(-1),
         userId: signal<number>(0),
         guid: signal<string>(""),
         name: signal<string>(""),
@@ -108,27 +108,27 @@ export class NoteManager {
         })
     }
 
-    public UpdateMarginLeft(newVal : number) {
-        this.notesService.UpdateSettings(this.note.guid(), 'marginLeft', newVal.toString()).subscribe(a => {
-            this.noteSettings.marginLeft.set(newVal);
+    public UpdateMarginLeft(newVal : string) {
+        this.notesService.UpdateSettings(this.note.guid(), 'marginLeft', newVal).subscribe(a => {
+            this.noteSettings.marginLeft.set(parseFloat(newVal));
         });
     }
 
-    public UpdateMarginRight(newVal : number) {
-        this.notesService.UpdateSettings(this.note.guid(), 'marginRight', newVal.toString()).subscribe(a => {
-            this.noteSettings.marginRight.set(newVal);
+    public UpdateMarginRight(newVal : string) {
+        this.notesService.UpdateSettings(this.note.guid(), 'marginRight', newVal).subscribe(a => {
+            this.noteSettings.marginRight.set(parseFloat(newVal));
         });
     }
 
-    public UpdateMarginTop(newVal : number) {
-        this.notesService.UpdateSettings(this.note.guid(), 'marginTop', newVal.toString()).subscribe(a => {
-            this.noteSettings.marginTop.set(newVal);
+    public UpdateMarginTop(newVal : string) {
+        this.notesService.UpdateSettings(this.note.guid(), 'marginTop', newVal).subscribe(a => {
+            this.noteSettings.marginTop.set(parseFloat(newVal));
         });
     }
 
-    public UpdateMarginBottom(newVal : number) {
-        this.notesService.UpdateSettings(this.note.guid(), 'marginBottom', newVal.toString()).subscribe(a => {
-            this.noteSettings.marginBottom.set(newVal);
+    public UpdateMarginBottom(newVal : string) {
+        this.notesService.UpdateSettings(this.note.guid(), 'marginBottom', newVal).subscribe(a => {
+            this.noteSettings.marginBottom.set(parseFloat(newVal));
         });
     }
 
@@ -140,5 +140,10 @@ export class NoteManager {
         this.notesService.UpdateSettings(this.note.guid(), 'backgroundColor', newVal).subscribe(a => {
             this.noteSettings.backgroundColor.set(newVal);
         })
+    }
+
+
+    public TestInfo() {
+        console.log(this.note.id());
     }
 }

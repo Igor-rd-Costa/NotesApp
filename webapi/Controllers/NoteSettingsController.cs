@@ -51,10 +51,25 @@ namespace webapi.Controllers
             return Ok(noteSettings);
         }
 
+        [HttpGet("default")]
+        public IActionResult Default()
+        {
+            string? userId = m_UserManager.GetUserId(User);
+            if (userId == null)
+                return NotFound();
+
+            NoteDefaultSettings? nds = m_NotesContext.note_default_settings.Where(ns => ns.UserId == int.Parse(userId)).FirstOrDefault();
+            if (nds == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(nds);
+        }
+
         [HttpPut("update")]
         public IActionResult Update([FromBody] NoteSettingUpdateInfo updateInfo)
         {
-            Console.WriteLine("Update request for note " + updateInfo.Guid + ":\nProperty: " + updateInfo.Property + "\nNew Value: " + updateInfo.NewValue);
             string? userId = m_UserManager.GetUserId(User);
             if (userId == null)
                 return NotFound();
@@ -73,24 +88,20 @@ namespace webapi.Controllers
                 } break;
                 case "marginLeft":
                 {
-                    Console.WriteLine("Updated margin left!");
                     settings.MarginLeft = decimal.Parse(updateInfo.NewValue);
                 } break;
                 case "marginRight":
                 {
                     settings.MarginRight = decimal.Parse(updateInfo.NewValue);
-                }
-                break;
+                } break;
                 case "marginTop":
                 {
                     settings.MarginTop = decimal.Parse(updateInfo.NewValue);
-                }
-                break;
+                } break;
                 case "marginBottom":
                 {
                     settings.MarginBottom = decimal.Parse(updateInfo.NewValue);
-                }
-                break;
+                } break;
                 case "backgroundColor":
                 {
                     settings.BackgroundColor = updateInfo.NewValue;
@@ -99,6 +110,56 @@ namespace webapi.Controllers
 
             m_NoteSettingsContext.note_settings.Update(settings);
             m_NoteSettingsContext.SaveChanges();
+            return Ok(true);
+        }
+
+        [HttpPut("default/update")]
+        public IActionResult DefaultUpdate([FromBody] DefaultNoteSettingsUpdateInfo updateInfo)
+        {
+            string? userId = m_UserManager.GetUserId(User);
+            if (userId == null)
+                return NotFound();
+
+            NoteDefaultSettings? nds = m_NotesContext.note_default_settings.Where(x => x.UserId == int.Parse(userId)).FirstOrDefault();
+            if (nds == null)
+                return NotFound();
+
+            switch (updateInfo.Property)
+            {
+                case "marginFormat":
+                {
+                    nds.MarginFormat = updateInfo.NewValue;
+                }
+                break;
+                case "marginLeft":
+                {
+                    nds.MarginLeft = decimal.Parse(updateInfo.NewValue);
+                }
+                break;
+                case "marginRight":
+                {
+                    nds.MarginRight = decimal.Parse(updateInfo.NewValue);
+                }
+                break;
+                case "marginTop":
+                {
+                    nds.MarginTop = decimal.Parse(updateInfo.NewValue);
+                }
+                break;
+                case "marginBottom":
+                {
+                    nds.MarginBottom = decimal.Parse(updateInfo.NewValue);
+                }
+                break;
+                case "backgroundColor":
+                {
+                    nds.BackgroundColor = updateInfo.NewValue;
+                }
+                break;
+            }
+
+            m_NotesContext.note_default_settings.Update(nds);
+            m_NotesContext.SaveChanges();
             return Ok(true);
         }
     }

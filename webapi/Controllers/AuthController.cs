@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using webapi.Data;
+using webapi.Models;
 using webapi.Types;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -26,11 +28,13 @@ namespace webapi.Controllers
     {
         private readonly UserManager<IdentityUser<int>> m_UserManager;
         private readonly SignInManager<IdentityUser<int>> m_SignInManager;
+        private readonly NoteDefaultSettingsContext m_NoteDefaultSettingsContext;
 
-        public AuthController(UserManager<IdentityUser<int>> userManager, SignInManager<IdentityUser<int>> signInManager)
+        public AuthController(UserManager<IdentityUser<int>> userManager, SignInManager<IdentityUser<int>> signInManager, NoteDefaultSettingsContext ndsc)
         {
             m_UserManager = userManager;
             m_SignInManager = signInManager;
+            m_NoteDefaultSettingsContext = ndsc;
         }
 
         [HttpPost("login")]
@@ -69,6 +73,13 @@ namespace webapi.Controllers
                 }
                 return BadRequest(registerError);
             }
+            Console.WriteLine("CREATED USER WITH ID: " + user.Id);
+            NoteDefaultSettings nds = new()
+            {
+                UserId = user.Id,
+            };
+            m_NoteDefaultSettingsContext.note_default_settings.Add(nds);
+            m_NoteDefaultSettingsContext.SaveChanges();
             Microsoft.AspNetCore.Identity.SignInResult signInResult = await m_SignInManager.PasswordSignInAsync(info.Username, info.Password, false, false);
             if (signInResult.Succeeded)
             {

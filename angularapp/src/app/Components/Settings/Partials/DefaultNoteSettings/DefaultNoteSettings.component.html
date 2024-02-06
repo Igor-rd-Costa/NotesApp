@@ -1,0 +1,11 @@
+<section id="note-settings-wrapper">
+    <NotePreview [marginFormat]="marginFormat()" [backgroundColor]="backgroundColor()"
+    [marginLeft]="marginLeft()" [marginRight]="marginRight()" [marginTop]="marginTop()" [marginBottom]="marginBottom()"></NotePreview>
+    <section id="settings-wrapper">
+        <MarginSettings [increment]="increment" [marginFormat]="marginFormat()" (onInputChange)="HandleMarginChange($event)"
+        [marginLeft]="marginLeft()" [marginRight]="marginRight()" [marginTop]="marginTop()" [marginBottom]="marginBottom()"></MarginSettings>
+        <div style="margin-top: 2rem;"></div>
+        <BackgroundColorSettings [backgroundColor]="backgroundColor()"
+        (onBackgroundColorChange)="HandleBackgroundColorChange($event)"></BackgroundColorSettings>
+    </section>
+</section>

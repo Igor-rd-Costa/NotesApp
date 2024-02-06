@@ -8,6 +8,8 @@ builder.Services.AddDbContext<NotesContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Connection string 'Database' not found.")));
 builder.Services.AddDbContext<NoteSettingsContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Connection string 'Database' not found.")));
+builder.Services.AddDbContext<NoteDefaultSettingsContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Connection string 'Database' not found.")));
 builder.Services.AddDbContext<UsersContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Connection string 'Database' not found.")));
 // Add services to the container.

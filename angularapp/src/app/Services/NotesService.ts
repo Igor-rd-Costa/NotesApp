@@ -45,6 +45,17 @@ export interface NoteSettings {
     backgroundColor: string,
 }
 
+export interface DefaultNoteSettings {
+    id: number,
+    userId: number,
+    marginFormat: MarginFormat,
+    marginLeft: number,
+    marginRight: number,
+    marginTop: number,
+    marginBottom: number,
+    backgroundColor: string,
+}
+
 @Injectable()
 export class NotesService {
     constructor(private http : HttpClient) {}
@@ -66,6 +77,10 @@ export class NotesService {
         return this.http.put("https://localhost:7216/settings/update/", {Guid: guid, Property: property, NewValue: newValue}, {withCredentials: true});
     }
 
+    public UpdateDefaultSettings(property : NoteSettingsProperty, newValue : string) {
+        return this.http.put("https://localhost:7216/settings/default/update/", {Property: property, NewValue: newValue}, {withCredentials: true});
+    }
+
     public Update(guid : string, content : string) {
         return this.http.patch("https://localhost:7216/note/update/", { Guid: guid, Content: content }, { withCredentials: true});
     }
@@ -76,6 +91,10 @@ export class NotesService {
 
     public GetNotePreviews() : Observable<{preview: NotePreview, settings: NoteSettings}[]> {
         return this.http.get<{preview: NotePreview, settings: NoteSettings}[]>('https://localhost:7216/', {withCredentials: true});
+    }
+
+    public GetDefaultNoteSettings() : Observable<DefaultNoteSettings> {
+        return this.http.get<DefaultNoteSettings>("https://localhost:7216/settings/default/", {withCredentials: true});
     }
 
     public GetSettingsNoteCards() : Observable<NoteSettingsCardInfo[]> {
