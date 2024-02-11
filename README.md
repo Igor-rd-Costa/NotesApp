@@ -8,7 +8,7 @@ A project I started to learn Angular and ASP.NET. Design based on the Samsung No
 
 ## Setup
 * Setup the Database:
-  * Rename `appsettingsexample.json` to `appsettings.json`;
+  * Rename `appsettingexample.json` to `appsetting.json`;
   * Replace `yourpassword` with the password for your postgres user;
   * You can also change the server, port, user or database if needed;  
 * Run `dotnet ef database update` to create and setup the database for the project.

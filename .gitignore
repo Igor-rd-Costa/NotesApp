@@ -4,8 +4,8 @@
 *.esproj.user
 /webapi/bin
 /webapi/obj
-/webapi/appsettings.json
-/webapi/appsettings.Development.json
+/webapi/appsetting.json
+/webapi/appsetting.Development.json
 
 /angularapp/obj
 /angularapp/.vscode
