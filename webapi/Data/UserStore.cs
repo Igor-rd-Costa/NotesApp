@@ -1,19 +1,20 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using webapi.Models;
 
 namespace webapi.Data
 {
-    public class UserStore : IUserStore<IdentityUser<int>>, IUserPasswordStore<IdentityUser<int>>, IUserEmailStore<IdentityUser<int>>
+    public class UserStore : IUserStore<User>, IUserPasswordStore<User>, IUserEmailStore<User>
     {
-        private readonly UsersContext m_UserContext;
+        private readonly NotesAppContext m_UserContext;
 
-        public UserStore(UsersContext userContext)
+        public UserStore(NotesAppContext userContext)
         {
             m_UserContext = userContext;
         }
 
-        public Task<IdentityResult> CreateAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        public Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -30,7 +31,7 @@ namespace webapi.Data
             });
         }
 
-        public Task<IdentityResult> DeleteAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        public Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -45,7 +46,7 @@ namespace webapi.Data
 
         }
 
-        public Task<IdentityUser<int>?> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        public Task<User?> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -53,7 +54,7 @@ namespace webapi.Data
             });
         }
 
-        public Task<IdentityUser<int>?> FindByIdAsync(string userId, CancellationToken cancellationToken)
+        public Task<User?> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -61,9 +62,9 @@ namespace webapi.Data
             });
         }
 
-        public Task<IdentityUser<int>?> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        public Task<User?> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            return Task.Factory.StartNew<IdentityUser<int>?>(() =>
+            return Task.Factory.StartNew<User?>(() =>
             {
                 var result = m_UserContext.users.Where(user => user.NormalizedUserName == normalizedUserName);
                 if (result.Count() > 0)
@@ -75,37 +76,37 @@ namespace webapi.Data
             });
         }
 
-        public Task<string?> GetEmailAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        public Task<string?> GetEmailAsync(User user, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() => user.Email);
         }
 
-        public Task<bool> GetEmailConfirmedAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        public Task<bool> GetEmailConfirmedAsync(User user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string?> GetNormalizedEmailAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        public Task<string?> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string?> GetNormalizedUserNameAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        public Task<string?> GetNormalizedUserNameAsync(User user, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() => user.NormalizedUserName);
         }
 
-        public Task<string?> GetPasswordHashAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        public Task<string?> GetPasswordHashAsync(User user, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() => user.PasswordHash);
         }
 
-        public Task<string> GetUserIdAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        public Task<string> GetUserIdAsync(User user, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(user.Id.ToString);
         }
 
-        public Task<string?> GetUserNameAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        public Task<string?> GetUserNameAsync(User user, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -113,12 +114,12 @@ namespace webapi.Data
             });
         }
 
-        public Task<bool> HasPasswordAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        public Task<bool> HasPasswordAsync(User user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task SetEmailAsync(IdentityUser<int> user, string? email, CancellationToken cancellationToken)
+        public Task SetEmailAsync(User user, string? email, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -126,7 +127,7 @@ namespace webapi.Data
             });
         }
 
-        public Task SetEmailConfirmedAsync(IdentityUser<int> user, bool confirmed, CancellationToken cancellationToken)
+        public Task SetEmailConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -134,7 +135,7 @@ namespace webapi.Data
             });
         }
 
-        public Task SetNormalizedEmailAsync(IdentityUser<int> user, string? normalizedEmail, CancellationToken cancellationToken)
+        public Task SetNormalizedEmailAsync(User user, string? normalizedEmail, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -142,7 +143,7 @@ namespace webapi.Data
             });
         }
 
-        public Task SetNormalizedUserNameAsync(IdentityUser<int> user, string? normalizedName, CancellationToken cancellationToken)
+        public Task SetNormalizedUserNameAsync(User user, string? normalizedName, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -150,7 +151,7 @@ namespace webapi.Data
             });
         }
 
-        public Task SetPasswordHashAsync(IdentityUser<int> user, string? passwordHash, CancellationToken cancellationToken)
+        public Task SetPasswordHashAsync(User user, string? passwordHash, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -158,7 +159,7 @@ namespace webapi.Data
             });
         }
 
-        public Task SetUserNameAsync(IdentityUser<int> user, string? userName, CancellationToken cancellationToken)
+        public Task SetUserNameAsync(User user, string? userName, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -166,7 +167,7 @@ namespace webapi.Data
             });
         }
 
-        public Task<IdentityResult> UpdateAsync(IdentityUser<int> user, CancellationToken cancellationToken)
+        public Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
         {
             return Task<IdentityResult>.Factory.StartNew(() =>
             {

@@ -7,7 +7,11 @@ A project I started to learn Angular and ASP.NET. Design based on the Samsung No
 * PostgreSQL 16.
 
 ## Setup
-* Run the `GenerateDatabase.bat` file to setup the PostgreSQL database for the project.
+* Setup the Database:
+  * Rename `appsettingsexample.json` to `appsettings.json`;
+  * Replace `yourpassword` with the password for your postgres user;
+  * You can also change the server, port, user or database if needed;  
+* Run `dotnet ef database update` to create and setup the database for the project.
 * Setup the Angular App:
   * Open a command promt in the `angularapp` folder;
   * Run `npm install` to setup the project;

@@ -2,20 +2,16 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using webapi.Data;
+using webapi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<NotesContext>(options =>
+builder.Services.AddDbContext<NotesAppContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Connection string 'Database' not found.")));
-builder.Services.AddDbContext<NoteSettingsContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Connection string 'Database' not found.")));
-builder.Services.AddDbContext<NoteDefaultSettingsContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Connection string 'Database' not found.")));
-builder.Services.AddDbContext<UsersContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Connection string 'Database' not found.")));
+
 // Add services to the container.
-builder.Services.AddIdentityCore<IdentityUser<int>>()
+builder.Services.AddIdentityCore<User>()
     .AddUserStore<UserStore>()
-    .AddSignInManager<SignInManager<IdentityUser<int>>>();
+    .AddSignInManager<SignInManager<User>>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

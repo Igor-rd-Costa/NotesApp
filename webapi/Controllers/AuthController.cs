@@ -26,15 +26,15 @@ namespace webapi.Controllers
     [Route("/auth")]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser<int>> m_UserManager;
-        private readonly SignInManager<IdentityUser<int>> m_SignInManager;
-        private readonly NoteDefaultSettingsContext m_NoteDefaultSettingsContext;
+        private readonly NotesAppContext m_NoteContext;
+        private readonly UserManager<User> m_UserManager;
+        private readonly SignInManager<User> m_SignInManager;
 
-        public AuthController(UserManager<IdentityUser<int>> userManager, SignInManager<IdentityUser<int>> signInManager, NoteDefaultSettingsContext ndsc)
+        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager , NotesAppContext noteContext)
         {
             m_UserManager = userManager;
             m_SignInManager = signInManager;
-            m_NoteDefaultSettingsContext = ndsc;
+            m_NoteContext = noteContext;
         }
 
         [HttpPost("login")]
@@ -58,7 +58,7 @@ namespace webapi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterInfo info)
         {
-            IdentityUser<int> user = new()
+            User user = new()
             {
                 UserName = info.Username,
                 Email = info.Email,
@@ -78,8 +78,8 @@ namespace webapi.Controllers
             {
                 UserId = user.Id,
             };
-            m_NoteDefaultSettingsContext.note_default_settings.Add(nds);
-            m_NoteDefaultSettingsContext.SaveChanges();
+            m_NoteContext.note_default_settings.Add(nds);
+            m_NoteContext.SaveChanges();
             Microsoft.AspNetCore.Identity.SignInResult signInResult = await m_SignInManager.PasswordSignInAsync(info.Username, info.Password, false, false);
             if (signInResult.Succeeded)
             {
@@ -109,7 +109,7 @@ namespace webapi.Controllers
         [HttpGet("get-email")]
         public async Task<IActionResult> GetEmail()
         {
-            IdentityUser<int>? user = await m_UserManager.GetUserAsync(User);
+            User? user = await m_UserManager.GetUserAsync(User);
             if (user == null)
             {
                 return Unauthorized();
@@ -130,7 +130,7 @@ namespace webapi.Controllers
         [HttpGet("check-username/{username}")]
         public async Task<IActionResult> CheckUsername(string username)
         {
-            IdentityUser<int>? user = await m_UserManager.FindByNameAsync(username);
+            User? user = await m_UserManager.FindByNameAsync(username);
             if (user != null)
             {
                 return Ok(false);
@@ -141,7 +141,7 @@ namespace webapi.Controllers
         [HttpGet("check-email/{email}")]
         public async Task<IActionResult> CheckEmail(string email)
         {
-            IdentityUser<int>? user = await m_UserManager.FindByEmailAsync(email);
+            User? user = await m_UserManager.FindByEmailAsync(email);
             if (user != null)
             {
                 return Ok(false);
@@ -153,7 +153,7 @@ namespace webapi.Controllers
         [HttpPost("check-password")]
         public async Task<IActionResult> CheckPassword([FromBody] CheckPasswordInfo info)
         {
-            IdentityUser<int>? user = await m_UserManager.GetUserAsync(User);
+            User? user = await m_UserManager.GetUserAsync(User);
             if (user == null)
             {
                 return BadRequest();
@@ -166,7 +166,7 @@ namespace webapi.Controllers
         [HttpPatch("change-username")]
         public async Task<IActionResult> ChangeUsername([FromBody] ChangeUsernameInfo info)
         {
-            IdentityUser<int>? user = await m_UserManager.GetUserAsync(User);
+            User? user = await m_UserManager.GetUserAsync(User);
             if (user == null)
             {
                 return BadRequest();
@@ -186,7 +186,7 @@ namespace webapi.Controllers
         public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailInfo info)
         {
             Console.WriteLine("Recieved email " + info.Email);
-            IdentityUser<int>? user = await m_UserManager.GetUserAsync(User);
+            User? user = await m_UserManager.GetUserAsync(User);
             if (user == null)
             {
                 Console.WriteLine("User is null!");
@@ -213,7 +213,7 @@ namespace webapi.Controllers
         [HttpPatch("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordInfo info)
         {
-            IdentityUser<int>? user = await m_UserManager.GetUserAsync(User);
+            User? user = await m_UserManager.GetUserAsync(User);
             if (user == null)
                 return BadRequest(0);
 
@@ -233,7 +233,7 @@ namespace webapi.Controllers
         [HttpDelete("delete-account")]
         public async Task<IActionResult> DeleteAccount()
         {
-            IdentityUser<int>? user = await m_UserManager.GetUserAsync(User);
+            User? user = await m_UserManager.GetUserAsync(User);
             if (user == null)
             {
                 return BadRequest();

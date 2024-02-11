@@ -15,16 +15,14 @@ namespace webapi.Controllers
     [Authorize(AuthenticationSchemes = "Identity.Application")]
     public class HomeController : ControllerBase
     {
-        private readonly NotesContext m_NoteContext;
-        private readonly NoteSettingsContext m_NoteSettingsContext;
-        private readonly UserManager<IdentityUser<int>> m_UserManager;
-        private readonly SignInManager<IdentityUser<int>> m_SignInManager;
+        private readonly NotesAppContext m_NoteContext;
+        private readonly UserManager<User> m_UserManager;
+        private readonly SignInManager<User> m_SignInManager;
 
-        public HomeController(NotesContext noteContext, NoteSettingsContext noteSettingsContext,
-            UserManager<IdentityUser<int>> userManager, SignInManager<IdentityUser<int>> signInManager) 
+        public HomeController(NotesAppContext noteContext,
+            UserManager<User> userManager, SignInManager<User> signInManager) 
         {
             m_NoteContext = noteContext;
-            m_NoteSettingsContext = noteSettingsContext;
             m_UserManager = userManager;
             m_SignInManager = signInManager;
         }
@@ -81,11 +79,13 @@ namespace webapi.Controllers
             {
                 return NotFound();
             }
-            NoteSettings? settings = m_NoteSettingsContext.note_settings.Where(ns => ns.NoteId == note.Id).FirstOrDefault();
+            NoteSettings? settings = m_NoteContext.note_settings.Where(ns => ns.NoteId == note.Id).FirstOrDefault();
             if (settings == null) 
             {
                 return NotFound();
             }
+
+            Console.WriteLine("Got Hereeee!");
             return Ok(new {note, settings});
         }
 
@@ -132,13 +132,13 @@ namespace webapi.Controllers
                 MarginTop = nds.MarginTop,
                 BackgroundColor = nds.BackgroundColor
             }).First();
-            var res = m_NoteSettingsContext.Add(settings);
+            var res = m_NoteContext.Add(settings);
             if (res.State != EntityState.Added)
             {
                 //TODO delete note that was created
                 return BadRequest("Could not create note settings!");
             }
-            m_NoteSettingsContext.SaveChanges();
+            m_NoteContext.SaveChanges();
             return Ok(noteGuid);
         }
 
@@ -188,11 +188,11 @@ namespace webapi.Controllers
             if (note == null)
                 return NotFound();
 
-            NoteSettings? noteSettings = m_NoteSettingsContext.note_settings.Where(ns => note.Id == ns.NoteId).FirstOrDefault();
+            NoteSettings? noteSettings = m_NoteContext.note_settings.Where(ns => note.Id == ns.NoteId).FirstOrDefault();
             if (noteSettings != null)
             {
-                m_NoteSettingsContext.note_settings.Remove(noteSettings);
-                m_NoteSettingsContext.SaveChanges();
+                m_NoteContext.note_settings.Remove(noteSettings);
+                m_NoteContext.SaveChanges();
             }
             m_NoteContext.notes.Remove(note);
             m_NoteContext.SaveChanges();
@@ -212,11 +212,11 @@ namespace webapi.Controllers
 
             if (note.ModifyDate.Equals(note.CreationDate))
             {
-                NoteSettings? noteSettings = m_NoteSettingsContext.note_settings.Where(ns => note.Id == ns.NoteId).FirstOrDefault();
+                NoteSettings? noteSettings = m_NoteContext.note_settings.Where(ns => note.Id == ns.NoteId).FirstOrDefault();
                 if (noteSettings != null)
                 {
-                    m_NoteSettingsContext.Remove(noteSettings);
-                    m_NoteSettingsContext.SaveChanges();
+                    m_NoteContext.Remove(noteSettings);
+                    m_NoteContext.SaveChanges();
                 }
                 m_NoteContext.notes.Remove(note);
                 m_NoteContext.SaveChanges();

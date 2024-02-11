@@ -25,7 +25,6 @@ export class DefaultNoteSettings {
 
   constructor(private noteService : NotesService) {
     this.noteService.GetDefaultNoteSettings().subscribe(settings => {
-      console.log(settings);
       this.marginFormat.set(settings.marginFormat);
       this.marginLeft.set(settings.marginLeft);
       this.marginRight.set(settings.marginRight);
@@ -77,7 +76,6 @@ export class DefaultNoteSettings {
 
   protected HandleBackgroundColorChange(newColor : string) {
     this.noteService.UpdateDefaultSettings('backgroundColor', newColor).subscribe(a => {
-      console.log(a);
       this.backgroundColor.set(newColor);
     });
   }

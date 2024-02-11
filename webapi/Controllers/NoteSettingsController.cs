@@ -12,13 +12,11 @@ namespace webapi.Controllers
     [Authorize(AuthenticationSchemes = "Identity.Application")]
     public class NoteSettingsController : ControllerBase
     {
-        private readonly NoteSettingsContext m_NoteSettingsContext;
-        private readonly NotesContext m_NotesContext;
-        private readonly UserManager<IdentityUser<int>> m_UserManager;
+        private readonly NotesAppContext m_NotesContext;
+        private readonly UserManager<User> m_UserManager;
 
-        public NoteSettingsController(NoteSettingsContext noteSettingsContext, NotesContext notesContext, UserManager<IdentityUser<int>> userManager)
+        public NoteSettingsController(NotesAppContext notesContext, UserManager<User> userManager)
         {
-            m_NoteSettingsContext = noteSettingsContext;
             m_NotesContext = notesContext;
             m_UserManager = userManager;
         }
@@ -32,18 +30,13 @@ namespace webapi.Controllers
             {
                 return Unauthorized();
             }
-            var obj = new
-            {
-                id = 42,
-                guid = "",
-            };
             var note = m_NotesContext.notes.Select(obj => new { Id = obj.Id, Guid = obj.Guid }).Where(note => note.Guid == guid).FirstOrDefault();
             if (note == null)
             {
                 return NotFound();
             }
             Console.WriteLine($"Found Note: Id: {note.Id}, Guid: {note.Guid}");
-            NoteSettings? noteSettings = m_NoteSettingsContext.note_settings.Where(ns => ns.NoteId == note.Id).FirstOrDefault();
+            NoteSettings? noteSettings = m_NotesContext.note_settings.Where(ns => ns.NoteId == note.Id).FirstOrDefault();
             if (noteSettings == null )
             {
                 return NotFound("No settings available!");
@@ -75,7 +68,7 @@ namespace webapi.Controllers
                 return NotFound();
 
             int noteId = m_NotesContext.notes.Where(note => note.UserId == int.Parse(userId) && note.Guid == updateInfo.Guid).Select(note => note.Id).FirstOrDefault();
-            NoteSettings? settings = m_NoteSettingsContext.note_settings.Where(ns => ns.NoteId == noteId).FirstOrDefault();
+            NoteSettings? settings = m_NotesContext.note_settings.Where(ns => ns.NoteId == noteId).FirstOrDefault();
             if (settings == null)
             {
                 return NotFound();
@@ -108,8 +101,8 @@ namespace webapi.Controllers
                 } break;
             }
 
-            m_NoteSettingsContext.note_settings.Update(settings);
-            m_NoteSettingsContext.SaveChanges();
+            m_NotesContext.note_settings.Update(settings);
+            m_NotesContext.SaveChanges();
             return Ok(true);
         }
 
